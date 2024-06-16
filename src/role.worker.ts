@@ -3,7 +3,7 @@ import { Task, taskToString } from "./types";
 export function run(creep: Creep) {
     if ((creep.memory.currentTask != Task.CHARGE) && (creep.store[RESOURCE_ENERGY] == 0)) {
         // add current task to queue for later execution
-        if (creep.memory.currentTask != Task.IDLE) {
+        if ((creep.memory.currentTask != Task.IDLE) && (creep.memory.currentTask != Task.UPGRADE_STRUCTURE)) {
             creep.memory.taskQueue.push(creep.memory.currentTask);
         }
         creep.memory.taskQueue.push(Task.CHARGE);
@@ -16,7 +16,7 @@ export function run(creep: Creep) {
 
         switch (creep.memory.currentTask) {
             case Task.CHARGE: creep.say('🪫'); break;
-            case Task.CHARGE_STRUCTURE: creep.say('⚡'); break;
+            case Task.CHARGE_STRUCTURE: creep.say('🔌'); break;
             case Task.UPGRADE_STRUCTURE: creep.say('⬆️'); break;
             case Task.BUILD_STRUCTURE: creep.say('🛠️'); break;
             default: creep.say('💤');
@@ -28,7 +28,7 @@ export function run(creep: Creep) {
     // execute current task
     if (creep.memory.currentTask == Task.CHARGE) {
         if (creep.store.getFreeCapacity() > 0) {
-            var sources = creep.room.find(FIND_SOURCES);
+            const sources = creep.room.find(FIND_SOURCES);
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
             }
@@ -88,9 +88,19 @@ export function run(creep: Creep) {
 
     // check for construction sites
     const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-
     if ((constructionSites.length) && (creep.memory.currentTask == Task.IDLE) && (creep.memory.taskQueue.length == 0)) {
         creep.memory.taskQueue.push(Task.BUILD_STRUCTURE);
         return;
     }
+
+    // upgrade controller if nothing else is needed
+    if ((creep.memory.currentTask == Task.IDLE)
+        && (creep.memory.taskQueue.length == 0)
+        && (creep.room.controller)
+        && (creep.room.controller.ticksToDowngrade < 1000)
+    ) {
+        creep.memory.taskQueue.push(Task.UPGRADE_STRUCTURE);
+        return;
+    }
+
 }

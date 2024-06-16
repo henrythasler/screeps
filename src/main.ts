@@ -1,5 +1,6 @@
 import * as creepManager from "./manager.creeps";
 import * as worker from "./role.worker";
+import * as tower from "./tower";
 import { Role, Task } from "./types";
 
 declare global {
@@ -34,10 +35,11 @@ declare global {
 
 export const loop = () => {
     // console.log(`Current game tick is ${Game.time}`);
-    creepManager.run(3);
+    creepManager.run(4);
+    tower.run();
 
-    for (var name in Game.creeps) {
-        var creep = Game.creeps[name];
+    for (const name in Game.creeps) {
+        const creep = Game.creeps[name];
 
         // let workers do their thing
         if (creep.memory.role == Role.WORKER) {
