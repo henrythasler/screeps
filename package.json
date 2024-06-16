@@ -1,0 +1,18 @@
+{
+  "name": "screeps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc src/main.ts",
+    "deploy": "npm run build && cp src/*.js /home/henry/.config/Screeps/scripts/screeps.com/ts-test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@types/screeps": "^3.3.8",
+    "typescript": "^5.4.5"
+  }
+}
