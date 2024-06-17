@@ -9,6 +9,7 @@ export enum Task {
     CHARGE_STRUCTURE,
     CHARGE_CONTROLLER,
     BUILD_STRUCTURE,
+    STORE_ENERGY,
 }
 
 export function roleToString(role: Role): string {

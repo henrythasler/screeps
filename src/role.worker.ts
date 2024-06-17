@@ -6,6 +6,7 @@ import * as moveto from "./trait.creep.moveto";
 import * as structureCharge from "./trait.structure.charge";
 import * as structureBuild from "./trait.structure.build";
 import * as controllerCharge from "./trait.controller.charge";
+import * as structureStore from "./trait.structure.store";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -17,6 +18,7 @@ export function run(creep: Creep) {
 
     // check what task this creep should do; any check can overwrite the previous task
     creep.memory.task = moveto.check(creep);
+    creep.memory.task = structureStore.check(creep);
     creep.memory.task = controllerCharge.check(creep);  // any controller need charging
     creep.memory.task = structureBuild.check(creep);    // check for construction sites
     creep.memory.task = structureCharge.check(creep);   // check for structures that need recharging
@@ -30,6 +32,7 @@ export function run(creep: Creep) {
             case Task.CHARGE_STRUCTURE: creep.say('⚡'); break;
             case Task.CHARGE_CONTROLLER: creep.say('⬆️'); break;
             case Task.BUILD_STRUCTURE: creep.say('🛠️'); break;
+            case Task.STORE_ENERGY: creep.say('🔋'); break;
             default: creep.say('💤');
         }
     }
@@ -39,5 +42,6 @@ export function run(creep: Creep) {
     creep.memory.task = structureCharge.execute(creep);
     creep.memory.task = structureBuild.execute(creep);
     creep.memory.task = controllerCharge.execute(creep);
+    creep.memory.task = structureStore.execute(creep);
     creep.memory.task = moveto.execute(creep);
 }
