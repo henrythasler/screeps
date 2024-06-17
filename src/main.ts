@@ -2,6 +2,7 @@ import * as creepManager from "./manager.creeps";
 import * as worker from "./role.worker";
 import * as tower from "./tower";
 import { Role, Task } from "./types";
+import { Config } from "./config";
 
 declare global {
     /*
@@ -16,13 +17,14 @@ declare global {
     interface Memory {
         uuid: number;
         log: any;
+        taskQueue: Task[];
     }
 
     interface CreepMemory {
         role: Role;
-        currentTask: Task,
-        taskQueue: Task[],
-        path: PathStep[],
+        task: Task; // current action that the creep is doing
+        traits: Task[]; // potential actions that a creep can perform
+        percentile: number;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -34,8 +36,7 @@ declare global {
 }
 
 export const loop = () => {
-    // console.log(`Current game tick is ${Game.time}`);
-    creepManager.run(4);
+    creepManager.run(Config.worker.minCountPerRoom);
     tower.run();
 
     for (const name in Game.creeps) {

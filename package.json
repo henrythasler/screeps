@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc src/main.ts",
-    "deploy": "npm run build && cp src/*.js /home/henry/.config/Screeps/scripts/screeps.com/ts-test"
+    "build": "tsc src/main.ts --outDir dist",
+    "deploy": "npm run build && mkdir -p /home/henry/.config/Screeps/scripts/screeps.com/$(git branch --show-current) && cp dist/*.js /home/henry/.config/Screeps/scripts/screeps.com/$(git branch --show-current)"
   },
   "author": "",
   "license": "MIT",
