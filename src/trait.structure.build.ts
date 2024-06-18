@@ -14,7 +14,7 @@ export function execute(creep: Creep): Task {
         const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
         if (constructionSites.length) {
             if (creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(constructionSites[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                creep.moveTo(constructionSites[0], { visualizePathStyle: { stroke: '#ffff00' } });
             }
         }
     }

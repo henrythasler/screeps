@@ -29,7 +29,7 @@ export function execute(creep: Creep): Task {
         });
         if (structuresToCharge.length > 0) {
             if (creep.transfer(structuresToCharge[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(structuresToCharge[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                creep.moveTo(structuresToCharge[0], { visualizePathStyle: { stroke: '#00ff00' } });
             }
         }
     }
