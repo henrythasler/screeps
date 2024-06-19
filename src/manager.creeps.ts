@@ -35,13 +35,14 @@ const workerZoo: Map<SpeciesName, Species> = new Map([
 ]);
 
 function findMostExpensiveCreep(budget: number, zoo: Map<SpeciesName, Species>): SpeciesName | null {
-    // let selection: SpeciesName | null = null;
-    // zoo.forEach( (value, key) => {
-    //     if ((value.cost <= budget) && (selection ? value.cost >= zoo.get(selection)!.cost: true)) {
-    //         selection = key;
-    //     }
-    // });
-    return SpeciesName.BASIC;
+    let selection: SpeciesName | null = null;
+    zoo.forEach( (value, key) => {
+        if ((value.cost <= budget) && ((selection != null) ? value.cost >= zoo.get(selection)!.cost: true)) {
+            selection = key;
+        }
+    });
+    console.log(`Selected species: ${selection}, energyCapacityAvailable: ${budget}`);
+    return selection;
 }
 
 export function run(minWorker: number) {
@@ -73,7 +74,6 @@ export function run(minWorker: number) {
     if (numWorker < minWorker) {
         var newName = 'worker_' + Game.time;
         const species = findMostExpensiveCreep(spawns[0].room.energyCapacityAvailable, workerZoo);
-        console.log(species);
         if (species) {
             spawns[0].spawnCreep(workerZoo.get(species)!.parts, newName,
                 {
