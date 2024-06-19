@@ -5,7 +5,7 @@ import { Task } from "./types";
 export function check(creep: Creep): Task {
     const controller = creep.room.controller;
     if ((nonInterruptableTasks.indexOf(creep.memory.task) < 0) && controller) {
-        if ((controller.ticksToDowngrade < 1000) ||
+        if ((controller.ticksToDowngrade < 7000) ||
             (controller.level < Config.minControllerLevel) && (controller.progress < controller.progressTotal)) {
             return Task.CHARGE_CONTROLLER;
         }

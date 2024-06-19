@@ -20,8 +20,8 @@ export function run(creep: Creep) {
     // check what task this creep should do; any check can overwrite the previous task
     creep.memory.task = moveto.check(creep);
     creep.memory.task = structureStore.check(creep);
-    creep.memory.task = controllerCharge.check(creep);  // any controller need charging
     creep.memory.task = structureBuild.check(creep);    // check for construction sites
+    creep.memory.task = controllerCharge.check(creep);  // any controller need charging
     creep.memory.task = structureRepair.check(creep);
     creep.memory.task = structureCharge.check(creep);   // check for structures that need recharging
     creep.memory.task = charge.check(creep);    // manage creep charging

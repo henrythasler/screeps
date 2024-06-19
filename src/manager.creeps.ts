@@ -17,6 +17,7 @@ enum SpeciesName {
     ENTRY_FAST,
     ENTRY_HEAVY,
     BASIC,
+    BASIC_SLOW,
 }
 
 interface Species {
@@ -30,6 +31,7 @@ const workerZoo: Map<SpeciesName, Species> = new Map([
     [SpeciesName.ENTRY_FAST, { parts: [WORK, CARRY, MOVE, MOVE], cost: 250 }],
     [SpeciesName.ENTRY_HEAVY, { parts: [WORK, CARRY, CARRY, MOVE, MOVE], cost: 300 }],
     [SpeciesName.BASIC, { parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE], cost: 400 }],
+    [SpeciesName.BASIC_SLOW, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], cost: 600 }],
 ]);
 
 function findMostExpensiveCreep(budget: number, zoo: Map<SpeciesName, Species>): SpeciesName | null {
