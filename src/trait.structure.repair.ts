@@ -9,14 +9,16 @@ const repairFilter: StructureConstant[] = [
 ];
 
 export function check(creep: Creep): Task {
-    const structuresToRepair = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return repairFilter.includes(structure.structureType) &&
-                (structure.hits / structure.hitsMax < 0.2);
+    if (creep.memory.traits.includes(Task.STRUCTURE_REPAIR)) {
+        const structuresToRepair: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return repairFilter.includes(structure.structureType) &&
+                    (structure.hits / structure.hitsMax < 0.2);
+            }
+        });
+        if ((structuresToRepair.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
+            return Task.STRUCTURE_REPAIR;
         }
-    });
-    if ((structuresToRepair.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-        return Task.STRUCTURE_REPAIR;
     }
     return creep.memory.task;
 }
@@ -27,8 +29,8 @@ export function execute(creep: Creep): Task {
         const structuresToRepair = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return repairFilter.includes(structure.structureType) &&
-                (structure.hits / structure.hitsMax < 0.2);
-                }
+                    (structure.hits / structure.hitsMax < 0.2);
+            }
         });
         if (structuresToRepair.length > 0) {
             structuresToRepair.sort((a: AnyStructure, b: AnyStructure): number => {

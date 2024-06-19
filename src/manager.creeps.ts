@@ -1,3 +1,4 @@
+import { Config } from "./config";
 import { EnergySource, Role, Task, roleToString } from "./types";
 
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
@@ -36,8 +37,8 @@ const workerZoo: Map<SpeciesName, Species> = new Map([
 
 function findMostExpensiveCreep(budget: number, zoo: Map<SpeciesName, Species>): SpeciesName | null {
     let selection: SpeciesName | null = null;
-    zoo.forEach( (value, key) => {
-        if ((value.cost <= budget) && ((selection != null) ? value.cost >= zoo.get(selection)!.cost: true)) {
+    zoo.forEach((value, key) => {
+        if ((value.cost <= budget) && ((selection != null) ? value.cost >= zoo.get(selection)!.cost : true)) {
             selection = key;
         }
     });
@@ -80,7 +81,7 @@ export function run(minWorker: number) {
                     memory: {
                         role: Role.WORKER,
                         task: Task.IDLE,
-                        traits: [Task.IDLE, Task.CHARGE, Task.CHARGE_STRUCTURE, Task.CONTROLLER_CHARGE, Task.BUILD_STRUCTURE, Task.MOVETO],
+                        traits: [Task.IDLE, Task.CHARGE, Task.MOVETO, Task.CHARGE_STRUCTURE, Task.BUILD_STRUCTURE],
                         percentile: -1,
                         lastChargeSource: EnergySource.OTHER,
                     },
@@ -100,5 +101,27 @@ export function run(minWorker: number) {
             { align: 'left', opacity: 0.8 });
     }
 
-    // FIXME: apply trait distribution
+    // apply trait distribution
+    if ((Game.time % 10) == 0) {
+        const numCreeps = creeps.length;
+        const currentDistribution: Map<Task, number> = new Map();
+        for (const creep of creeps) {
+            creep.memory.traits = [];
+            for (const trait of Config.worker.availableTraits) {
+                const current = currentDistribution.get(trait);
+                const expected = Config.worker.traitDistribution.get(trait);
+                if (current && expected) {
+                    if (current < Math.ceil(expected * numCreeps)) {
+                        creep.memory.traits.push(trait);
+                        currentDistribution.set(trait, current + 1);
+                    }
+                }
+                else {
+                    creep.memory.traits.push(trait);
+                    currentDistribution.set(trait, 1);
+                }
+            }
+            console.log(`[${creep.name}] Traits: ${creep.memory.traits.length}`);
+        }
+    }
 }
