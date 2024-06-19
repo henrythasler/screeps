@@ -7,10 +7,17 @@ export enum Task {
     CHARGE,
     MOVETO,
     CHARGE_STRUCTURE,
-    CHARGE_CONTROLLER,
+    CONTROLLER_CHARGE,
     BUILD_STRUCTURE,
     STORE_ENERGY,
-    REPAIR_STRUCTURE,
+    STRUCTURE_REPAIR,
+    CONTROLLER_REFRESH,
+}
+
+export enum EnergySource {
+    OTHER,
+    SOURCE,
+    CONTAINER,
 }
 
 export function roleToString(role: Role): string {
@@ -22,7 +29,7 @@ export function taskToString(task: Task): string {
     if (task == Task.IDLE) return "IDLE";
     if (task == Task.CHARGE) return "CHARGE";
     if (task == Task.CHARGE_STRUCTURE) return "CHARGE_STRUCTURE";
-    if (task == Task.CHARGE_CONTROLLER) return "UPGRADE_STRUCTURE";
+    if (task == Task.CONTROLLER_CHARGE) return "UPGRADE_STRUCTURE";
     if (task == Task.BUILD_STRUCTURE) return "BUILD_STRUCTURE";
     return "unknown";
 }

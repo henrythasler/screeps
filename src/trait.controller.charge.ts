@@ -5,9 +5,8 @@ import { Task } from "./types";
 export function check(creep: Creep): Task {
     const controller = creep.room.controller;
     if ((nonInterruptableTasks.indexOf(creep.memory.task) < 0) && controller) {
-        if ((controller.ticksToDowngrade < 7000) ||
-            (controller.level < Config.minControllerLevel) && (controller.progress < controller.progressTotal)) {
-            return Task.CHARGE_CONTROLLER;
+        if ((controller.level < Config.minControllerLevel) && (controller.progress < controller.progressTotal)) {
+            return Task.CONTROLLER_CHARGE;
         }
     }
     return creep.memory.task;
@@ -15,7 +14,7 @@ export function check(creep: Creep): Task {
 
 export function execute(creep: Creep): Task {
     const controller = creep.room.controller;
-    if ((creep.memory.task == Task.CHARGE_CONTROLLER) && controller) {
+    if ((creep.memory.task == Task.CONTROLLER_CHARGE) && controller) {
         if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
             creep.moveTo(controller, { visualizePathStyle: { stroke: '#00ff00' } });
         }

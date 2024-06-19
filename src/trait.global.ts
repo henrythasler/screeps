@@ -2,7 +2,7 @@ import { Task } from "./types";
 
 export const taskPriority: Task[] = [
     Task.CHARGE_STRUCTURE,
-    Task.CHARGE_CONTROLLER,
+    Task.CONTROLLER_CHARGE,
     Task.BUILD_STRUCTURE,
     Task.IDLE,
 ];
@@ -15,4 +15,5 @@ export const idleTasks: Task[] = [
 
 export const nonInterruptableTasks: Task[] = [
     Task.CHARGE,
+    Task.CONTROLLER_REFRESH,
 ];

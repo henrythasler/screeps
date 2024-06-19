@@ -3,6 +3,6 @@ class Worker {
 }
 
 export class Config {
-    static minControllerLevel = 3;
+    static minControllerLevel = 4;
     static worker = Worker;
 }

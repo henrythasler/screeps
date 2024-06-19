@@ -1,4 +1,4 @@
-import { Role, Task, roleToString } from "./types";
+import { EnergySource, Role, Task, roleToString } from "./types";
 
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
@@ -80,8 +80,9 @@ export function run(minWorker: number) {
                     memory: {
                         role: Role.WORKER,
                         task: Task.IDLE,
-                        traits: [Task.IDLE, Task.CHARGE, Task.CHARGE_STRUCTURE, Task.CHARGE_CONTROLLER, Task.BUILD_STRUCTURE, Task.MOVETO],
+                        traits: [Task.IDLE, Task.CHARGE, Task.CHARGE_STRUCTURE, Task.CONTROLLER_CHARGE, Task.BUILD_STRUCTURE, Task.MOVETO],
                         percentile: -1,
+                        lastChargeSource: EnergySource.OTHER,
                     },
                 });
         }

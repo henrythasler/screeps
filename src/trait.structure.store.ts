@@ -1,17 +1,19 @@
 import { nonInterruptableTasks } from "./trait.global";
-import { Task } from "./types";
+import { EnergySource, Task } from "./types";
 
 const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER];
 
 export function check(creep: Creep): Task {
-    const stores = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return (structureTypes.includes(structure.structureType) &&
-                ((structure as StructureContainer).store.getFreeCapacity(RESOURCE_ENERGY) > 0));
+    if (creep.memory.lastChargeSource != EnergySource.CONTAINER) {
+        const stores = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structureTypes.includes(structure.structureType) &&
+                    ((structure as StructureContainer).store.getFreeCapacity(RESOURCE_ENERGY) > 0));
+            }
+        });
+        if ((stores.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
+            return Task.STORE_ENERGY;
         }
-    });
-    if ((stores.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-        return Task.STORE_ENERGY;
     }
     return creep.memory.task;
 }

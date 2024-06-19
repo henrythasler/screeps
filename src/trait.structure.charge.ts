@@ -3,7 +3,7 @@ import { Task } from "./types";
 
 export function check(creep: Creep): Task {
     const structuresToCharge = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
+        filter: (structure: AnyStructure) => {
             return (structure.structureType == STRUCTURE_EXTENSION ||
                 structure.structureType == STRUCTURE_SPAWN ||
                 structure.structureType == STRUCTURE_TOWER) &&

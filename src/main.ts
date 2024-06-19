@@ -1,7 +1,7 @@
 import * as creepManager from "./manager.creeps";
 import * as worker from "./role.worker";
 import * as tower from "./tower";
-import { Role, Task } from "./types";
+import { EnergySource, Role, Task } from "./types";
 import { Config } from "./config";
 
 declare global {
@@ -25,6 +25,7 @@ declare global {
         task: Task; // current action that the creep is doing
         traits: Task[]; // potential actions that a creep can perform
         percentile: number;
+        lastChargeSource: EnergySource;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")

@@ -16,14 +16,14 @@ export function check(creep: Creep): Task {
         }
     });
     if ((structuresToRepair.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-        return Task.REPAIR_STRUCTURE;
+        return Task.STRUCTURE_REPAIR;
     }
     return creep.memory.task;
 }
 
 // FIXME: add hysteresis
 export function execute(creep: Creep): Task {
-    if (creep.memory.task == Task.REPAIR_STRUCTURE) {
+    if (creep.memory.task == Task.STRUCTURE_REPAIR) {
         const structuresToRepair = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return repairFilter.includes(structure.structureType) &&
