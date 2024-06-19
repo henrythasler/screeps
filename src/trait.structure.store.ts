@@ -4,7 +4,7 @@ import { EnergySource, Task } from "./types";
 const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER];
 
 export function check(creep: Creep): Task {
-    if (creep.memory.lastChargeSource != EnergySource.CONTAINER) {
+    if ((creep.memory.lastChargeSource != EnergySource.CONTAINER) && creep.memory.traits.includes(Task.STORE_ENERGY)) {
         const stores = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structureTypes.includes(structure.structureType) &&

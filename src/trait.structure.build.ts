@@ -2,9 +2,11 @@ import { nonInterruptableTasks } from "./trait.global";
 import { Task } from "./types";
 
 export function check(creep: Creep): Task {
-    const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-    if ((constructionSites.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-        return Task.BUILD_STRUCTURE;
+    if (creep.memory.traits.includes(Task.BUILD_STRUCTURE)) {
+        const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
+        if ((constructionSites.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
+            return Task.BUILD_STRUCTURE;
+        }
     }
     return creep.memory.task;
 }
