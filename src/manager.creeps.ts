@@ -72,7 +72,7 @@ export function run(minWorker: number) {
     var numWorker = creeps.filter((creep: Creep) => creep.memory.role == Role.WORKER).length;
     if (numWorker < minWorker) {
         var newName = 'worker_' + Game.time;
-        const species = findMostExpensiveCreep(spawns[0].store.getCapacity(RESOURCE_ENERGY), workerZoo);
+        const species = findMostExpensiveCreep(spawns[0].room.energyCapacityAvailable, workerZoo);
         console.log(species);
         if (species) {
             spawns[0].spawnCreep(workerZoo.get(species)!.parts, newName,
