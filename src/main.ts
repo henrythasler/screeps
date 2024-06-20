@@ -1,4 +1,4 @@
-import * as creepManager from "./manager.creeps";
+import * as workerManager from "./manager.worker";
 import * as worker from "./role.worker";
 import * as tower from "./tower";
 import { EnergySource, Role, Task } from "./types";
@@ -37,7 +37,7 @@ declare global {
 }
 
 export const loop = () => {
-    creepManager.run(Config.worker.minCountPerRoom);
+    workerManager.run(Config.worker.minCountPerRoom);
     tower.run();
 
     for (const name in Game.creeps) {

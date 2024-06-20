@@ -27,12 +27,17 @@ function repairStructure(room: string, towers: StructureTower[]): void {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_ROAD ||
                 structure.structureType == STRUCTURE_SPAWN ||
+                structure.structureType == STRUCTURE_RAMPART ||
                 structure.structureType == STRUCTURE_EXTENSION) 
-                && ((structure.hits / structure.hitsMax) < 0.5);
+                && ((structure.hits / structure.hitsMax) < 0.3);
         }
     }) as Structure[];
 
     if(needRepair.length > 0) {
+        needRepair.sort((a: Structure, b: Structure): number => {
+            return (a.hits - b.hits);
+        });
+
         towers.forEach(tower => tower.repair(needRepair[0]));
     }
 }

@@ -19,6 +19,7 @@ enum SpeciesName {
     ENTRY_HEAVY,
     BASIC,
     BASIC_SLOW,
+    BASIC_FAST
 }
 
 interface Species {
@@ -33,6 +34,7 @@ const workerZoo: Map<SpeciesName, Species> = new Map([
     [SpeciesName.ENTRY_HEAVY, { parts: [WORK, CARRY, CARRY, MOVE, MOVE], cost: 300 }],
     [SpeciesName.BASIC, { parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE], cost: 400 }],
     [SpeciesName.BASIC_SLOW, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], cost: 600 }],
+    [SpeciesName.BASIC_FAST, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], cost: 700 }],
 ]);
 
 function findMostExpensiveCreep(budget: number, zoo: Map<SpeciesName, Species>): SpeciesName | null {
@@ -42,7 +44,7 @@ function findMostExpensiveCreep(budget: number, zoo: Map<SpeciesName, Species>):
             selection = key;
         }
     });
-    console.log(`Selected species: ${selection}, energyCapacityAvailable: ${budget}`);
+    console.log(`Selected species: ${selection} (${selection ? workerZoo.get(selection)?.cost : "0"}), energyCapacityAvailable: ${budget}`);
     return selection;
 }
 
@@ -102,26 +104,38 @@ export function run(minWorker: number) {
     }
 
     // apply trait distribution
-    if ((Game.time % 10) == 0) {
+    if ((Game.time % 30) == 0) {
         const numCreeps = creeps.length;
         const currentDistribution: Map<Task, number> = new Map();
+
+        let traitOverview = "";
         for (const creep of creeps) {
             creep.memory.traits = [];
             for (const trait of Config.worker.availableTraits) {
+
                 const current = currentDistribution.get(trait);
                 const expected = Config.worker.traitDistribution.get(trait);
-                if (current && expected) {
-                    if (current < Math.ceil(expected * numCreeps)) {
+
+                if (numCreeps >= 10) {
+                    if (expected && (creep.memory.percentile <= (expected * 100))) {
                         creep.memory.traits.push(trait);
-                        currentDistribution.set(trait, current + 1);
                     }
                 }
                 else {
-                    creep.memory.traits.push(trait);
-                    currentDistribution.set(trait, 1);
+                    if (current && expected) {
+                        if (current < Math.ceil(expected * numCreeps)) {
+                            creep.memory.traits.push(trait);
+                            currentDistribution.set(trait, current + 1);
+                        }
+                    }
+                    else {
+                        creep.memory.traits.push(trait);
+                        currentDistribution.set(trait, 1);
+                    }
                 }
             }
-            console.log(`[${creep.name}] Traits: ${creep.memory.traits.length}`);
+            traitOverview += `${creep.memory.traits.length}, `;
         }
+        console.log(`Traits: [${traitOverview}]`);
     }
 }
