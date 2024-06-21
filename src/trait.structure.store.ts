@@ -1,10 +1,10 @@
 import { nonInterruptableTasks } from "./trait.global";
-import { EnergySource, Task } from "./types";
+import { EnergyLocation, Task } from "./manager.global";
 
-const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER];
+const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
 
 export function check(creep: Creep): Task {
-    if ((creep.memory.lastChargeSource != EnergySource.CONTAINER) && creep.memory.traits.includes(Task.STORE_ENERGY)) {
+    if ((creep.memory.lastChargeSource != EnergyLocation.CONTAINER) && creep.memory.traits.includes(Task.STORE_ENERGY)) {
         const stores = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structureTypes.includes(structure.structureType) &&
@@ -34,6 +34,9 @@ export function execute(creep: Creep): Task {
 
             if (creep.transfer(stores[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(stores[0], { visualizePathStyle: { stroke: '#ffffff' } });
+            }
+            else {
+                creep.memory.lastEnergyDeposit = EnergyLocation.CONTAINER;
             }
         }
     }

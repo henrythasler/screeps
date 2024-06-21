@@ -1,4 +1,4 @@
-import { Task } from "./types";
+import { Task } from "./manager.global";
 
 export const taskPriority: Task[] = [
     Task.CHARGE_STRUCTURE,

@@ -1,7 +1,9 @@
 import * as workerManager from "./manager.worker";
+import * as scoutManager from "./manager.scout";
 import * as worker from "./role.worker";
+import * as scout from "./role.scout";
 import * as tower from "./tower";
-import { EnergySource, Role, Task } from "./types";
+import { EnergyLocation, Role, Task } from "./manager.global";
 import { Config } from "./config";
 
 declare global {
@@ -15,29 +17,32 @@ declare global {
     */
     // Memory extension samples
     interface Memory {
-        uuid: number;
-        log: any;
-        taskQueue: Task[];
+        uuid: number,
+        log: any,
+        taskQueue: Task[],
     }
 
     interface CreepMemory {
-        role: Role;
-        task: Task; // current action that the creep is doing
-        traits: Task[]; // potential actions that a creep can perform
-        percentile: number;
-        lastChargeSource: EnergySource;
+        role: Role,
+        task: Task, // current action that the creep is doing
+        traits: Task[], // potential actions that a creep can perform
+        percentile: number,
+        lastChargeSource: EnergyLocation,
+        lastEnergyDeposit: EnergyLocation,
+        homeBase: string,
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
     namespace NodeJS {
         interface Global {
-            log: any;
+            log: any,
         }
     }
 }
 
 export const loop = () => {
     workerManager.run(Config.worker.minCountPerRoom);
+    scoutManager.run();
     tower.run();
 
     for (const name in Game.creeps) {
@@ -46,6 +51,9 @@ export const loop = () => {
         // let workers do their thing
         if (creep.memory.role == Role.WORKER) {
             worker.run(creep);
+        }
+        else if (creep.memory.role == Role.SCOUT) {
+            scout.run(creep);
         }
     }
 };

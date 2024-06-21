@@ -1,6 +1,6 @@
 import { Config } from "./config";
 import { nonInterruptableTasks } from "./trait.global";
-import { Task } from "./types";
+import { Task } from "./manager.global";
 
 export function check(creep: Creep): Task {
     if (creep.memory.traits.includes(Task.CONTROLLER_CHARGE)) {

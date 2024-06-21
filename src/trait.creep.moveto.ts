@@ -1,5 +1,5 @@
 import { idleTasks, nonInterruptableTasks } from "./trait.global";
-import { Task } from "./types";
+import { Task } from "./manager.global";
 
 export function check(creep: Creep): Task {
     const meetingPoints = creep.room.find(FIND_FLAGS, { filter: (flag) => { return (flag.name == "Rest"); } });

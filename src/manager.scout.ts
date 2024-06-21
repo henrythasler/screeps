@@ -1,23 +1,29 @@
 import { Config } from "./config";
 import { EnergyLocation, Role, Task, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
 
-const workerZoo: Map<SpeciesName, Species> = new Map([
-    [SpeciesName.WORKER_ENTRY, { parts: [WORK, CARRY, MOVE], cost: 200 }],
-    [SpeciesName.WORKER_ENTRY_SLOW, { parts: [WORK, CARRY, CARRY, CARRY, MOVE], cost: 300 }],
-    [SpeciesName.WORKER_ENTRY_FAST, { parts: [WORK, CARRY, MOVE, MOVE], cost: 250 }],
-    [SpeciesName.WORKER_ENTRY_HEAVY, { parts: [WORK, CARRY, CARRY, MOVE, MOVE], cost: 300 }],
-    [SpeciesName.WORKER_BASIC, { parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE], cost: 400 }],
-    [SpeciesName.WORKER_BASIC_SLOW, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], cost: 600 }],
-    [SpeciesName.WORKER_BASIC_FAST, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], cost: 700 }],
-    // [SpeciesName.WORKER_BASIC_HEAVY, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], cost: 700 }],
+const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
+    [MOVE, 50],
+    [WORK, 100],
+    [CARRY, 50],
+    [ATTACK, 80],
+    [RANGED_ATTACK, 150],
+    [HEAL, 250],
+    [CLAIM, 600],
+    [TOUGH, 10],
 ]);
 
-export function run(minWorker: number) {
+const workerZoo: Map<SpeciesName, Species> = new Map([
+    [SpeciesName.SCOUT_ENTRY, { parts: [/*CLAIM, */WORK, CARRY, MOVE, MOVE], cost: 200 }],
+]);
+
+export function run(): void {
 
     // create an array for all creeps to work with
-    const creeps: Creep[] = [];
+    const scouts: Creep[] = [];
     for (const name in Game.creeps) {
-        creeps.push(Game.creeps[name]);
+        if (Game.creeps[name].memory.role == Role.SCOUT) {
+            scouts.push(Game.creeps[name]);
+        }
     }
 
     // create an array for all spawns
@@ -37,21 +43,21 @@ export function run(minWorker: number) {
     }
 
     // check number of active creeps; spawn a new one if needed
-    var numWorker = creeps.filter((creep: Creep) => creep.memory.role == Role.WORKER).length;
-    if (numWorker < minWorker) {
-        var newName = 'worker_' + Game.time;
-        const species = findMostExpensiveCreep(spawns[0].room.energyCapacityAvailable, workerZoo);
+    if (scouts.length < Config.scout.minCountPerRoom) {
+        const spawn = spawns[0];
+        var newName = 'scout_' + Game.time;
+        const species = findMostExpensiveCreep(spawn.room.energyCapacityAvailable, workerZoo);
         if (species) {
-            spawns[0].spawnCreep(workerZoo.get(species)!.parts, newName,
+            spawn.spawnCreep(workerZoo.get(species)!.parts, newName,
                 {
                     memory: {
-                        role: Role.WORKER,
+                        role: Role.SCOUT,
                         task: Task.IDLE,
-                        traits: [Task.IDLE, Task.CHARGE, Task.MOVETO, Task.CHARGE_STRUCTURE, Task.BUILD_STRUCTURE],
+                        traits: [Task.IDLE, Task.CHARGE, Task.CONTROLLER_CLAIM, Task.CONTROLLER_RESERVE],
                         percentile: -1,
                         lastChargeSource: EnergyLocation.OTHER,
                         lastEnergyDeposit: EnergyLocation.OTHER,
-                        homeBase: "",
+                        homeBase: spawn.room.name,
                     },
                 });
         }
@@ -71,16 +77,16 @@ export function run(minWorker: number) {
 
     // apply trait distribution
     if ((Game.time % 30) == 0) {
-        const numCreeps = creeps.length;
+        const numCreeps = scouts.length;
         const currentDistribution: Map<Task, number> = new Map();
 
         let traitOverview = "";
-        for (const creep of creeps) {
+        for (const creep of scouts) {
             creep.memory.traits = [];
-            for (const trait of Config.worker.availableTraits) {
+            for (const trait of Config.scout.availableTraits) {
 
                 const current = currentDistribution.get(trait);
-                const expected = Config.worker.traitDistribution.get(trait);
+                const expected = Config.scout.traitDistribution.get(trait);
 
                 if (numCreeps >= 10) {
                     if (expected && (creep.memory.percentile <= (expected * 100))) {
@@ -102,6 +108,6 @@ export function run(minWorker: number) {
             }
             traitOverview += `${creep.memory.traits.length}, `;
         }
-        console.log(`Traits: [${traitOverview}]`);
+        console.log(`Scout Traits: [${traitOverview}]`);
     }
 }

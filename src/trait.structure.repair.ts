@@ -1,5 +1,5 @@
 import { nonInterruptableTasks } from "./trait.global";
-import { Task } from "./types";
+import { Task } from "./manager.global";
 
 const repairFilter: StructureConstant[] = [
     STRUCTURE_EXTENSION,

@@ -1,5 +1,4 @@
-import { Task, taskToString } from "./types";
-import { Config } from "./config";
+import { EnergyLocation, Task } from "./manager.global";
 import { idleTasks, nonInterruptableTasks } from "./trait.global";
 import * as charge from "./trait.creep.charge";
 import * as moveto from "./trait.creep.moveto";
@@ -41,6 +40,10 @@ export function run(creep: Creep) {
             case Task.STRUCTURE_REPAIR: creep.say('🔧'); break;
             default: creep.say('💤');
         }
+    }
+
+    if(idleTasks.includes(creep.memory.task)) {
+        creep.memory.lastChargeSource = EnergyLocation.SOURCE;
     }
 
     // execute current tasks
