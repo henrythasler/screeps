@@ -17,7 +17,7 @@ class Worker {
         [Task.IDLE, 1],
         [Task.CHARGE, 1],
         [Task.MOVETO, 1],
-        [Task.CHARGE_STRUCTURE, 0.8],
+        [Task.CHARGE_STRUCTURE, 0.5],
         [Task.CONTROLLER_CHARGE, 1],
         [Task.BUILD_STRUCTURE, 1],
         [Task.STORE_ENERGY, 1],
