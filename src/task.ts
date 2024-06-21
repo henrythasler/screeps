@@ -10,7 +10,7 @@ export enum Task {
     REFRESH_CONTROLLER,
     CLAIM_CONTROLLER,
     RESERVE_CONTROLLER,
-    SCOUT,
+    SWITCH_ROOM,
 }
 
 // can always be interrupted by another task

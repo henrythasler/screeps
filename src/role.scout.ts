@@ -1,8 +1,8 @@
 import { Task, nonInterruptableTasks } from "./task";
-import * as charge from "./trait.creep.charge";
-import * as moveto from "./trait.creep.moveto";
-import * as scoutRoom from "./trait.creep.scoutRoom";
-import * as claimController from "./trait.controller.claim";
+import * as charge from "./task.creep.charge";
+import * as moveto from "./task.creep.moveto";
+import * as scoutRoom from "./task.creep.scoutRoom";
+import * as claimController from "./task.controller.claim";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -22,7 +22,7 @@ export function run(creep: Creep) {
     if (creep.memory.task != previousTask) {
         switch (creep.memory.task) {
             case Task.CHARGE: creep.say('🪫'); break;
-            case Task.SCOUT: creep.say('🔭'); break;
+            case Task.SWITCH_ROOM: creep.say('🚪'); break;
             case Task.CLAIM_CONTROLLER: creep.say('🚩'); break;
             case Task.MOVETO: creep.say('👣'); break;
             default: creep.say('💤');

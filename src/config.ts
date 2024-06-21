@@ -34,7 +34,7 @@ class Scout {
         Task.MOVETO,
         Task.CLAIM_CONTROLLER,
         Task.RESERVE_CONTROLLER,
-        Task.SCOUT,
+        Task.SWITCH_ROOM,
     ];
     static traitDistribution: Map<Task, number> = new Map([
         [Task.IDLE, 1],
@@ -42,7 +42,7 @@ class Scout {
         [Task.MOVETO, 1],
         [Task.CLAIM_CONTROLLER, 1],
         [Task.RESERVE_CONTROLLER, 1],
-        [Task.SCOUT, 1],
+        [Task.SWITCH_ROOM, 1],
     ]);
 }
 

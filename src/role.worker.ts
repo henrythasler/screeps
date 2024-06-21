@@ -1,13 +1,13 @@
 import { Task, nonInterruptableTasks, idleTasks } from "./task";
 import { EnergyLocation } from "./manager.global";
-import * as charge from "./trait.creep.charge";
-import * as moveto from "./trait.creep.moveto";
-import * as structureCharge from "./trait.structure.charge";
-import * as structureBuild from "./trait.structure.build";
-import * as controllerCharge from "./trait.controller.charge";
-import * as controllerRefresh from "./trait.controller.refresh";
-import * as structureStore from "./trait.structure.store";
-import * as structureRepair from "./trait.structure.repair";
+import * as charge from "./task.creep.charge";
+import * as moveto from "./task.creep.moveto";
+import * as structureCharge from "./task.structure.charge";
+import * as structureBuild from "./task.structure.build";
+import * as controllerCharge from "./task.controller.charge";
+import * as controllerRefresh from "./task.controller.refresh";
+import * as structureStore from "./task.structure.store";
+import * as structureRepair from "./task.structure.repair";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;

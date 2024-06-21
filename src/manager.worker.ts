@@ -1,10 +1,24 @@
+import { Trait } from "./trait";
 import { Config } from "./config";
 import { EnergyLocation, Role, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
 import { Task } from "./task";
 
 const workerZoo: Map<SpeciesName, Species> = new Map([
-    [SpeciesName.WORKER_ENTRY, { parts: [WORK, CARRY, MOVE], cost: 200 }],
-    [SpeciesName.WORKER_ENTRY_SLOW, { parts: [WORK, CARRY, CARRY, CARRY, MOVE], cost: 300 }],
+    [SpeciesName.WORKER_ENTRY, {
+        parts: [WORK, CARRY, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL, 
+            Trait.CHARGE_SOURCE, 
+            Trait.CHARGE_STORAGE, 
+            Trait.BUILD_STRUCTURE, 
+            Trait.RECHARGE_STRUCTURE,
+        ],
+        cost: 200,
+    }],
+    [SpeciesName.WORKER_ENTRY_SLOW, { 
+        parts: [WORK, CARRY, CARRY, CARRY, MOVE],
+        cost: 300,
+     }],
     [SpeciesName.WORKER_ENTRY_FAST, { parts: [WORK, CARRY, MOVE, MOVE], cost: 250 }],
     [SpeciesName.WORKER_ENTRY_HEAVY, { parts: [WORK, CARRY, CARRY, MOVE, MOVE], cost: 300 }],
     [SpeciesName.WORKER_BASIC, { parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE], cost: 400 }],
