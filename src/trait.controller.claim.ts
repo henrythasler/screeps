@@ -1,12 +1,11 @@
 import { Config } from "./config";
-import { nonInterruptableTasks } from "./trait.global";
-import { Task } from "./manager.global";
+import { Task, nonInterruptableTasks } from "./task";
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.CONTROLLER_CLAIM)) {
+    if (creep.memory.traits.includes(Task.CLAIM_CONTROLLER)) {
         const controller = creep.room.controller;
         if (controller && (!controller.my) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-            return Task.CONTROLLER_CLAIM;
+            return Task.CLAIM_CONTROLLER;
         }
     }
     return creep.memory.task;
@@ -14,7 +13,7 @@ export function check(creep: Creep): Task {
 
 export function execute(creep: Creep): Task {
     const controller = creep.room.controller;
-    if ((creep.memory.task == Task.CONTROLLER_CLAIM) && controller) {
+    if ((creep.memory.task == Task.CLAIM_CONTROLLER) && controller) {
         const res = creep.claimController(controller);
         if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(controller, { visualizePathStyle: { stroke: '#ff0000' } });

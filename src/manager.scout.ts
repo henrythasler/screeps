@@ -1,5 +1,6 @@
 import { Config } from "./config";
-import { EnergyLocation, Role, Task, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
+import { Task } from "./task";
 
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
@@ -12,7 +13,7 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [TOUGH, 10],
 ]);
 
-const workerZoo: Map<SpeciesName, Species> = new Map([
+const scoutZoo: Map<SpeciesName, Species> = new Map([
     [SpeciesName.SCOUT_ENTRY, { parts: [/*CLAIM, */WORK, CARRY, MOVE, MOVE], cost: 200 }],
 ]);
 
@@ -46,14 +47,14 @@ export function run(): void {
     if (scouts.length < Config.scout.minCountPerRoom) {
         const spawn = spawns[0];
         var newName = 'scout_' + Game.time;
-        const species = findMostExpensiveCreep(spawn.room.energyCapacityAvailable, workerZoo);
+        const species = findMostExpensiveCreep(spawn.room.energyCapacityAvailable, scoutZoo);
         if (species) {
-            spawn.spawnCreep(workerZoo.get(species)!.parts, newName,
+            spawn.spawnCreep(scoutZoo.get(species)!.parts, newName,
                 {
                     memory: {
                         role: Role.SCOUT,
                         task: Task.IDLE,
-                        traits: [Task.IDLE, Task.CHARGE, Task.CONTROLLER_CLAIM, Task.CONTROLLER_RESERVE],
+                        traits: [Task.IDLE, Task.CHARGE, Task.CLAIM_CONTROLLER, Task.RESERVE_CONTROLLER],
                         percentile: -1,
                         lastChargeSource: EnergyLocation.OTHER,
                         lastEnergyDeposit: EnergyLocation.OTHER,

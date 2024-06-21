@@ -1,4 +1,4 @@
-import { Task } from "./manager.global";
+import { Task } from "./task";
 
 class Worker {
     static minCountPerRoom = 12;
@@ -7,22 +7,22 @@ class Worker {
         Task.CHARGE,
         Task.MOVETO,
         Task.CHARGE_STRUCTURE,
-        Task.CONTROLLER_CHARGE,
+        Task.CHARGE_CONTROLLER,
         Task.BUILD_STRUCTURE,
         Task.STORE_ENERGY,
-        Task.STRUCTURE_REPAIR,
-        Task.CONTROLLER_REFRESH,
+        Task.REPAIR_STRUCTURE,
+        Task.REFRESH_CONTROLLER,
     ];
     static traitDistribution: Map<Task, number> = new Map([
         [Task.IDLE, 1],
         [Task.CHARGE, 1],
         [Task.MOVETO, 1],
         [Task.CHARGE_STRUCTURE, 0.5],
-        [Task.CONTROLLER_CHARGE, 1],
+        [Task.CHARGE_CONTROLLER, 1],
         [Task.BUILD_STRUCTURE, 1],
         [Task.STORE_ENERGY, 1],
-        [Task.STRUCTURE_REPAIR, 0.5],
-        [Task.CONTROLLER_REFRESH, 0.2],
+        [Task.REPAIR_STRUCTURE, 0.5],
+        [Task.REFRESH_CONTROLLER, 0.2],
     ]);
 }
 
@@ -32,16 +32,16 @@ class Scout {
         Task.IDLE,
         Task.CHARGE,
         Task.MOVETO,
-        Task.CONTROLLER_CLAIM,
-        Task.CONTROLLER_RESERVE,
+        Task.CLAIM_CONTROLLER,
+        Task.RESERVE_CONTROLLER,
         Task.SCOUT,
     ];
     static traitDistribution: Map<Task, number> = new Map([
         [Task.IDLE, 1],
         [Task.CHARGE, 1],
         [Task.MOVETO, 1],
-        [Task.CONTROLLER_CLAIM, 1],
-        [Task.CONTROLLER_RESERVE, 1],
+        [Task.CLAIM_CONTROLLER, 1],
+        [Task.RESERVE_CONTROLLER, 1],
         [Task.SCOUT, 1],
     ]);
 }

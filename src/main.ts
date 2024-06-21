@@ -3,8 +3,9 @@ import * as scoutManager from "./manager.scout";
 import * as worker from "./role.worker";
 import * as scout from "./role.scout";
 import * as tower from "./tower";
-import { EnergyLocation, Role, Task } from "./manager.global";
+import { EnergyLocation, Role } from "./manager.global";
 import { Config } from "./config";
+import { Task } from "./task";
 
 declare global {
     /*

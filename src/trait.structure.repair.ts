@@ -1,5 +1,4 @@
-import { nonInterruptableTasks } from "./trait.global";
-import { Task } from "./manager.global";
+import { Task, nonInterruptableTasks } from "./task";
 
 const repairFilter: StructureConstant[] = [
     STRUCTURE_EXTENSION,
@@ -9,7 +8,7 @@ const repairFilter: StructureConstant[] = [
 ];
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.STRUCTURE_REPAIR)) {
+    if (creep.memory.traits.includes(Task.REPAIR_STRUCTURE)) {
         const structuresToRepair: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return repairFilter.includes(structure.structureType) &&
@@ -17,7 +16,7 @@ export function check(creep: Creep): Task {
             }
         });
         if ((structuresToRepair.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-            return Task.STRUCTURE_REPAIR;
+            return Task.REPAIR_STRUCTURE;
         }
     }
     return creep.memory.task;
@@ -25,7 +24,7 @@ export function check(creep: Creep): Task {
 
 // FIXME: add hysteresis
 export function execute(creep: Creep): Task {
-    if (creep.memory.task == Task.STRUCTURE_REPAIR) {
+    if (creep.memory.task == Task.REPAIR_STRUCTURE) {
         const structuresToRepair = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return repairFilter.includes(structure.structureType) &&

@@ -1,21 +1,14 @@
+import { Task } from "./task";
+
 export enum Role {
     WORKER,
     SCOUT,
 }
 
-export enum Task {
-    IDLE,
-    CHARGE,
-    MOVETO,
-    CHARGE_STRUCTURE,
-    CONTROLLER_CHARGE,
-    BUILD_STRUCTURE,
-    STORE_ENERGY,
-    STRUCTURE_REPAIR,
-    CONTROLLER_REFRESH,
-    CONTROLLER_CLAIM,
-    CONTROLLER_RESERVE,
-    SCOUT,
+export enum Class {
+    NONE = 0,
+    WORKER_LOCAL = 1,
+    WORKER_REMOTE = 2,
 }
 
 export enum EnergyLocation {
@@ -34,7 +27,7 @@ export function taskToString(task: Task): string {
     if (task == Task.IDLE) return "IDLE";
     if (task == Task.CHARGE) return "CHARGE";
     if (task == Task.CHARGE_STRUCTURE) return "CHARGE_STRUCTURE";
-    if (task == Task.CONTROLLER_CHARGE) return "UPGRADE_STRUCTURE";
+    if (task == Task.CHARGE_CONTROLLER) return "UPGRADE_STRUCTURE";
     if (task == Task.BUILD_STRUCTURE) return "BUILD_STRUCTURE";
     return "unknown";
 }

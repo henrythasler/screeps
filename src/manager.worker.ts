@@ -1,5 +1,6 @@
 import { Config } from "./config";
-import { EnergyLocation, Role, Task, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
+import { Task } from "./task";
 
 const workerZoo: Map<SpeciesName, Species> = new Map([
     [SpeciesName.WORKER_ENTRY, { parts: [WORK, CARRY, MOVE], cost: 200 }],

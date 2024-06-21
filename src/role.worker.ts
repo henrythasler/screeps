@@ -1,5 +1,5 @@
-import { EnergyLocation, Task } from "./manager.global";
-import { idleTasks, nonInterruptableTasks } from "./trait.global";
+import { Task, nonInterruptableTasks, idleTasks } from "./task";
+import { EnergyLocation } from "./manager.global";
 import * as charge from "./trait.creep.charge";
 import * as moveto from "./trait.creep.moveto";
 import * as structureCharge from "./trait.structure.charge";
@@ -33,11 +33,11 @@ export function run(creep: Creep) {
             case Task.CHARGE: creep.say('🪫'); break;
             case Task.MOVETO: creep.say('👣'); break;
             case Task.CHARGE_STRUCTURE: creep.say('⚡'); break;
-            case Task.CONTROLLER_CHARGE: creep.say('⬆️'); break;
-            case Task.CONTROLLER_REFRESH: creep.say('🚿'); break;
+            case Task.CHARGE_CONTROLLER: creep.say('⬆️'); break;
+            case Task.REFRESH_CONTROLLER: creep.say('🚿'); break;
             case Task.BUILD_STRUCTURE: creep.say('🔨'); break;
             case Task.STORE_ENERGY: creep.say('🔋'); break;
-            case Task.STRUCTURE_REPAIR: creep.say('🔧'); break;
+            case Task.REPAIR_STRUCTURE: creep.say('🔧'); break;
             default: creep.say('💤');
         }
     }

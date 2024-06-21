@@ -1,5 +1,4 @@
-import { Task } from "./manager.global";
-import { nonInterruptableTasks } from "./trait.global";
+import { Task, nonInterruptableTasks } from "./task";
 import * as charge from "./trait.creep.charge";
 import * as moveto from "./trait.creep.moveto";
 import * as scoutRoom from "./trait.creep.scoutRoom";
@@ -24,7 +23,7 @@ export function run(creep: Creep) {
         switch (creep.memory.task) {
             case Task.CHARGE: creep.say('🪫'); break;
             case Task.SCOUT: creep.say('🔭'); break;
-            case Task.CONTROLLER_CLAIM: creep.say('🚩'); break;
+            case Task.CLAIM_CONTROLLER: creep.say('🚩'); break;
             case Task.MOVETO: creep.say('👣'); break;
             default: creep.say('💤');
         }

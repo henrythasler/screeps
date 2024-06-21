@@ -1,13 +1,13 @@
 import { Config } from "./config";
-import { nonInterruptableTasks } from "./trait.global";
-import { EnergyLocation, Task } from "./manager.global";
+import { EnergyLocation } from "./manager.global";
+import { Task, nonInterruptableTasks } from "./task";
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.CONTROLLER_REFRESH)) {
+    if (creep.memory.traits.includes(Task.REFRESH_CONTROLLER)) {
         const controller = creep.room.controller;
-        if ((creep.memory.task != Task.CONTROLLER_REFRESH) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0) && controller) {
+        if ((creep.memory.task != Task.REFRESH_CONTROLLER) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0) && controller) {
             if (controller.ticksToDowngrade < 7000) {
-                return Task.CONTROLLER_REFRESH;
+                return Task.REFRESH_CONTROLLER;
             }
         }
     }
@@ -16,7 +16,7 @@ export function check(creep: Creep): Task {
 
 export function execute(creep: Creep): Task {
     const controller = creep.room.controller;
-    if ((creep.memory.task == Task.CONTROLLER_REFRESH) && controller) {
+    if ((creep.memory.task == Task.REFRESH_CONTROLLER) && controller) {
         if ((controller.ticksToDowngrade < 9000) && (creep.store[RESOURCE_ENERGY] > 0)) {
             const res = creep.upgradeController(controller);
             if(res == OK) {

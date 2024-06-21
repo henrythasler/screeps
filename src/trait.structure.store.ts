@@ -1,5 +1,5 @@
-import { nonInterruptableTasks } from "./trait.global";
-import { EnergyLocation, Task } from "./manager.global";
+import { Task, nonInterruptableTasks } from "./task";
+import { EnergyLocation } from "./manager.global";
 
 const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
 
