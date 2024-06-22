@@ -21,7 +21,7 @@ export function run(creep: Creep) {
     creep.memory.task = charge.check(creep);    // manage creep charging
 
 
-    console.log(`${creep.memory.speciesName}: ${creep.memory.task}`);
+    // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`);
 
     // tell about the current task
     if (creep.memory.task != previousTask) {

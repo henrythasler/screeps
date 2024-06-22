@@ -24,8 +24,7 @@ declare global {
     interface Memory {
         uuid: number,
         log: any,
-        taskQueue: Task[],
-        ticksWithoutSpawn: number,
+        sources: string[],  // stores the ID of all known sources
     }
 
     interface CreepMemory {
@@ -50,7 +49,7 @@ declare global {
 
 export const loop = () => {
     const numWorker = workerManager.run();
-    if (numWorker >= Config.worker.minCountPerRoom) {
+    if (numWorker >= Config.worker.minCount) {
         scoutManager.run();
         collectorManager.run();
     }

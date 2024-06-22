@@ -21,4 +21,5 @@ export enum Trait {
     RESERVE_CONTROLLER,
 
     SWITCH_ROOM,    // allow movement to another room
+    RECON,  // can add objects to global memory
 }

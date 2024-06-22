@@ -2,7 +2,7 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 
 class Worker {
-    static minCountPerRoom = 12;
+    static minCount = 12;
     static availableTraits: Trait[] = [
         Trait.CHARGE_LOCAL,
         Trait.CHARGE_SOURCE,
@@ -28,25 +28,29 @@ class Worker {
 }
 
 class Scout {
-    static minCountPerRoom = 0;
+    static minCount = 1;
     static availableTraits: Trait[] = [
         Trait.CHARGE_SOURCE,
+        Trait.CHARGE_AWAY,
         Trait.CHARGE_STORAGE,
         Trait.CLAIM_CONTROLLER,
         Trait.RESERVE_CONTROLLER,
         Trait.SWITCH_ROOM,
+        Trait.RECON,
     ];
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 1],
-        [Trait.CHARGE_STORAGE, 1],
-        [Trait.CLAIM_CONTROLLER, 1],
+        [Trait.CHARGE_AWAY, 1],
+        [Trait.CHARGE_STORAGE, 0],
+        [Trait.CLAIM_CONTROLLER, 0],
         [Trait.RESERVE_CONTROLLER, 1],
         [Trait.SWITCH_ROOM, 1],
+        [Trait.RECON, 1],
     ]);
 }
 
 class Collector {
-    static minCount = 8;
+    static minCount = 4;
     static availableTraits: Trait[] = [
         Trait.CHARGE_SOURCE,
         Trait.CHARGE_AWAY,

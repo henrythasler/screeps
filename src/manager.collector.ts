@@ -15,14 +15,14 @@ const collectorZoo: Map<string, Species> = new Map([
     //     cost: 250,
     // }],
     ["COLLECTOR_BASIC", {
-        parts: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        parts: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: [
             Trait.CHARGE_AWAY,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
             Trait.SWITCH_ROOM,
         ],
-        cost: 700,
+        cost: 750,
     }],        
 ]);
 

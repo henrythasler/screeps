@@ -3,6 +3,8 @@ import * as charge from "./task.creep.charge";
 import * as moveto from "./task.creep.moveto";
 import * as switchRoom from "./task.creep.switchRoom";
 import * as claimController from "./task.controller.claim";
+import * as reserveController from "./task.controller.reserve";
+import * as recon from "./task.creep.recon";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -13,8 +15,10 @@ export function run(creep: Creep) {
     }
 
     // check what task this creep should do; any check can overwrite the previous task
+    creep.memory.task = recon.check(creep);
     creep.memory.task = moveto.check(creep);
     creep.memory.task = switchRoom.check(creep);
+    creep.memory.task = reserveController.check(creep);
     creep.memory.task = claimController.check(creep);
     creep.memory.task = charge.check(creep);    // manage creep charging
 
@@ -24,14 +28,17 @@ export function run(creep: Creep) {
             case Task.CHARGE: creep.say('🪫'); break;
             case Task.SWITCH_ROOM: creep.say('🚪'); break;
             case Task.CLAIM_CONTROLLER: creep.say('🚩'); break;
+            case Task.RESERVE_CONTROLLER: creep.say('🏳️'); break;
             case Task.MOVETO: creep.say('👣'); break;
             default: creep.say('💤');
         }
     }
 
     // execute current tasks
+    creep.memory.task = recon.execute(creep);
     creep.memory.task = moveto.execute(creep);
     creep.memory.task = switchRoom.execute(creep);
+    creep.memory.task = reserveController.execute(creep);
     creep.memory.task = claimController.execute(creep);
     creep.memory.task = charge.execute(creep);
 }

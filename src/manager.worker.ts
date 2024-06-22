@@ -98,7 +98,7 @@ const workerZoo: Map<string, Species> = new Map([
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: [
             Trait.CHARGE_LOCAL,
-            Trait.CHARGE_STORAGE,
+            // Trait.CHARGE_STORAGE,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
             Trait.REPAIR_STRUCTURE,
@@ -109,6 +109,21 @@ const workerZoo: Map<string, Species> = new Map([
         ],
         cost: 700,
     }], 
+    // ["WORKER_BASIC_HEAVY", {
+    //     parts: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+    //     traits: [
+    //         Trait.CHARGE_LOCAL,
+    //         // Trait.CHARGE_STORAGE,
+    //         Trait.CHARGE_SOURCE,
+    //         Trait.STORE_ENERGY,
+    //         Trait.REPAIR_STRUCTURE,
+    //         Trait.RECHARGE_STRUCTURE,
+    //         Trait.RECHARGE_CONTROLLER,
+    //         Trait.BUILD_STRUCTURE,
+    //         Trait.REFRESH_CONTROLLER,
+    //     ],
+    //     cost: 900,
+    // }],     
 ]);
 
 export function run(): number {
@@ -140,7 +155,7 @@ export function run(): number {
     const spawn = spawns[0];
 
     // check number of active creeps; spawn a new one if needed
-    if ((worker.length < Config.worker.minCountPerRoom) && !spawn.spawning) {
+    if ((worker.length < Config.worker.minCount) && !spawn.spawning) {
         const newName = 'worker_' + spawn.room.name + "_" + Game.time;
         const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, workerZoo);
         if (species) {

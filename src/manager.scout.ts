@@ -16,9 +16,17 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 
 const scoutZoo: Map<string, Species> = new Map([
     ["SCOUT_ENTRY", { 
-        parts: [/*CLAIM, */WORK, CARRY, MOVE, MOVE],
-        traits: [Trait.CHARGE_AWAY, Trait.SWITCH_ROOM],
-        cost: 200,
+        parts: [CLAIM, WORK, CARRY, MOVE, MOVE],
+        traits: [
+            // Trait.CHARGE_AWAY,
+            // Trait.CHARGE_STORAGE,
+            // Trait.CHARGE_SOURCE,
+            Trait.CLAIM_CONTROLLER,
+            Trait.RESERVE_CONTROLLER,
+            Trait.SWITCH_ROOM,    
+            Trait.RECON,
+        ],
+        cost: 800,
     }],
 ]);
 
@@ -51,7 +59,7 @@ export function run(): void {
     const spawn = spawns[0];
 
     // check number of active creeps; spawn a new one if needed
-    if (scouts.length < Config.scout.minCountPerRoom && !spawn.spawning) {
+    if (scouts.length < Config.scout.minCount && !spawn.spawning) {
         const newName = 'scout_' + spawn.room.name + "_" + Game.time;
         const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, scoutZoo);
         if (species) {

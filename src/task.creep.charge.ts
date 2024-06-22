@@ -9,7 +9,7 @@ const canCharge = (trait: Trait) => chargeTraits.includes(trait);
 
 export function check(creep: Creep): Task {
     if (creep.memory.occupation.some(canCharge) && !nonInterruptableTasks.includes(creep.memory.task)) {
-        if ((creep.store[RESOURCE_ENERGY] < 10) || (idleTasks.includes(creep.memory.task) && (creep.store.getFreeCapacity() > 0))) {
+        if ((creep.store[RESOURCE_ENERGY] < 1) || (idleTasks.includes(creep.memory.task) && (creep.store.getFreeCapacity() > 0))) {
             if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
                 creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
                 (creep.memory.homeBase == "")) {
@@ -68,7 +68,7 @@ export function execute(creep: Creep): Task {
                 return creep.memory.task;
             }
 
-            if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER) {
+            if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && creep.memory.occupation.includes(Trait.CHARGE_STORAGE)) {
                 const container = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (containerTypes.includes(structure.structureType) &&
