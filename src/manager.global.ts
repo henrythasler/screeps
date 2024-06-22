@@ -4,6 +4,7 @@ import { Trait } from "./trait";
 export enum Role {
     WORKER,
     SCOUT,
+    COLLECTOR,
 }
 
 export enum Class {
@@ -21,6 +22,7 @@ export enum EnergyLocation {
 export function roleToString(role: Role): string {
     if (role == Role.WORKER) return "Worker";
     if (role == Role.SCOUT) return "Scout";
+    if (role == Role.COLLECTOR) return "Collector";
     return "unknown";
 }
 

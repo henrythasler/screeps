@@ -10,7 +10,11 @@ const canCharge = (trait: Trait) => chargeTraits.includes(trait);
 export function check(creep: Creep): Task {
     if (creep.memory.occupation.some(canCharge) && !nonInterruptableTasks.includes(creep.memory.task)) {
         if ((creep.store[RESOURCE_ENERGY] < 10) || (idleTasks.includes(creep.memory.task) && (creep.store.getFreeCapacity() > 0))) {
-            return Task.CHARGE;
+            if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
+                creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
+                (creep.memory.homeBase == "")) {
+                return Task.CHARGE;
+            }
         }
     }
     return creep.memory.task;
@@ -93,8 +97,18 @@ export function execute(creep: Creep): Task {
                 }
             }) as Source[];
             if (sources.length > 0) {
+
+                let sourceId = 0;
                 // randomly select a source; static per creep
-                const sourceId = creep.memory.percentile % sources.length;
+                if (creep.memory.homeBase == creep.room.name) {
+                    sourceId = creep.memory.percentile % sources.length;
+                }
+                else {
+                    // sort by distance if in another room
+                    sources.sort((a: Source, b: Source): number => {
+                        return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
+                    });
+                }
 
                 // harvest or move towards source
                 if (creep.harvest(sources[sourceId]) == ERR_NOT_IN_RANGE) {

@@ -1,12 +1,15 @@
-import * as workerManager from "./manager.worker";
-import * as scoutManager from "./manager.scout";
-import * as worker from "./role.worker";
-import * as scout from "./role.scout";
-import * as tower from "./tower";
 import { EnergyLocation, Role } from "./manager.global";
 import { Config } from "./config";
 import { Task } from "./task";
 import { Trait } from "./trait";
+import * as workerManager from "./manager.worker";
+import * as scoutManager from "./manager.scout";
+import * as collectorManager from "./manager.collector";
+import * as worker from "./role.worker";
+import * as scout from "./role.scout";
+import * as collector from "./role.collector";
+import * as tower from "./tower";
+
 
 declare global {
     /*
@@ -49,18 +52,21 @@ export const loop = () => {
     const numWorker = workerManager.run();
     if (numWorker >= Config.worker.minCountPerRoom) {
         scoutManager.run();
+        collectorManager.run();
     }
     tower.run();
 
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
 
-        // let workers do their thing
         if (creep.memory.role == Role.WORKER) {
             worker.run(creep);
         }
         else if (creep.memory.role == Role.SCOUT) {
             scout.run(creep);
+        }
+        else if (creep.memory.role == Role.COLLECTOR) {
+            collector.run(creep);
         }
     }
 };

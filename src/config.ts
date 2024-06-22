@@ -4,6 +4,7 @@ import { Trait } from "./trait";
 class Worker {
     static minCountPerRoom = 12;
     static availableTraits: Trait[] = [
+        Trait.CHARGE_LOCAL,
         Trait.CHARGE_SOURCE,
         Trait.CHARGE_STORAGE,
         Trait.RECHARGE_STRUCTURE,
@@ -14,6 +15,7 @@ class Worker {
         Trait.REFRESH_CONTROLLER,
     ];
     static traitDistribution: Map<Trait, number> = new Map([
+        [Trait.CHARGE_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 1],
         [Trait.CHARGE_STORAGE, 1],
         [Trait.RECHARGE_STRUCTURE, 0.5],
@@ -43,8 +45,25 @@ class Scout {
     ]);
 }
 
+class Collector {
+    static minCount = 8;
+    static availableTraits: Trait[] = [
+        Trait.CHARGE_SOURCE,
+        Trait.CHARGE_AWAY,
+        Trait.STORE_ENERGY,
+        Trait.SWITCH_ROOM,
+    ];
+    static traitDistribution: Map<Trait, number> = new Map([
+        [Trait.CHARGE_SOURCE, 1],
+        [Trait.CHARGE_AWAY, 1],
+        [Trait.STORE_ENERGY, 1],
+        [Trait.SWITCH_ROOM, 1],
+    ]);    
+}
+
 export class Config {
     static minControllerLevel = 5;
     static worker = Worker;
     static scout = Scout;
+    static collector = Collector;
 }

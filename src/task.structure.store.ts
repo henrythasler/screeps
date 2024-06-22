@@ -5,7 +5,8 @@ import { Trait } from "./trait";
 const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
 
 export function check(creep: Creep): Task {
-    if ((creep.memory.lastChargeSource != EnergyLocation.CONTAINER) && creep.memory.occupation.includes(Trait.STORE_ENERGY)) {
+    if ((creep.memory.lastChargeSource != EnergyLocation.CONTAINER) && creep.memory.occupation.includes(Trait.STORE_ENERGY) &&
+        (creep.store.getFreeCapacity() == 0)) {
         const stores = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structureTypes.includes(structure.structureType) &&

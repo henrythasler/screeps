@@ -11,6 +11,7 @@ export enum Task {
     CLAIM_CONTROLLER,
     RESERVE_CONTROLLER,
     SWITCH_ROOM,
+    RETURN, // return to homeBase
 }
 
 // can always be interrupted by another task

@@ -15,7 +15,7 @@ export function execute(creep: Creep): Task {
     if ((creep.room.name == creep.memory.homeBase) && (creep.memory.task == Task.SWITCH_ROOM)) {
         const exits = creep.room.find(FIND_EXIT);
         if (exits.length > 0) {
-            // console.log(`current room: ${creep.room.name}, exits ${exits[10]}`);
+            console.log(`current room: ${creep.room.name}, exits ${exits[10]}`);
             creep.moveTo(exits[10], { visualizePathStyle: { stroke: '#0000ff' } })
         }
     }
