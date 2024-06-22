@@ -6,6 +6,7 @@ import * as tower from "./tower";
 import { EnergyLocation, Role } from "./manager.global";
 import { Config } from "./config";
 import { Task } from "./task";
+import { Trait } from "./trait";
 
 declare global {
     /*
@@ -21,12 +22,15 @@ declare global {
         uuid: number,
         log: any,
         taskQueue: Task[],
+        ticksWithoutSpawn: number,
     }
 
     interface CreepMemory {
+        speciesName?: string,
         role: Role,
         task: Task, // current action that the creep is doing
-        traits: Task[], // potential actions that a creep can perform
+        traits: Trait[], // potential actions that a creep can perform
+        occupation: Trait[],  // subset of traits that a creep is currently allowed to use 
         percentile: number,
         lastChargeSource: EnergyLocation,
         lastEnergyDeposit: EnergyLocation,
@@ -42,8 +46,10 @@ declare global {
 }
 
 export const loop = () => {
-    workerManager.run(Config.worker.minCountPerRoom);
-    scoutManager.run();
+    const numWorker = workerManager.run();
+    if (numWorker >= Config.worker.minCountPerRoom) {
+        scoutManager.run();
+    }
     tower.run();
 
     for (const name in Game.creeps) {

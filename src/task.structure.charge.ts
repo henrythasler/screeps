@@ -1,7 +1,8 @@
 import { Task, nonInterruptableTasks } from "./task";
+import { Trait } from "./trait";
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.CHARGE_STRUCTURE)) {
+    if (creep.memory.occupation.includes(Trait.RECHARGE_STRUCTURE)) {
         const structuresToCharge: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION ||

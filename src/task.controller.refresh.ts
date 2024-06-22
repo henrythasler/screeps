@@ -1,9 +1,10 @@
 import { Config } from "./config";
 import { EnergyLocation } from "./manager.global";
 import { Task, nonInterruptableTasks } from "./task";
+import { Trait } from "./trait";
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.REFRESH_CONTROLLER)) {
+    if (creep.memory.occupation.includes(Trait.REFRESH_CONTROLLER)) {
         const controller = creep.room.controller;
         if ((creep.memory.task != Task.REFRESH_CONTROLLER) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0) && controller) {
             if (controller.ticksToDowngrade < 7000) {

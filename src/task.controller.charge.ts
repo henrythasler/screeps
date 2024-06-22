@@ -1,10 +1,11 @@
 import { Config } from "./config";
 import { EnergyLocation } from "./manager.global";
 import { Task, nonInterruptableTasks, idleTasks } from "./task";
+import { Trait } from "./trait";
 
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.CHARGE_CONTROLLER)) {
+    if (creep.memory.occupation.includes(Trait.RECHARGE_CONTROLLER)) {
         const controller = creep.room.controller;
         if ((nonInterruptableTasks.indexOf(creep.memory.task) < 0) && controller) {
             if ((controller.level < Config.minControllerLevel) && (controller.progress < controller.progressTotal)) {

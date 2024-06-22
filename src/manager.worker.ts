@@ -1,38 +1,101 @@
-import { Trait } from "./trait";
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, SpeciesName, findMostExpensiveCreep } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies } from "./manager.global";
 import { Task } from "./task";
+import { Trait } from "./trait";
 
-const workerZoo: Map<SpeciesName, Species> = new Map([
-    [SpeciesName.WORKER_ENTRY, {
+const workerZoo: Map<string, Species> = new Map([
+    ["WORKER_ENTRY", {
         parts: [WORK, CARRY, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL, 
-            Trait.CHARGE_SOURCE, 
-            Trait.CHARGE_STORAGE, 
-            Trait.BUILD_STRUCTURE, 
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_SOURCE,
+            Trait.CHARGE_STORAGE,
+            Trait.BUILD_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
         ],
         cost: 200,
     }],
-    [SpeciesName.WORKER_ENTRY_SLOW, { 
+    ["WORKER_ENTRY_SLOW", {
         parts: [WORK, CARRY, CARRY, CARRY, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_SOURCE,
+            Trait.CHARGE_STORAGE,
+            Trait.BUILD_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+        ],
         cost: 300,
-     }],
-    [SpeciesName.WORKER_ENTRY_FAST, { parts: [WORK, CARRY, MOVE, MOVE], cost: 250 }],
-    [SpeciesName.WORKER_ENTRY_HEAVY, { parts: [WORK, CARRY, CARRY, MOVE, MOVE], cost: 300 }],
-    [SpeciesName.WORKER_BASIC, { parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE], cost: 400 }],
-    [SpeciesName.WORKER_BASIC_SLOW, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], cost: 600 }],
-    [SpeciesName.WORKER_BASIC_FAST, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], cost: 700 }],
+    }],
+    ["WORKER_ENTRY_FAST", {
+        parts: [WORK, CARRY, MOVE, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_SOURCE,
+            Trait.CHARGE_STORAGE,
+            Trait.BUILD_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+        ],
+        cost: 250,
+    }],
+    ["WORKER_ENTRY_HEAVY", {
+        parts: [WORK, CARRY, CARRY, MOVE, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_SOURCE,
+            Trait.CHARGE_STORAGE,
+            Trait.BUILD_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+        ],
+        cost: 300,
+    }],
+    ["WORKER_BASIC", {
+        parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_SOURCE,
+            Trait.CHARGE_STORAGE,
+            Trait.BUILD_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+        ],
+        cost: 400,
+    }],
+    ["WORKER_BASIC_SLOW", {
+        parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_SOURCE,
+            Trait.CHARGE_STORAGE,
+            Trait.BUILD_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+        ],
+        cost: 600,
+    }],
+    ["WORKER_BASIC_FAST", {
+        parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+        traits: [
+            Trait.CHARGE_LOCAL,
+            Trait.CHARGE_STORAGE,
+            Trait.CHARGE_SOURCE,
+            Trait.STORE_ENERGY,
+            Trait.REPAIR_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+            Trait.RECHARGE_CONTROLLER,
+            Trait.BUILD_STRUCTURE,
+            Trait.REFRESH_CONTROLLER,
+        ],
+        cost: 700,
+    }],
     // [SpeciesName.WORKER_BASIC_HEAVY, { parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], cost: 700 }],
 ]);
 
-export function run(minWorker: number) {
+export function run(): number {
 
     // create an array for all creeps to work with
-    const creeps: Creep[] = [];
+    const worker: Creep[] = [];
     for (const name in Game.creeps) {
-        creeps.push(Game.creeps[name]);
+        if (Game.creeps[name].memory.role == Role.WORKER) {
+            worker.push(Game.creeps[name]);
+        }
     }
 
     // create an array for all spawns
@@ -43,7 +106,7 @@ export function run(minWorker: number) {
 
     if ((Game.time % 60) == 0) {
         // clean up dead creeps every n ticks
-        for (var name in Memory.creeps) {
+        for (const name in Memory.creeps) {
             if (!Game.creeps[name]) {
                 delete Memory.creeps[name];
                 console.log('Clearing non-existing creep memory:', name);
@@ -51,72 +114,81 @@ export function run(minWorker: number) {
         }
     }
 
+    const spawn = spawns[0];
+
     // check number of active creeps; spawn a new one if needed
-    var numWorker = creeps.filter((creep: Creep) => creep.memory.role == Role.WORKER).length;
-    if (numWorker < minWorker) {
-        var newName = 'worker_' + Game.time;
-        const species = findMostExpensiveCreep(spawns[0].room.energyCapacityAvailable, workerZoo);
+    if ((worker.length < Config.worker.minCountPerRoom) && !spawn.spawning) {
+        const newName = 'worker_' + spawn.room.name + "_" + Game.time;
+        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, workerZoo);
         if (species) {
-            spawns[0].spawnCreep(workerZoo.get(species)!.parts, newName,
+            const res = spawn.spawnCreep(species.parts, newName,
                 {
                     memory: {
+                        speciesName: species.name,
                         role: Role.WORKER,
                         task: Task.IDLE,
-                        traits: [Task.IDLE, Task.CHARGE, Task.MOVETO, Task.CHARGE_STRUCTURE, Task.BUILD_STRUCTURE],
+                        traits: species.traits,
+                        occupation: [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE],
                         percentile: -1,
                         lastChargeSource: EnergyLocation.OTHER,
                         lastEnergyDeposit: EnergyLocation.OTHER,
                         homeBase: "",
                     },
                 });
+            if (res != OK) {
+                console.log(`[ERROR] spawnCreep(${species.parts}) returned ${res}`);
+            }
         }
     }
 
     // show some info about new creep
-    if (spawns[0].spawning) {
-        var spawningCreep = Game.creeps[spawns[0].spawning.name];
+    if (spawn.spawning) {
+        var spawningCreep = Game.creeps[spawn.spawning.name];
         // assign a unique number between 0..100
         spawningCreep.memory.percentile = Math.round(parseInt(spawningCreep.id.substring(22), 16) * 100 / 255);
-        spawns[0].room.visual.text(
-            '🛠️ ' + roleToString(spawningCreep.memory.role),
-            spawns[0].pos.x + 1,
-            spawns[0].pos.y,
-            { align: 'left', opacity: 0.8 });
+        spawn.room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.8 });
     }
 
     // apply trait distribution
     if ((Game.time % 30) == 0) {
-        const numCreeps = creeps.length;
-        const currentDistribution: Map<Task, number> = new Map();
+        const numCreeps = worker.length;
+        const currentDistribution: Map<Trait, number> = new Map();
+        for (const creep of worker) {
+            // update traits from blueprint
+            if (creep.memory.speciesName) {
+                const species = workerZoo.get(creep.memory.speciesName);
+                if(species) {
+                    creep.memory.traits = species.traits;
+                }
+            }
 
-        let traitOverview = "";
-        for (const creep of creeps) {
-            creep.memory.traits = [];
+            // assign occupation
+            creep.memory.occupation = [];
             for (const trait of Config.worker.availableTraits) {
 
                 const current = currentDistribution.get(trait);
                 const expected = Config.worker.traitDistribution.get(trait);
 
                 if (numCreeps >= 10) {
-                    if (expected && (creep.memory.percentile <= (expected * 100))) {
-                        creep.memory.traits.push(trait);
+                    if (creep.memory.traits.includes(trait) && expected && (creep.memory.percentile <= (expected * 100))) {
+                        creep.memory.occupation.push(trait);
                     }
                 }
                 else {
                     if (current && expected) {
-                        if (current < Math.ceil(expected * numCreeps)) {
-                            creep.memory.traits.push(trait);
+                        if (creep.memory.traits.includes(trait) && (current < Math.ceil(expected * numCreeps))) {
+                            creep.memory.occupation.push(trait);
                             currentDistribution.set(trait, current + 1);
                         }
                     }
-                    else {
-                        creep.memory.traits.push(trait);
+                    else if (creep.memory.traits.includes(trait)) {
+                        creep.memory.occupation.push(trait);
                         currentDistribution.set(trait, 1);
                     }
                 }
             }
-            traitOverview += `${creep.memory.traits.length}, `;
+            console.log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`)
         }
-        console.log(`Traits: [${traitOverview}]`);
     }
+    return worker.length;
 }

@@ -1,8 +1,9 @@
 import { Config } from "./config";
 import { Task, nonInterruptableTasks } from "./task";
+import { Trait } from "./trait";
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.CLAIM_CONTROLLER)) {
+    if (creep.memory.occupation.includes(Trait.CLAIM_CONTROLLER)) {
         const controller = creep.room.controller;
         if (controller && (!controller.my) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
             return Task.CLAIM_CONTROLLER;

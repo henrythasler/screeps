@@ -1,4 +1,5 @@
 import { Task, nonInterruptableTasks } from "./task";
+import { Trait } from "./trait";
 
 const repairFilter: StructureConstant[] = [
     STRUCTURE_EXTENSION,
@@ -8,7 +9,7 @@ const repairFilter: StructureConstant[] = [
 ];
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.REPAIR_STRUCTURE)) {
+    if (creep.memory.occupation.includes(Trait.REPAIR_STRUCTURE)) {
         const structuresToRepair: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return repairFilter.includes(structure.structureType) &&

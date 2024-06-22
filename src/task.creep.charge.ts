@@ -1,14 +1,17 @@
 import { Task, nonInterruptableTasks, idleTasks } from "./task";
 import { EnergyLocation } from "./manager.global";
+import { Trait } from "./trait";
 
 const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
+const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE];
+
+const canCharge = (trait: Trait) => chargeTraits.includes(trait);
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.CHARGE) && (creep.memory.task != Task.CHARGE) &&
-        (nonInterruptableTasks.indexOf(creep.memory.task) < 0) && (creep.store[RESOURCE_ENERGY] < 10) ||
-        ((idleTasks.indexOf(creep.memory.task) >= 0) && (creep.store.getFreeCapacity() > 0))
-    ) {
-        return Task.CHARGE;
+    if (creep.memory.occupation.some(canCharge) && !nonInterruptableTasks.includes(creep.memory.task)) {
+        if ((creep.store[RESOURCE_ENERGY] < 10) || (idleTasks.includes(creep.memory.task) && (creep.store.getFreeCapacity() > 0))) {
+            return Task.CHARGE;
+        }
     }
     return creep.memory.task;
 }
