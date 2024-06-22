@@ -1,12 +1,19 @@
+interface Hostiles {
+    count: number;
+    hits: number;
+}
 
-function defendRoom(room: string, towers: StructureTower[]): number {
+function defendRoom(room: string, towers: StructureTower[]): Hostiles {
+    
     const hostiles = Game.rooms[room].find(FIND_HOSTILE_CREEPS);
+    const stats: Hostiles = {count: hostiles.length, hits: 0};
     if (hostiles.length > 0) {
         const username = hostiles[0].owner.username;
         Game.notify(`User ${username} spotted in room ${room}`);
         towers.forEach(tower => tower.attack(hostiles[0]));
+        hostiles.forEach(hostile => stats.hits += hostile.hits);   
     }
-    return hostiles.length;
+    return stats;
 }
 
 function healCreeps(room: string, towers: StructureTower[]): void {
@@ -47,10 +54,19 @@ export function run(): void {
         const towers = Game.rooms[room].find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } }) as StructureTower[];
 
         if(towers.length > 0) {
-            const hostiles = defendRoom(room, towers);
-            if(hostiles == 0) {
+            const hostileStats = defendRoom(room, towers);
+            if(hostileStats.count == 0) {
                 healCreeps(room, towers);
                 repairStructure(room, towers);
+            }
+            else {
+                if(hostileStats.hits > 15000) {
+                    console.log(`[ALERT] ${hostileStats.count} hostiles (${hostileStats.hits} hits) in ${room}`);
+                    const res = Game.rooms[room].controller?.activateSafeMode();
+                    if(res != OK) {
+                        console.log(`[ERROR] in ${Game.rooms[room].name}.activateSafeMode(): ${res}`)
+                    }
+                }
             }
         }
     }
