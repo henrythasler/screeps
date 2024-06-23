@@ -53,18 +53,20 @@ export interface Species {
     name?: string,
 }
 
-export function findMostExpensiveSpecies(budget: number, zoo: Map<string, Species>): Species | undefined {
+export function findMostExpensiveSpecies(budget: number, ticksWithoutSpawn: number | undefined, zoo: Map<string, Species>): Species | undefined {
     let speciesName: string = "null";
+    ticksWithoutSpawn = ticksWithoutSpawn ? ticksWithoutSpawn : 0;
+    const actualBudget = budget - ticksWithoutSpawn;
     zoo.forEach((value, key) => {
-        if ((value.cost <= budget) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
+        if ((value.cost <= actualBudget) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
             speciesName = key;
         }
     });
 
-    console.log(`Selected species: ${speciesName} (${zoo.get(speciesName)?.cost}), energyCapacityAvailable: ${budget}`);
+    console.log(`Selected species: ${speciesName} (${zoo.get(speciesName)?.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
     const species = zoo.get(speciesName);
-    if(species) {
-        species.name = speciesName; 
+    if (species) {
+        species.name = speciesName;
     }
     return species;
 }

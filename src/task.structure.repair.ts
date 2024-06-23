@@ -4,7 +4,7 @@ import { Trait } from "./trait";
 const repairFilter: StructureConstant[] = [
     STRUCTURE_EXTENSION,
     STRUCTURE_SPAWN,
-    STRUCTURE_RAMPART,
+    // STRUCTURE_RAMPART,
     STRUCTURE_TOWER,
 ];
 

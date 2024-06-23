@@ -119,10 +119,9 @@ export function execute(creep: Creep): Task {
                 }
                 return creep.memory.task;
             }
-            // else {
-            //     const exits = creep.room.find(FIND_EXIT_BOTTOM);
-            //     creep.moveTo(exits[0]);
-            // }
+            else {
+                return Task.IDLE;
+            }
         }
         // energy is full, so we can do some work
         else {

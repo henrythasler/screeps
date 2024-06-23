@@ -2,7 +2,7 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 
 class Worker {
-    static minCount = 12;
+    static minCount = 10;
     static availableTraits: Trait[] = [
         Trait.CHARGE_LOCAL,
         Trait.CHARGE_SOURCE,
@@ -17,8 +17,8 @@ class Worker {
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 1],
-        [Trait.CHARGE_STORAGE, 1],
-        [Trait.RECHARGE_STRUCTURE, 0.5],
+        [Trait.CHARGE_STORAGE, 0.4],
+        [Trait.RECHARGE_STRUCTURE, 0.75],
         [Trait.RECHARGE_CONTROLLER, 1],
         [Trait.BUILD_STRUCTURE, 1],
         [Trait.STORE_ENERGY, 1],

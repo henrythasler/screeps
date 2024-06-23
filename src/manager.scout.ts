@@ -61,7 +61,7 @@ export function run(): void {
     // check number of active creeps; spawn a new one if needed
     if (scouts.length < Config.scout.minCount && !spawn.spawning) {
         const newName = 'scout_' + spawn.room.name + "_" + Game.time;
-        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, scoutZoo);
+        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, scoutZoo);
         if (species) {
             spawn.spawnCreep(species.parts, newName,
                 {

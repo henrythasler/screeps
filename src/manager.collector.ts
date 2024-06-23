@@ -57,7 +57,7 @@ export function run(): number {
     // check number of active creeps; spawn a new one if needed
     if ((collector.length < Config.collector.minCount) && !spawn.spawning) {
         const newName = 'collector_' + spawn.room.name + "_" + Game.time;
-        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, collectorZoo);
+        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, collectorZoo);
         if (species) {
             const res = spawn.spawnCreep(species.parts, newName,
                 {

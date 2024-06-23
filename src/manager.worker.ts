@@ -98,7 +98,7 @@ const workerZoo: Map<string, Species> = new Map([
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: [
             Trait.CHARGE_LOCAL,
-            // Trait.CHARGE_STORAGE,
+            Trait.CHARGE_STORAGE,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
             Trait.REPAIR_STRUCTURE,
@@ -108,7 +108,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.REFRESH_CONTROLLER,
         ],
         cost: 700,
-    }], 
+    }],
     // ["WORKER_BASIC_HEAVY", {
     //     parts: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
     //     traits: [
@@ -131,7 +131,7 @@ export function run(): number {
     // create an array for all creeps to work with
     const worker: Creep[] = [];
     for (const name in Game.creeps) {
-        if (Game.creeps[name].memory.role == Role.WORKER) {
+        if (Game.creeps[name].memory.role == Role.WORKER && !Game.creeps[name].spawning) {
             worker.push(Game.creeps[name]);
         }
     }
@@ -157,7 +157,7 @@ export function run(): number {
     // check number of active creeps; spawn a new one if needed
     if ((worker.length < Config.worker.minCount) && !spawn.spawning) {
         const newName = 'worker_' + spawn.room.name + "_" + Game.time;
-        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, workerZoo);
+        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, workerZoo);
         if (species) {
             const res = spawn.spawnCreep(species.parts, newName,
                 {
@@ -175,7 +175,28 @@ export function run(): number {
                 });
             if (res != OK) {
                 console.log(`[ERROR] spawnCreep(${species.parts}) returned ${res}`);
+                if (Memory.ticksWithoutSpawn == undefined) {
+                    Memory.ticksWithoutSpawn = 0;
+                }
+                Memory.ticksWithoutSpawn++;
             }
+            else {
+                Memory.ticksWithoutSpawn = 0;
+            }
+        }
+    }
+    else {
+        Memory.ticksWithoutSpawn = 0;
+
+        const needRepair: Creep[] = [];
+        for (const name in Game.creeps) {
+            if (Game.creeps[name].memory.role == Role.WORKER && !Game.creeps[name].spawning &&
+                spawn.pos.getRangeTo(Game.creeps[name].pos) <= 1) {
+                needRepair.push(Game.creeps[name]);
+            }
+        }
+        if (needRepair.length > 0) {
+            spawn.renewCreep(needRepair[0]);
         }
     }
 
@@ -195,7 +216,7 @@ export function run(): number {
             // update traits from blueprint
             if (creep.memory.speciesName) {
                 const species = workerZoo.get(creep.memory.speciesName);
-                if(species) {
+                if (species) {
                     creep.memory.traits = species.traits;
                 }
             }

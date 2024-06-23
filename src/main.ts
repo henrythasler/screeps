@@ -25,6 +25,7 @@ declare global {
         uuid: number,
         log: any,
         sources: string[],  // stores the ID of all known sources
+        ticksWithoutSpawn: number,
     }
 
     interface CreepMemory {
