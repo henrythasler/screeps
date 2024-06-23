@@ -156,47 +156,9 @@ export function run(): number {
 
     // check number of active creeps; spawn a new one if needed
     if ((worker.length < Config.worker.minCount) && !spawn.spawning) {
-        const newName = 'worker_' + spawn.room.name + "_" + Game.time;
         const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, workerZoo);
         if (species) {
-            const res = spawn.spawnCreep(species.parts, newName,
-                {
-                    memory: {
-                        speciesName: species.name,
-                        role: Role.WORKER,
-                        task: Task.IDLE,
-                        traits: species.traits,
-                        occupation: [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE],
-                        percentile: -1,
-                        lastChargeSource: EnergyLocation.OTHER,
-                        lastEnergyDeposit: EnergyLocation.OTHER,
-                        homeBase: spawn.room.name,
-                    },
-                });
-            if (res != OK) {
-                console.log(`[ERROR] spawnCreep(${species.parts}) returned ${res}`);
-                if (Memory.ticksWithoutSpawn == undefined) {
-                    Memory.ticksWithoutSpawn = 0;
-                }
-                Memory.ticksWithoutSpawn++;
-            }
-            else {
-                Memory.ticksWithoutSpawn = 0;
-            }
-        }
-    }
-    else {
-        Memory.ticksWithoutSpawn = 0;
-
-        const needRepair: Creep[] = [];
-        for (const name in Game.creeps) {
-            if (Game.creeps[name].memory.role == Role.WORKER && !Game.creeps[name].spawning &&
-                spawn.pos.getRangeTo(Game.creeps[name].pos) <= 1) {
-                needRepair.push(Game.creeps[name]);
-            }
-        }
-        if (needRepair.length > 0) {
-            spawn.renewCreep(needRepair[0]);
+            spawn.memory.buildQueue.push({species: species, role: Role.WORKER});
         }
     }
 
@@ -240,7 +202,7 @@ export function run(): number {
                             currentDistribution.set(trait, current + 1);
                         }
                     }
-                    else if (creep.memory.traits.includes(trait)) {
+                    else if (creep.memory.traits.includes(trait) && expected && expected > 0) {
                         creep.memory.occupation.push(trait);
                         currentDistribution.set(trait, 1);
                     }

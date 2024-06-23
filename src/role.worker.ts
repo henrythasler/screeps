@@ -46,6 +46,8 @@ export function run(creep: Creep) {
         creep.memory.lastChargeSource = EnergyLocation.SOURCE;
     }
 
+    console.log(`${creep.memory.speciesName}: ${creep.memory.task}`)
+
     // execute current tasks
     creep.memory.task = charge.execute(creep);
     creep.memory.task = structureCharge.execute(creep);

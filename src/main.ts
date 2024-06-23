@@ -10,6 +10,7 @@ import * as worker from "./role.worker";
 import * as scout from "./role.scout";
 import * as collector from "./role.collector";
 import * as tower from "./tower";
+import { RequiredSpecies } from "./manager.spawn";
 
 
 declare global {
@@ -25,7 +26,7 @@ declare global {
     interface Memory {
         uuid: number,
         log: any,
-        sources: string[],  // stores the ID of all known sources
+        sources: Array<Id<Source>>,  // stores the ID of all known sources
         ticksWithoutSpawn: number,
     }
 
@@ -42,7 +43,7 @@ declare global {
     }
 
     interface SpawnMemory {
-        buildQueue: Species[],
+        buildQueue: RequiredSpecies[],
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -61,6 +62,7 @@ export const loop = () => {
     }
     tower.run();
 
+    spawnManager.resetBuildQueue();
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
 
