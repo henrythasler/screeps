@@ -93,7 +93,7 @@ export function execute(creep: Creep): Task {
 
             const sources: Source[] = creep.room.find(FIND_SOURCES, {
                 filter: (source) => {
-                    return source.energy > 0;
+                    return (source.energy > 0 || source.ticksToRegeneration < 40);
                 }
             }) as Source[];
             if (sources.length > 0) {
@@ -111,12 +111,17 @@ export function execute(creep: Creep): Task {
                 }
 
                 // harvest or move towards source
-                if (creep.harvest(sources[sourceId]) == ERR_NOT_IN_RANGE) {
+                const res = creep.harvest(sources[sourceId]);
+                if (res == OK) {
+                    creep.memory.lastChargeSource = EnergyLocation.SOURCE;
+                }
+                else if ( res == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sources[sourceId], { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
                 else {
-                    creep.memory.lastChargeSource = EnergyLocation.SOURCE;
+                    console.log(`[ERROR] harvest(${sources[sourceId]}): ${res}`)
                 }
+
                 return creep.memory.task;
             }
             else {
