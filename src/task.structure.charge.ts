@@ -8,7 +8,7 @@ export function check(creep: Creep): Task {
                 return (structure.structureType == STRUCTURE_EXTENSION ||
                     structure.structureType == STRUCTURE_SPAWN ||
                     structure.structureType == STRUCTURE_TOWER) &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    (structure.store.getFreeCapacity(RESOURCE_ENERGY) / structure.store.getCapacity(RESOURCE_ENERGY) > 0.1);
             }
         });
         if ((structuresToCharge.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
@@ -26,14 +26,14 @@ export function execute(creep: Creep): Task {
                     structure.structureType == STRUCTURE_EXTENSION ||
                     structure.structureType == STRUCTURE_SPAWN ||
                     structure.structureType == STRUCTURE_TOWER) &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    (structure.store.getFreeCapacity(RESOURCE_ENERGY) / structure.store.getCapacity(RESOURCE_ENERGY) > 0.1);
             }
         });
         if (structuresToCharge.length > 0) {
             // FIXME: add priority for charging structures
             structuresToCharge.sort((a: AnyStructure, b: AnyStructure): number => {
                 return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
-            });            
+            });
             if (creep.transfer(structuresToCharge[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(structuresToCharge[0], { visualizePathStyle: { stroke: '#00ff00' } });
             }
