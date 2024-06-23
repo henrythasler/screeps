@@ -1,42 +1,38 @@
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies } from "./manager.global";
+import { EnergyLocation, Role, Species, findMostExpensiveSpecies } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
-const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
-    [MOVE, 50],
-    [WORK, 100],
-    [CARRY, 50],
-    [ATTACK, 80],
-    [RANGED_ATTACK, 150],
-    [HEAL, 250],
-    [CLAIM, 600],
-    [TOUGH, 10],
-]);
-
-const scoutZoo: Map<string, Species> = new Map([
-    ["SCOUT_ENTRY", { 
-        parts: [CLAIM, WORK, CARRY, MOVE, MOVE],
+const collectorZoo: Map<string, Species> = new Map([
+    // ["COLLECTOR_TEST", {
+    //     parts: [WORK, CARRY, MOVE, MOVE],
+    //     traits: [
+    //         Trait.CHARGE_AWAY,
+    //         Trait.CHARGE_SOURCE,
+    //         Trait.STORE_ENERGY,
+    //         Trait.SWITCH_ROOM,
+    //     ],
+    //     cost: 250,
+    // }],
+    ["COLLECTOR_BASIC", {
+        parts: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: [
-            // Trait.CHARGE_AWAY,
-            // Trait.CHARGE_STORAGE,
-            // Trait.CHARGE_SOURCE,
-            Trait.CLAIM_CONTROLLER,
-            Trait.RESERVE_CONTROLLER,
-            Trait.SWITCH_ROOM,    
-            Trait.RECON,
+            Trait.CHARGE_AWAY,
+            Trait.CHARGE_SOURCE,
+            Trait.STORE_ENERGY,
+            Trait.SWITCH_ROOM,
         ],
-        cost: 800,
-    }],
+        cost: 750,
+    }],        
 ]);
 
-export function run(): void {
+export function run(): number {
 
     // create an array for all creeps to work with
-    const scouts: Creep[] = [];
+    const collector: Creep[] = [];
     for (const name in Game.creeps) {
-        if (Game.creeps[name].memory.role == Role.SCOUT) {
-            scouts.push(Game.creeps[name]);
+        if (Game.creeps[name].memory.role == Role.COLLECTOR) {
+            collector.push(Game.creeps[name]);
         }
     }
 
@@ -59,24 +55,27 @@ export function run(): void {
     const spawn = spawns[0];
 
     // check number of active creeps; spawn a new one if needed
-    if (scouts.length < Config.scout.minCount && !spawn.spawning) {
-        const newName = 'scout_' + spawn.room.name + "_" + Game.time;
-        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, scoutZoo);
+    if ((collector.length < Config.collector.minCount) && !spawn.spawning) {
+        const newName = 'collector_' + spawn.room.name + "_" + Game.time;
+        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, collectorZoo);
         if (species) {
-            spawn.spawnCreep(species.parts, newName,
+            const res = spawn.spawnCreep(species.parts, newName,
                 {
                     memory: {
                         speciesName: species.name,
-                        role: Role.SCOUT,
+                        role: Role.COLLECTOR,
                         task: Task.IDLE,
                         traits: species.traits,
-                        occupation: [], //[Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE],
+                        occupation: [],
                         percentile: -1,
                         lastChargeSource: EnergyLocation.OTHER,
                         lastEnergyDeposit: EnergyLocation.OTHER,
                         homeBase: spawn.room.name,
                     },
                 });
+            if (res != OK) {
+                console.log(`[ERROR] spawnCreep(${species.parts}) returned ${res}`);
+            }
         }
     }
 
@@ -90,25 +89,23 @@ export function run(): void {
 
     // apply trait distribution
     if ((Game.time % 30) == 0) {
-        const numCreeps = scouts.length;
+        const numCreeps = collector.length;
         const currentDistribution: Map<Trait, number> = new Map();
-
-        let traitOverview = "";
-        for (const creep of scouts) {
+        for (const creep of collector) {
             // update traits from blueprint
             if (creep.memory.speciesName) {
-                const species = scoutZoo.get(creep.memory.speciesName);
-                if(species) {
+                const species = collectorZoo.get(creep.memory.speciesName);
+                if (species) {
                     creep.memory.traits = species.traits;
                 }
             }
 
             // assign occupation
             creep.memory.occupation = [];
-            for (const trait of Config.scout.availableTraits) {
+            for (const trait of Config.collector.availableTraits) {
 
                 const current = currentDistribution.get(trait);
-                const expected = Config.scout.traitDistribution.get(trait);
+                const expected = Config.collector.traitDistribution.get(trait);
 
                 if (numCreeps >= 10) {
                     if (creep.memory.traits.includes(trait) && expected && (creep.memory.percentile <= (expected * 100))) {
@@ -131,4 +128,5 @@ export function run(): void {
             console.log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`)
         }
     }
+    return collector.length;
 }

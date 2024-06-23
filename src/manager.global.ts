@@ -1,8 +1,10 @@
 import { Task } from "./task";
+import { Trait } from "./trait";
 
 export enum Role {
     WORKER,
     SCOUT,
+    COLLECTOR,
 }
 
 export enum Class {
@@ -20,6 +22,7 @@ export enum EnergyLocation {
 export function roleToString(role: Role): string {
     if (role == Role.WORKER) return "Worker";
     if (role == Role.SCOUT) return "Scout";
+    if (role == Role.COLLECTOR) return "Collector";
     return "unknown";
 }
 
@@ -43,31 +46,27 @@ export const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [TOUGH, 10],
 ]);
 
-export enum SpeciesName {
-    WORKER_ENTRY,
-    WORKER_ENTRY_SLOW,
-    WORKER_ENTRY_FAST,
-    WORKER_ENTRY_HEAVY,
-    WORKER_BASIC,
-    WORKER_BASIC_SLOW,
-    WORKER_BASIC_FAST,
-    WORKER_BASIC_HEAVY,
-
-    SCOUT_ENTRY = 0x100,
-}
-
 export interface Species {
     parts: BodyPartConstant[],
+    traits: Trait[],
     cost: number,
+    name?: string,
 }
 
-export function findMostExpensiveCreep(budget: number, zoo: Map<SpeciesName, Species>): SpeciesName | null {
-    let selection: SpeciesName | null = null;
+export function findMostExpensiveSpecies(budget: number, ticksWithoutSpawn: number | undefined, zoo: Map<string, Species>): Species | undefined {
+    let speciesName: string = "null";
+    ticksWithoutSpawn = ticksWithoutSpawn ? ticksWithoutSpawn : 0;
+    const actualBudget = budget - ticksWithoutSpawn;
     zoo.forEach((value, key) => {
-        if ((value.cost <= budget) && ((selection != null) ? value.cost >= zoo.get(selection)!.cost : true)) {
-            selection = key;
+        if ((value.cost <= actualBudget) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
+            speciesName = key;
         }
     });
-    console.log(`Selected species: ${selection} (${selection ? zoo.get(selection)?.cost : "0"}), energyCapacityAvailable: ${budget}`);
-    return selection;
+
+    console.log(`Selected species: ${speciesName} (${zoo.get(speciesName)?.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
+    const species = zoo.get(speciesName);
+    if (species) {
+        species.name = speciesName;
+    }
+    return species;
 }

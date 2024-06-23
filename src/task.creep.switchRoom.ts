@@ -1,7 +1,8 @@
 import { Task, nonInterruptableTasks } from "./task";
+import { Trait } from "./trait";
 
 export function check(creep: Creep): Task {
-    if (creep.memory.traits.includes(Task.SWITCH_ROOM)) {
+    if (creep.memory.occupation.includes(Trait.SWITCH_ROOM)) {
         const exits = creep.room.find(FIND_EXIT);
         if ((exits.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
             return Task.SWITCH_ROOM;
