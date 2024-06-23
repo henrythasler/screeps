@@ -24,7 +24,7 @@ const scoutZoo: Map<string, Species> = new Map([
             Trait.CLAIM_CONTROLLER,
             Trait.RESERVE_CONTROLLER,
             Trait.SWITCH_ROOM,    
-            Trait.RECON,
+            Trait.RECON_ROOM,
         ],
         cost: 800,
     }],

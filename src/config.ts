@@ -36,7 +36,7 @@ class Scout {
         Trait.CLAIM_CONTROLLER,
         Trait.RESERVE_CONTROLLER,
         Trait.SWITCH_ROOM,
-        Trait.RECON,
+        Trait.RECON_ROOM,
     ];
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 1],
@@ -45,7 +45,7 @@ class Scout {
         [Trait.CLAIM_CONTROLLER, 0],
         [Trait.RESERVE_CONTROLLER, 1],
         [Trait.SWITCH_ROOM, 1],
-        [Trait.RECON, 1],
+        [Trait.RECON_ROOM, 1],
     ]);
 }
 

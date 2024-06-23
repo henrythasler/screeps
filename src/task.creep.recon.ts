@@ -3,7 +3,7 @@ import { EnergyLocation } from "./manager.global";
 import { Trait } from "./trait";
 
 export function check(creep: Creep): Task {
-    if(creep.memory.occupation.includes(Trait.RECON)) {
+    if(creep.memory.occupation.includes(Trait.RECON_ROOM)) {
         const sources: Source[] = creep.room.find(FIND_SOURCES) as Source[];                
 
         if(Memory.sources == undefined) {
