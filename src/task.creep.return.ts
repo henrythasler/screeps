@@ -12,9 +12,9 @@ export function check(creep: Creep): Task {
 
 export function execute(creep: Creep): Task {
     if ((creep.room.name != creep.memory.homeBase) && (creep.memory.task == Task.RETURN)) {
-        const home = new RoomPosition(34, 25, creep.memory.homeBase);
-        let res = creep.moveTo(home, { visualizePathStyle: { stroke: '#0000ff' } })
-        if(res != OK) {
+        const home = Game.rooms[creep.memory.homeBase].find(FIND_FLAGS)[0].pos;
+        const res = creep.moveTo(home, { visualizePathStyle: { stroke: '#0000ff' } })
+        if(!([OK, ERR_TIRED].includes(res as any))) {
             console.log(`[ERROR] creep.moveTo(${home}) failed: ${res}`);
         }
     }

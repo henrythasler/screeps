@@ -1,7 +1,8 @@
-import { EnergyLocation, Role } from "./manager.global";
+import { EnergyLocation, Role, Species } from "./manager.global";
 import { Config } from "./config";
 import { Task } from "./task";
 import { Trait } from "./trait";
+import * as spawnManager from "./manager.spawn";
 import * as workerManager from "./manager.worker";
 import * as scoutManager from "./manager.scout";
 import * as collectorManager from "./manager.collector";
@@ -40,6 +41,10 @@ declare global {
         homeBase: string,
     }
 
+    interface SpawnMemory {
+        buildQueue: Species[],
+    }
+
     // Syntax for adding proprties to `global` (ex "global.log")
     namespace NodeJS {
         interface Global {
@@ -69,4 +74,5 @@ export const loop = () => {
             collector.run(creep);
         }
     }
+    spawnManager.run();
 };
