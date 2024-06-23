@@ -190,9 +190,9 @@ export function run(): number {
 
         const needRepair: Creep[] = [];
         for (const name in Game.creeps) {
-            if (Game.creeps[name].memory.role == Role.WORKER && !Game.creeps[name].spawning &&
-                spawn.pos.getRangeTo(Game.creeps[name].pos) <= 1) {
-                needRepair.push(Game.creeps[name]);
+            const creep = Game.creeps[name];
+            if (!creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < 1000) {
+                needRepair.push(creep);
             }
         }
         if (needRepair.length > 0) {
