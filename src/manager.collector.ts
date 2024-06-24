@@ -26,8 +26,9 @@ const collectorZoo: Map<string, Species> = new Map([
     }],        
 ]);
 
-export function run(): number {
-
+export function run(room: Room): number {
+    return 0;
+/*
     // create an array for all creeps to work with
     const collector: Creep[] = [];
     for (const name in Game.creeps) {
@@ -129,4 +130,5 @@ export function run(): number {
         }
     }
     return collector.length;
+*/    
 }

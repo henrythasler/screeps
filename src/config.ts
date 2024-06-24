@@ -3,17 +3,6 @@ import { Trait } from "./trait";
 
 class Worker {
     static minCount = 2;
-    static availableTraits: Trait[] = [
-        Trait.CHARGE_LOCAL,
-        Trait.CHARGE_SOURCE,
-        Trait.CHARGE_STORAGE,
-        Trait.RECHARGE_STRUCTURE,
-        Trait.RECHARGE_CONTROLLER,
-        Trait.BUILD_STRUCTURE,
-        Trait.STORE_ENERGY,
-        Trait.REPAIR_STRUCTURE,
-        Trait.REFRESH_CONTROLLER,
-    ];
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 1],
@@ -62,11 +51,17 @@ class Collector {
         [Trait.CHARGE_AWAY, 1],
         [Trait.STORE_ENERGY, 1],
         [Trait.SWITCH_ROOM, 1],
-    ]);    
+    ]);       
 }
 
 export class Config {
     static minControllerLevel = 5;
+
+    static creepHealThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
+    static structureRepairThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair
+
+    static safeModeThreshold = 15_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
+
     static worker = Worker;
     static scout = Scout;
     static collector = Collector;

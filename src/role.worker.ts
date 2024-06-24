@@ -1,3 +1,4 @@
+import { log } from "./debug";
 import { Task, nonInterruptableTasks, idleTasks } from "./task";
 import { EnergyLocation } from "./manager.global";
 import * as charge from "./task.creep.charge";
@@ -46,7 +47,7 @@ export function run(creep: Creep) {
         creep.memory.lastChargeSource = EnergyLocation.SOURCE;
     }
 
-    console.log(`${creep.memory.speciesName}: ${creep.memory.task}`)
+    // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`)
 
     // execute current tasks
     creep.memory.task = charge.execute(creep);

@@ -1,5 +1,6 @@
+import { Loglevel, log } from "./debug";
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, applyTraitDistribution } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -126,8 +127,36 @@ const workerZoo: Map<string, Species> = new Map([
     // }],     
 ]);
 
-export function run(): number {
+export function run(room: Room): number {
+    const activeWorker: Creep[] = room.find(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return creep.memory.homeBase == room.name && creep.memory.role == Role.WORKER;
+        }
+    });
 
+    log(activeWorker.length.toString(), Loglevel.DEBUG);
+
+    if (activeWorker.length < Config.worker.minCount) {
+        const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, workerZoo);
+        if (species) {
+            room.memory.buildQueue.push({species: species, role: Role.WORKER});
+        }
+    }
+
+    // apply trait distribution
+    if ((Game.time % 10) == 0) {
+        const currentDistribution: Map<Trait, number> = new Map();
+        for (const creep of activeWorker) {
+            // update traits from blueprint
+                const species = workerZoo.get(creep.memory.speciesName);
+                creep.memory.traits = species?.traits ?? [];
+
+            // assign occupation
+            creep.memory.occupation = applyTraitDistribution(creep, activeWorker.length, currentDistribution, Config.worker.traitDistribution);
+            log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`, Loglevel.DEBUG);
+        }
+    }    
+/*
     // create an array for all creeps to work with
     const worker: Creep[] = [];
     for (const name in Game.creeps) {
@@ -142,16 +171,6 @@ export function run(): number {
         spawns.push(Game.spawns[name]);
     }
 
-    if ((Game.time % 60) == 0) {
-        // clean up dead creeps every n ticks
-        for (const name in Memory.creeps) {
-            if (!Game.creeps[name]) {
-                delete Memory.creeps[name];
-                console.log('Clearing non-existing creep memory:', name);
-            }
-        }
-    }
-
     const spawn = spawns[0];
 
     // check number of active creeps; spawn a new one if needed
@@ -160,14 +179,6 @@ export function run(): number {
         if (species) {
             spawn.memory.buildQueue.push({species: species, role: Role.WORKER});
         }
-    }
-
-    // show some info about new creep
-    if (spawn.spawning) {
-        var spawningCreep = Game.creeps[spawn.spawning.name];
-        // assign a unique number between 0..100
-        spawningCreep.memory.percentile = Math.round(parseInt(spawningCreep.id.substring(22), 16) * 100 / 255);
-        spawn.room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.8 });
     }
 
     // apply trait distribution
@@ -211,5 +222,6 @@ export function run(): number {
             console.log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`)
         }
     }
-    return worker.length;
+    */
+    return activeWorker.length;
 }

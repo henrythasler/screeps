@@ -1,4 +1,4 @@
-import { EnergyLocation, Role, Species } from "./manager.global";
+import { EnergyLocation, Role, Species, creepMaintenance } from "./manager.global";
 import { Config } from "./config";
 import { Task } from "./task";
 import { Trait } from "./trait";
@@ -6,9 +6,7 @@ import * as spawnManager from "./manager.spawn";
 import * as workerManager from "./manager.worker";
 import * as scoutManager from "./manager.scout";
 import * as collectorManager from "./manager.collector";
-import * as worker from "./role.worker";
-import * as scout from "./role.scout";
-import * as collector from "./role.collector";
+import * as roomManager from "./manager.room";
 import * as tower from "./tower";
 import { RequiredSpecies } from "./manager.spawn";
 
@@ -27,11 +25,10 @@ declare global {
         uuid: number,
         log: any,
         sources: Array<Id<Source>>,  // stores the ID of all known sources
-        ticksWithoutSpawn: number,
     }
 
     interface CreepMemory {
-        speciesName?: string,
+        speciesName: string,
         role: Role,
         task: Task, // current action that the creep is doing
         traits: Trait[], // potential actions that a creep can perform
@@ -43,7 +40,11 @@ declare global {
     }
 
     interface SpawnMemory {
+    }
+
+    interface RoomMemory {
         buildQueue: RequiredSpecies[],
+        ticksWithPendingSpawns: number;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -55,12 +56,23 @@ declare global {
 }
 
 export const loop = () => {
+    creepMaintenance();
+
+    for (const roomId in Game.rooms) {
+        const room = Game.rooms[roomId];
+        tower.run(room);
+
+        room.memory.buildQueue = [];
+        const numWorker = workerManager.run(room);  // manage worker population
+        spawnManager.run(room); // spawn/heal creeps
+        roomManager.run(room);  // execute creep action        
+    }
+/*        
     const numWorker = workerManager.run();
     if (numWorker >= Config.worker.minCount) {
         scoutManager.run();
         collectorManager.run();
     }
-    tower.run();
 
     spawnManager.resetBuildQueue();
     for (const name in Game.creeps) {
@@ -77,4 +89,5 @@ export const loop = () => {
         }
     }
     spawnManager.run();
+*/    
 };

@@ -70,3 +70,60 @@ export function findMostExpensiveSpecies(budget: number, ticksWithoutSpawn: numb
     }
     return species;
 }
+
+export function applyTraitDistribution(creep: Creep, population: number, creepsPerTrait: Map<Trait, number>, expectedDistribution: Map<Trait, number>): Trait[] {
+    const occupation: Trait[] = [];
+    expectedDistribution.forEach((probability, trait) => {
+        if (creepsPerTrait.has(trait)) {
+            const numCreeps = creepsPerTrait.get(trait)!;
+            if (creep.memory.traits.includes(trait) && (numCreeps < Math.ceil(probability * population))) {
+                occupation.push(trait);
+                creepsPerTrait.set(trait, numCreeps + 1);
+            }
+        }
+        else if (creep.memory.traits.includes(trait) && probability > 0) {
+            occupation.push(trait);
+            creepsPerTrait.set(trait, 1);
+        }
+    });
+    return occupation;
+
+
+    /*    
+        for (const trait of Config.worker.availableTraits) {
+    
+            const current = currentDistribution.get(trait);
+            const expected = Config.worker.traitDistribution.get(trait);
+    
+            if (numCreeps >= 10) {
+                if (creep.memory.traits.includes(trait) && expected && (creep.memory.percentile <= (expected * 100))) {
+                    creep.memory.occupation.push(trait);
+                }
+            }
+            else {
+                if (current && expected) {
+                    if (creep.memory.traits.includes(trait) && (current < Math.ceil(expected * numCreeps))) {
+                        creep.memory.occupation.push(trait);
+                        currentDistribution.set(trait, current + 1);
+                    }
+                }
+                else if (creep.memory.traits.includes(trait) && expected && expected > 0) {
+                    creep.memory.occupation.push(trait);
+                    currentDistribution.set(trait, 1);
+                }
+            }
+        }    
+    */
+}
+
+export function creepMaintenance(): void {
+    if ((Game.time % 60) == 0) {
+        // clean up dead creeps every n ticks
+        for (const name in Memory.creeps) {
+            if (!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                // console.log('Clearing non-existing creep memory:', name);
+            }
+        }
+    }
+}
