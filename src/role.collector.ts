@@ -1,4 +1,4 @@
-import { Task, nonInterruptableTasks } from "./task";
+import { Task, nonInterruptableTasks, sayTask } from "./task";
 import * as charge from "./task.creep.charge";
 import * as moveto from "./task.creep.moveto";
 import * as switchRoom from "./task.creep.switchRoom";
@@ -20,19 +20,11 @@ export function run(creep: Creep) {
     creep.memory.task = structureStore.check(creep);
     creep.memory.task = charge.check(creep);    // manage creep charging
 
-
     // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`);
 
     // tell about the current task
     if (creep.memory.task != previousTask) {
-        switch (creep.memory.task) {
-            case Task.CHARGE: creep.say('🪫'); break;
-            case Task.SWITCH_ROOM: creep.say('🚪'); break;
-            case Task.RETURN: creep.say('🏠'); break;
-            case Task.STORE_ENERGY: creep.say('🔋'); break;
-            case Task.MOVETO: creep.say('👣'); break;
-            default: creep.say('💤');
-        }
+        sayTask(creep);
     }
 
     // execute current tasks

@@ -63,9 +63,9 @@ export const loop = () => {
         tower.run(room);
 
         room.memory.buildQueue = [];
-        const numWorker = workerManager.run(room);  // manage worker population
+        const numWorker = workerManager.run(room);  // manage worker population in that room
         spawnManager.run(room); // spawn/heal creeps
-        roomManager.run(room);  // execute creep action        
+        roomManager.run(room);  // execute creep action
     }
 /*        
     const numWorker = workerManager.run();

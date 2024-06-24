@@ -134,7 +134,7 @@ export function run(room: Room): number {
         }
     });
 
-    log(activeWorker.length.toString(), Loglevel.DEBUG);
+    // log(activeWorker.length.toString(), Loglevel.DEBUG);
 
     if (activeWorker.length < Config.worker.minCount) {
         const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, workerZoo);

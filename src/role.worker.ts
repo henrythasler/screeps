@@ -1,5 +1,5 @@
 import { log } from "./debug";
-import { Task, nonInterruptableTasks, idleTasks } from "./task";
+import { Task, nonInterruptableTasks, idleTasks, sayTask } from "./task";
 import { EnergyLocation } from "./manager.global";
 import * as charge from "./task.creep.charge";
 import * as moveto from "./task.creep.moveto";
@@ -30,17 +30,7 @@ export function run(creep: Creep) {
 
     // tell about the current task
     if (creep.memory.task != previousTask) {
-        switch (creep.memory.task) {
-            case Task.CHARGE: creep.say('🪫'); break;
-            case Task.MOVETO: creep.say('👣'); break;
-            case Task.CHARGE_STRUCTURE: creep.say('⚡'); break;
-            case Task.CHARGE_CONTROLLER: creep.say('⬆️'); break;
-            case Task.REFRESH_CONTROLLER: creep.say('🚿'); break;
-            case Task.BUILD_STRUCTURE: creep.say('🔨'); break;
-            case Task.STORE_ENERGY: creep.say('🔋'); break;
-            case Task.REPAIR_STRUCTURE: creep.say('🔧'); break;
-            default: creep.say('💤');
-        }
+        sayTask(creep);
     }
 
     if(idleTasks.includes(creep.memory.task)) {

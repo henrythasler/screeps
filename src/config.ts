@@ -2,12 +2,12 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 
 class Worker {
-    static minCount = 2;
+    static minCount = 6;
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 1],
         [Trait.CHARGE_STORAGE, 1],
-        [Trait.RECHARGE_STRUCTURE, 0.75],
+        [Trait.RECHARGE_STRUCTURE, 0.5],
         [Trait.RECHARGE_CONTROLLER, 1],
         [Trait.BUILD_STRUCTURE, 1],
         [Trait.STORE_ENERGY, 1],
@@ -17,16 +17,7 @@ class Worker {
 }
 
 class Scout {
-    static minCount = 1;
-    static availableTraits: Trait[] = [
-        Trait.CHARGE_SOURCE,
-        Trait.CHARGE_AWAY,
-        Trait.CHARGE_STORAGE,
-        Trait.CLAIM_CONTROLLER,
-        Trait.RESERVE_CONTROLLER,
-        Trait.SWITCH_ROOM,
-        Trait.RECON_ROOM,
-    ];
+    static minCount = 0;
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 1],
         [Trait.CHARGE_AWAY, 1],
@@ -40,12 +31,6 @@ class Scout {
 
 class Collector {
     static minCount = 0;
-    static availableTraits: Trait[] = [
-        Trait.CHARGE_SOURCE,
-        Trait.CHARGE_AWAY,
-        Trait.STORE_ENERGY,
-        Trait.SWITCH_ROOM,
-    ];
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 1],
         [Trait.CHARGE_AWAY, 1],
@@ -61,6 +46,11 @@ export class Config {
     static structureRepairThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair
 
     static safeModeThreshold = 15_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
+
+    static tombstoneMaxDistance = 10;   // max linear distance to travel for resource pickup
+    static ruinMaxDistance = 10;   // max linear distance to travel for resource pickup
+    static resourcePickupMaxDistance = 10;  // max linear distance to travel for resource pickup
+    static minHostileDistance = 10; // min linear distance that non-combatants must keep from hostiles
 
     static worker = Worker;
     static scout = Scout;

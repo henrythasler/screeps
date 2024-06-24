@@ -4,7 +4,7 @@ import { Trait } from "./trait";
 export function check(creep: Creep): Task {
     if (creep.memory.occupation.includes(Trait.BUILD_STRUCTURE)) {
         const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-        if ((constructionSites.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
+        if (constructionSites.length > 0 && !nonInterruptableTasks.includes(creep.memory.task)) {
             return Task.BUILD_STRUCTURE;
         }
     }
