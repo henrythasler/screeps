@@ -61,6 +61,30 @@ export const loop = () => {
     }
     tower.run();
 
+    if (Game.creeps["agent"]) {
+        if (Game.creeps["agent"].store.getFreeCapacity() > 0 && Game.creeps["agent"].memory.task == Task.CHARGE) {
+            const res = Game.creeps["agent"].harvest(Game.getObjectById("5bbcaf259099fc012e63a3bc"));
+            if (res == ERR_NOT_IN_RANGE) {
+                Game.creeps["agent"].moveTo(RoomPosition(26, 8, "E37S38"));
+            }
+        }
+        else {
+            Game.creeps["agent"].memory.task = Task.CHARGE_CONTROLLER;
+            const res = Game.creeps["agent"].upgradeController(Game.getObjectById("5bbcaf259099fc012e63a3bd"));
+            if (res == ERR_NOT_IN_RANGE) {
+                Game.creeps["agent"].moveTo(RoomPosition(34, 16, "E37S38"));
+            }
+            else if (res == ERR_NOT_ENOUGH_RESOURCES) {
+                Game.creeps["agent"].memory.task = Task.CHARGE;
+            }
+        }
+    }
+
+    // Game.creeps["agent"].moveTo(26, 8);
+    // Game.creeps["agent"].harvest(Game.getObjectById("5bbcaf259099fc012e63a3bc"))
+    // Game.creeps["agent"].moveTo(34, 16);
+    // Game.creeps["agent"].upgradeController(Game.getObjectById("5bbcaf259099fc012e63a3bd"))
+
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
 

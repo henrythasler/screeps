@@ -28,7 +28,7 @@ class Worker {
 }
 
 class Scout {
-    static minCount = 1;
+    static minCount = 0;
     static availableTraits: Trait[] = [
         Trait.CHARGE_SOURCE,
         Trait.CHARGE_AWAY,
