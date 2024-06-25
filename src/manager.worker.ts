@@ -205,6 +205,7 @@ export function run(): number {
         var spawningCreep = Game.creeps[spawn.spawning.name];
         // assign a unique number between 0..100
         spawningCreep.memory.percentile = Math.round(parseInt(spawningCreep.id.substring(22), 16) * 100 / 255);
+        spawningCreep.memory.task = Task.IDLE;
         spawn.room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.8 });
     }
 
