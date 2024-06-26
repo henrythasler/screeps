@@ -9,9 +9,9 @@ export function run(creep: Creep) {
     const previousTask = creep.memory.task;
 
     // any task that is interruptable can be redefined each tick
-    if (nonInterruptableTasks.indexOf(creep.memory.task) < 0) {
-        creep.memory.task = Task.IDLE;
-    }
+    // if (nonInterruptableTasks.indexOf(creep.memory.task) < 0) {
+    //     creep.memory.task = Task.IDLE;
+    // }
 
     // check what task this creep should do; any check can overwrite the previous task
     // creep.memory.task = moveto.check(creep);
@@ -22,7 +22,14 @@ export function run(creep: Creep) {
 
     // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`);
 
-    // tell about the current task
+    let match = charge.execute(creep);
+    if(!match) match = structureStore.execute(creep);
+    if(!match) match = returnHome.execute(creep);
+    if(!match) match = switchRoom.execute(creep);
+    if(!match) match = moveto.execute(creep);
+    if(!match) creep.memory.task = Task.IDLE;
+
+    // tell about the new task
     if (creep.memory.task != previousTask) {
         sayTask(creep);
     }
