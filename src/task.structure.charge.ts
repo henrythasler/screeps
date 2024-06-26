@@ -1,3 +1,4 @@
+import { EnergyLocation } from "./manager.global";
 import { Loglevel, log } from "./debug";
 import { Task, nonInterruptableTasks } from "./task";
 import { Trait } from "./trait";
@@ -35,8 +36,16 @@ export function execute(creep: Creep): boolean {
         structuresToCharge.sort((a: AnyStructure, b: AnyStructure): number => {
             return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
         });
-        if (creep.transfer(structuresToCharge[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        
+        const res = creep.transfer(structuresToCharge[0], RESOURCE_ENERGY);
+        if(res == OK) {
+            creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
+        }
+        else if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(structuresToCharge[0], { visualizePathStyle: { stroke: '#00ff00' } });
+        }
+        else {
+            log(`[${creep.room.name}][${creep.name}] build(${structuresToCharge[0]}) failed: ${res}`, Loglevel.ERROR);
         }
         return true;
     }

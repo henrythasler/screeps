@@ -12,6 +12,7 @@ export enum Task {
     RESERVE_CONTROLLER,
     SWITCH_ROOM,
     RETURN, // return to homeBase
+    RENEW,  // increase ticksToLive at spawn
 }
 
 // can always be interrupted by another task

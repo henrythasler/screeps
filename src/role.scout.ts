@@ -5,6 +5,7 @@ import * as switchRoom from "./task.creep.switchRoom";
 import * as claimController from "./task.controller.claim";
 import * as reserveController from "./task.controller.reserve";
 import * as recon from "./task.creep.recon";
+import * as renew from "./task.creep.renew";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -23,6 +24,7 @@ export function run(creep: Creep) {
     // creep.memory.task = charge.check(creep);    // manage creep charging
 
     let match = charge.execute(creep);
+    if(!match) match = renew.execute(creep);
     if(!match) match = claimController.execute(creep);
     if(!match) match = reserveController.execute(creep);
     if(!match) match = switchRoom.execute(creep);

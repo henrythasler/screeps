@@ -1,4 +1,4 @@
-import { log } from "./debug";
+import { Loglevel, log } from "./debug";
 import { Task, nonInterruptableTasks, idleTasks, sayTask } from "./task";
 import { EnergyLocation } from "./manager.global";
 import * as charge from "./task.creep.charge";
@@ -9,6 +9,7 @@ import * as controllerCharge from "./task.controller.charge";
 import * as controllerRefresh from "./task.controller.refresh";
 import * as structureStore from "./task.structure.store";
 import * as structureRepair from "./task.structure.repair";
+import * as renew from "./task.creep.renew";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -28,11 +29,12 @@ export function run(creep: Creep) {
     // creep.memory.task = controllerRefresh.check(creep);
     // creep.memory.task = charge.check(creep);    // manage creep charging
 
-    // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`)
+    // log(`name: ${creep.name}, task: ${creep.memory.task}`, Loglevel.DEBUG);
 
     // execute current tasks, order also defines priority where the first is the most important
     let match = charge.execute(creep);
     if(!match) match = controllerRefresh.execute(creep);
+    if(!match) match = renew.execute(creep);
     if(!match) match = structureCharge.execute(creep);
     if(!match) match = structureRepair.execute(creep);
     if(!match) match = structureBuild.execute(creep);

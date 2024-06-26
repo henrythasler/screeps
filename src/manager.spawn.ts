@@ -19,11 +19,16 @@ function generateName(role: Role, room: Room): string {
 export function run(room: Room): void {
     const availableSpawns = room.find(FIND_MY_SPAWNS);
 
+    if (!availableSpawns.length) {
+        return;
+    }
 
-    if (room.memory.buildQueue.length && availableSpawns.length) {
+    // FIXME: iterate over available spawns
+    const spawn = availableSpawns[0];
+
+    if (room.memory.buildQueue.length) {
         log(`[${room.name}][spawn] buildQueue: ${room.memory.buildQueue.length}`, Loglevel.INFO)
-        const spawn = availableSpawns[0];
-        // FIXME: sort queue
+        // FIXME: sort build queue
         const requiredCreep = room.memory.buildQueue[0];
         const res = spawn.spawnCreep(requiredCreep.species.parts, generateName(requiredCreep.role, room),
             {
@@ -49,6 +54,19 @@ export function run(room: Room): void {
     }
     else {
         room.memory.ticksWithPendingSpawns = 0;
+
+        const renew: Creep[] = room.find(FIND_MY_CREEPS, {
+            filter: (creep) => {
+                return !creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < Config.creepRenewMax;
+            }
+        });
+
+        if (renew.length > 0) {
+            renew.sort((a: Creep, b: Creep): number => {
+                return (a.ticksToLive! - b.ticksToLive!);
+            });
+            spawn.renewCreep(renew[0]);
+        }
     }
 
     availableSpawns.forEach((spawn) => {

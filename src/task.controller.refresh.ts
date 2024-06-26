@@ -21,8 +21,8 @@ const downgradeTicksPerLevel: number[] = [0, 20000, 10000, 20000, 40000, 80000, 
 
 export function execute(creep: Creep): boolean {
     const controller = creep.room.controller;
-    const ratio = creep.memory.task == Task.REFRESH_CONTROLLER ? 1 : Config.minControllerRefreshTicksRatio;
-    
+    const ratio = (creep.memory.task == Task.REFRESH_CONTROLLER) ? 1 : Config.minControllerRefreshTicksRatio;
+    // log(`name: ${creep.name}, ratio: ${ratio}, task: ${creep.memory.task}`, Loglevel.DEBUG);
     if (controller && creep.memory.occupation.includes(Trait.REFRESH_CONTROLLER) &&
         controller.ticksToDowngrade < (downgradeTicksPerLevel[controller.level] * ratio) &&
         creep.store[RESOURCE_ENERGY] > 0) {

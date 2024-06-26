@@ -10,7 +10,7 @@ import * as collector from "./role.collector";
 export function run(room: Room): void {
     const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
         filter: (creep) => {
-            return !creep.spawning && creep.memory.homeBase == room.name;
+            return !creep.spawning;// && creep.memory.homeBase == room.name;
         }
     });
 
@@ -18,11 +18,11 @@ export function run(room: Room): void {
         if (creep.memory.role == Role.WORKER) {
             worker.run(creep);
         }
-        // else if (creep.memory.role == Role.SCOUT) {
-        //     scout.run(creep);
-        // }
-        // else if (creep.memory.role == Role.COLLECTOR) {
-        //     collector.run(creep);
-        // }
+        else if (creep.memory.role == Role.SCOUT) {
+            scout.run(creep);
+        }
+        else if (creep.memory.role == Role.COLLECTOR) {
+            collector.run(creep);
+        }
     });
 }

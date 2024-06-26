@@ -73,7 +73,7 @@ function check(creep: Creep): boolean {
         return true;
     }
 
-    if ((creep.store[RESOURCE_ENERGY] == 0) || (idleTasks.includes(creep.memory.task) && (creep.store.getFreeCapacity() > 0))) {
+    if ((creep.store[RESOURCE_ENERGY] == 0) || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0)) {
         if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
             creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
             (creep.memory.homeBase == "")) {
@@ -181,10 +181,8 @@ export function execute(creep: Creep): boolean {
             return true;
         }
         else {
-            creep.memory.task = Task.IDLE;
             return false;
         }
     }
-    creep.memory.task = Task.IDLE;
     return false;
 }

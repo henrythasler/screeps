@@ -58,6 +58,36 @@ declare global {
 export const loop = () => {
     creepMaintenance();
 
+    if((Game.time % 5000) == 0) {
+        Game.spawns["Spawn1"].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], "agent");
+    }
+    if (Game.creeps["agent"]) {
+        if (Game.creeps["agent"].store.getFreeCapacity() > 0 && Game.creeps["agent"].memory.task == Task.CHARGE) {
+            const source = Game.getObjectById("5bbcaf259099fc012e63a3bc") as Source;
+            const res = Game.creeps["agent"].harvest(source);
+            if (res == ERR_NOT_IN_RANGE) {
+                Game.creeps["agent"].moveTo(source);
+            }
+            else {
+                console.log(`harvest: ${res}`);
+            }
+        }
+        else {
+            Game.creeps["agent"].memory.task = Task.CHARGE_CONTROLLER;
+            const controller = Game.getObjectById("5bbcaf259099fc012e63a3bd") as StructureController;
+            const res = Game.creeps["agent"].upgradeController(controller);
+            if (res == ERR_NOT_IN_RANGE) {
+                Game.creeps["agent"].moveTo(controller);
+            }
+            else if (res == ERR_NOT_ENOUGH_RESOURCES) {
+                Game.creeps["agent"].memory.task = Task.CHARGE;
+            }
+            else {
+                console.log(`upgradeController: ${res}`);
+            }
+        }
+    }    
+
     for (const roomId in Game.rooms) {
         const room = Game.rooms[roomId];
         tower.run(room);

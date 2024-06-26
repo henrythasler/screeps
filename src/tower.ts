@@ -21,16 +21,16 @@ function defendRoom(room: Room, towers: StructureTower[]): Hostiles {
 function healCreeps(room: Room, towers: StructureTower[]): void {
     const injuredCreeps: Creep[] = room.find(FIND_MY_CREEPS, {
         filter: (creep) => {
-            return creep.hits / creep.hitsMax < Config.creepHealThreshold;  
+            return creep.hits / creep.hitsMax < Config.creepHealThreshold;
         }
     });
 
-    if(injuredCreeps.length) {
+    if (injuredCreeps.length) {
         // sort by health in ascending order (low health first)
         injuredCreeps.sort((a: Creep, b: Creep): number => {
             return (a.hits - b.hits);
         });
-        towers.forEach( (tower, index) => {
+        towers.forEach((tower, index) => {
             tower.heal(injuredCreeps[0]);
         });
     }
@@ -58,7 +58,7 @@ function reinforceRamparts(room: Room, towers: StructureTower[], threat: boolean
     const toReinforce = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_RAMPART)
-                && ((structure.hits / structure.hitsMax) < (threat ? 0.5: 0.01));
+                && (structure.hits < (threat ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace) * structure.hitsMax);
         }
     }) as Structure[];
 
@@ -71,23 +71,23 @@ function reinforceRamparts(room: Room, towers: StructureTower[], threat: boolean
 }
 
 export function run(room: Room): void {
-        const towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } }) as StructureTower[];
+    const towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } }) as StructureTower[];
 
-        if (towers.length > 0) {
-            const hostileStats = defendRoom(room, towers);
-            reinforceRamparts(room, towers, hostileStats.count > 0);
-            if (hostileStats.count == 0) {
-                healCreeps(room, towers);
-                repairStructure(room, towers);
-            }
-            else {
-                if (hostileStats.hits > Config.safeModeThreshold) {
-                    console.log(`[ALERT] ${hostileStats.count} hostiles (${hostileStats.hits} hits) in ${room}`);
-                    const res = room.controller?.activateSafeMode();
-                    if (res != OK) {
-                        console.log(`[ERROR] in ${room.name}.activateSafeMode(): ${res}`)
-                    }
+    if (towers.length > 0) {
+        const hostileStats = defendRoom(room, towers);
+        reinforceRamparts(room, towers, hostileStats.count > 0);
+        if (hostileStats.count == 0) {
+            healCreeps(room, towers);
+            repairStructure(room, towers);
+        }
+        else {
+            if (hostileStats.hits > Config.safeModeThreshold) {
+                console.log(`[ALERT] ${hostileStats.count} hostiles (${hostileStats.hits} hits) in ${room}`);
+                const res = room.controller?.activateSafeMode();
+                if (res != OK) {
+                    console.log(`[ERROR] in ${room.name}.activateSafeMode(): ${res}`)
                 }
             }
         }
+    }
 }
