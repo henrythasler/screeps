@@ -13,6 +13,10 @@ export enum Class {
     WORKER_REMOTE = 2,
 }
 
+export const TaskPriority: Task[] = [
+    
+];
+
 export enum EnergyLocation {
     OTHER,
     SOURCE,

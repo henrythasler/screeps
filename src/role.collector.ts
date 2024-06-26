@@ -14,11 +14,11 @@ export function run(creep: Creep) {
     }
 
     // check what task this creep should do; any check can overwrite the previous task
-    creep.memory.task = moveto.check(creep);
-    creep.memory.task = switchRoom.check(creep);
-    creep.memory.task = returnHome.check(creep);
-    creep.memory.task = structureStore.check(creep);
-    creep.memory.task = charge.check(creep);    // manage creep charging
+    // creep.memory.task = moveto.check(creep);
+    // creep.memory.task = switchRoom.check(creep);
+    // creep.memory.task = returnHome.check(creep);
+    // creep.memory.task = structureStore.check(creep);
+    // creep.memory.task = charge.check(creep);    // manage creep charging
 
     // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`);
 
@@ -28,9 +28,9 @@ export function run(creep: Creep) {
     }
 
     // execute current tasks
-    creep.memory.task = moveto.execute(creep);
-    creep.memory.task = switchRoom.execute(creep);
-    creep.memory.task = returnHome.execute(creep);
-    creep.memory.task = structureStore.execute(creep);
-    creep.memory.task = charge.execute(creep);
+    // creep.memory.task = moveto.execute(creep);
+    // creep.memory.task = switchRoom.execute(creep);
+    // creep.memory.task = returnHome.execute(creep);
+    // creep.memory.task = structureStore.execute(creep);
+    // creep.memory.task = charge.execute(creep);
 }

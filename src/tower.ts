@@ -42,7 +42,7 @@ function repairStructure(room: Room, towers: StructureTower[]): void {
             return (structure.structureType == STRUCTURE_ROAD ||
                 structure.structureType == STRUCTURE_SPAWN ||
                 structure.structureType == STRUCTURE_EXTENSION)
-                && ((structure.hits / structure.hitsMax) < Config.structureRepairThreshold);
+                && structure.hits < Config.structureTowerRepairThreshold * structure.hitsMax;
         }
     }) as Structure[];
 

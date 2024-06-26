@@ -14,21 +14,34 @@ export function run(creep: Creep) {
     const previousTask = creep.memory.task;
 
     // any task that is interruptable can be redefined each tick
-    if (nonInterruptableTasks.indexOf(creep.memory.task) < 0) {
-        creep.memory.task = Task.IDLE;
-    }
+    // if (!nonInterruptableTasks.includes(creep.memory.task)) {
+    //     creep.memory.task = Task.IDLE;
+    // }
 
     // check what task this creep should do; any check can overwrite the previous task
-    creep.memory.task = moveto.check(creep);
-    creep.memory.task = structureStore.check(creep);
-    creep.memory.task = controllerCharge.check(creep);  // any controller need charging
-    creep.memory.task = structureBuild.check(creep);    // check for construction sites
-    creep.memory.task = structureRepair.check(creep);
-    creep.memory.task = structureCharge.check(creep);   // check for structures that need recharging
-    creep.memory.task = controllerRefresh.check(creep);
-    creep.memory.task = charge.check(creep);    // manage creep charging
+    // creep.memory.task = moveto.check(creep);
+    // creep.memory.task = structureStore.check(creep);
+    // creep.memory.task = controllerCharge.check(creep);  // any controller need charging
+    // creep.memory.task = structureBuild.check(creep);    // check for construction sites
+    // creep.memory.task = structureRepair.check(creep);
+    // creep.memory.task = structureCharge.check(creep);   // check for structures that need recharging
+    // creep.memory.task = controllerRefresh.check(creep);
+    // creep.memory.task = charge.check(creep);    // manage creep charging
 
-    // tell about the current task
+    // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`)
+
+    // execute current tasks, order also defines priority where the first is the most important
+    let match = charge.execute(creep);
+    if(!match) match = controllerRefresh.execute(creep);
+    if(!match) match = structureCharge.execute(creep);
+    if(!match) match = structureRepair.execute(creep);
+    if(!match) match = structureBuild.execute(creep);
+    if(!match) match = controllerCharge.execute(creep);
+    if(!match) match = structureStore.execute(creep);
+    if(!match) match = moveto.execute(creep);
+    if(!match) creep.memory.task = Task.IDLE;
+
+    // tell about the new task
     if (creep.memory.task != previousTask) {
         sayTask(creep);
     }
@@ -36,16 +49,4 @@ export function run(creep: Creep) {
     if(idleTasks.includes(creep.memory.task)) {
         creep.memory.lastChargeSource = EnergyLocation.SOURCE;
     }
-
-    // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`)
-
-    // execute current tasks
-    creep.memory.task = charge.execute(creep);
-    creep.memory.task = structureCharge.execute(creep);
-    creep.memory.task = controllerRefresh.execute(creep);
-    creep.memory.task = structureRepair.execute(creep);
-    creep.memory.task = structureBuild.execute(creep);
-    creep.memory.task = controllerCharge.execute(creep);
-    creep.memory.task = structureStore.execute(creep);
-    creep.memory.task = moveto.execute(creep);
 }

@@ -18,11 +18,11 @@ export function run(room: Room): void {
         if (creep.memory.role == Role.WORKER) {
             worker.run(creep);
         }
-        else if (creep.memory.role == Role.SCOUT) {
-            scout.run(creep);
-        }
-        else if (creep.memory.role == Role.COLLECTOR) {
-            collector.run(creep);
-        }
+        // else if (creep.memory.role == Role.SCOUT) {
+        //     scout.run(creep);
+        // }
+        // else if (creep.memory.role == Role.COLLECTOR) {
+        //     collector.run(creep);
+        // }
     });
 }

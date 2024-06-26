@@ -7,12 +7,12 @@ class Worker {
         [Trait.CHARGE_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 1],
         [Trait.CHARGE_STORAGE, 1],
-        [Trait.RECHARGE_STRUCTURE, 0.5],
+        [Trait.RECHARGE_STRUCTURE, 1],
         [Trait.RECHARGE_CONTROLLER, 1],
         [Trait.BUILD_STRUCTURE, 1],
         [Trait.STORE_ENERGY, 1],
-        [Trait.REPAIR_STRUCTURE, 0.5],
-        [Trait.REFRESH_CONTROLLER, 0],
+        [Trait.REPAIR_STRUCTURE, 1],
+        [Trait.REFRESH_CONTROLLER, 1],
     ]);
 }
 
@@ -40,10 +40,13 @@ class Collector {
 }
 
 export class Config {
-    static minControllerLevel = 5;
+    // Controller
+    static minControllerLevel = 2;
+    static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
     static creepHealThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
-    static structureRepairThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair
+    static structureTowerRepairThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
+    static structureWorkerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
 
     static safeModeThreshold = 15_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
 

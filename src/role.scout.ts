@@ -15,12 +15,12 @@ export function run(creep: Creep) {
     }
 
     // check what task this creep should do; any check can overwrite the previous task
-    creep.memory.task = recon.check(creep);
-    creep.memory.task = moveto.check(creep);
-    creep.memory.task = switchRoom.check(creep);
-    creep.memory.task = reserveController.check(creep);
-    creep.memory.task = claimController.check(creep);
-    creep.memory.task = charge.check(creep);    // manage creep charging
+    // creep.memory.task = recon.check(creep);
+    // creep.memory.task = moveto.check(creep);
+    // creep.memory.task = switchRoom.check(creep);
+    // creep.memory.task = reserveController.check(creep);
+    // creep.memory.task = claimController.check(creep);
+    // creep.memory.task = charge.check(creep);    // manage creep charging
 
     // tell about the current task
     if (creep.memory.task != previousTask) {
@@ -28,10 +28,10 @@ export function run(creep: Creep) {
     }
 
     // execute current tasks
-    creep.memory.task = recon.execute(creep);
-    creep.memory.task = moveto.execute(creep);
-    creep.memory.task = switchRoom.execute(creep);
-    creep.memory.task = reserveController.execute(creep);
-    creep.memory.task = claimController.execute(creep);
-    creep.memory.task = charge.execute(creep);
+    // creep.memory.task = recon.execute(creep);
+    // creep.memory.task = moveto.execute(creep);
+    // creep.memory.task = switchRoom.execute(creep);
+    // creep.memory.task = reserveController.execute(creep);
+    // creep.memory.task = claimController.execute(creep);
+    // creep.memory.task = charge.execute(creep);
 }
