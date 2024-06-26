@@ -34,6 +34,7 @@ function repairStructure(room: string, towers: StructureTower[]): void {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_ROAD ||
                 structure.structureType == STRUCTURE_SPAWN ||
+                structure.structureType == STRUCTURE_CONTAINER ||
                 structure.structureType == STRUCTURE_EXTENSION)
                 && ((structure.hits / structure.hitsMax) < 0.5);
         }
