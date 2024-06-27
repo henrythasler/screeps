@@ -5,7 +5,8 @@ import { Trait } from "./trait";
 export function execute(creep: Creep): boolean {
     const availableSpawns = creep.room.find(FIND_MY_SPAWNS, {
         filter: (structure) => {
-            return structure.store.getFreeCapacity(RESOURCE_ENERGY) < structure.store.getCapacity(RESOURCE_ENERGY) * Config.spawnRenewMinEnergy;
+            return structure.store.getFreeCapacity(RESOURCE_ENERGY) < structure.store.getCapacity(RESOURCE_ENERGY) * Config.spawnRenewMinEnergy &&
+            !structure.spawning;
         }
     });
     const threshold = (creep.memory.task == Task.RENEW) ? Config.creepRenewMax : Config.creepRenewThreshold;

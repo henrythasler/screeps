@@ -73,7 +73,7 @@ function check(creep: Creep): boolean {
         return true;
     }
 
-    if ((creep.store[RESOURCE_ENERGY] == 0) || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0)) {
+    if ((creep.store[RESOURCE_ENERGY] == 0) || (/*idleTasks.includes(creep.memory.task) && */creep.store.getFreeCapacity() > 0)) {
         if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
             creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
             (creep.memory.homeBase == "")) {
@@ -158,7 +158,7 @@ export function execute(creep: Creep): boolean {
             let sourceId = 0;
             // randomly select a source; static per creep
             if (creep.memory.homeBase == creep.room.name) {
-                sourceId = creep.memory.percentile % sources.length;
+                sourceId = creep.memory.percentile % sources.length ;
             }
             else {
                 // sort by distance if in another room
@@ -177,6 +177,7 @@ export function execute(creep: Creep): boolean {
             }
             else {
                 console.log(`[ERROR] harvest(${sources[sourceId]}): ${res}`)
+                return false;
             }
             return true;
         }

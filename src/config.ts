@@ -50,6 +50,7 @@ export class Config {
     static creepRenewThreshold = 1500 * 0.5; // 
     static creepRenewMax = 1500 * 0.9; // 
     static spawnRenewMinEnergy = 0.8;  // min energy needed to be able to renew spawns
+    static spawnDryRun = false; // enabled dry-run does not actually spawn a creep
     static creepHealThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers

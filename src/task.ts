@@ -41,6 +41,7 @@ export function sayTask(creep: Creep): void {
         case Task.RESERVE_CONTROLLER: creep.say('🏳️'); break;
         case Task.SWITCH_ROOM: creep.say('🚪'); break;
         case Task.RETURN: creep.say('🏠'); break;
+        case Task.RENEW: creep.say('🏥'); break;
         default: creep.say('💤');
     }    
 }

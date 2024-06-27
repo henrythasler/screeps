@@ -13,7 +13,8 @@ import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
     const exits = creep.room.find(FIND_EXIT);
-    if (exits.length && creep.memory.occupation.includes(Trait.SWITCH_ROOM) && creep.room.name == creep.memory.homeBase) {
+    if (exits.length && creep.memory.occupation.includes(Trait.SWITCH_ROOM) &&
+        creep.room.name == creep.memory.homeBase && creep.store.getFreeCapacity() > 0) {
         creep.memory.task = Task.SWITCH_ROOM;
         // FIXME: select actual exit
         console.log(`current room: ${creep.room.name}, exits ${exits[10]}`);

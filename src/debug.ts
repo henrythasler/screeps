@@ -7,7 +7,7 @@ export enum Loglevel {
 }
 
 export function log(message: string, level: Loglevel): void {
-    if(level >= Loglevel.DEBUG) {
+    if(level <= Loglevel.INFO) {
         console.log(message);
     }
 }

@@ -58,6 +58,7 @@ declare global {
 export const loop = () => {
     creepMaintenance();
 
+    // FIXME: remove workaround
     if((Game.time % 5000) == 0) {
         Game.spawns["Spawn1"].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], "agent");
     }
@@ -87,15 +88,20 @@ export const loop = () => {
             }
         }
     }    
+    /** END OF WORKAROUND */
 
     for (const roomId in Game.rooms) {
         const room = Game.rooms[roomId];
         tower.run(room);
 
         room.memory.buildQueue = [];
-        const numWorker = workerManager.run(room);  // manage worker population in that room
-        spawnManager.run(room); // spawn/heal creeps
+
+        workerManager.run(room);  // manage worker population in that room
+        collectorManager.run(room);  // manage worker population in that room
+
         roomManager.run(room);  // execute creep action
+        
+        spawnManager.run(room); // spawn/heal creeps
     }
 /*        
     const numWorker = workerManager.run();

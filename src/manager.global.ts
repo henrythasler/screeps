@@ -1,3 +1,4 @@
+import { Loglevel, log } from "./debug";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -14,7 +15,7 @@ export enum Class {
 }
 
 export const TaskPriority: Task[] = [
-    
+
 ];
 
 export enum EnergyLocation {
@@ -67,10 +68,10 @@ export function findMostExpensiveSpecies(budget: number, ticksWithoutSpawn: numb
         }
     });
 
-    console.log(`Selected species: ${speciesName} (${zoo.get(speciesName)?.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
     const species = zoo.get(speciesName);
     if (species) {
         species.name = speciesName;
+        console.log(`Selected species: ${speciesName} (${species.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
     }
     return species;
 }
@@ -118,6 +119,31 @@ export function applyTraitDistribution(creep: Creep, population: number, creepsP
             }
         }    
     */
+}
+
+export function managePopulation(required: number, current: number, room: Room, zoo: Map<string, Species>, role: Role): number {
+    let requested = 0;
+    if (current < required) {
+        const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, zoo);
+        if (species) {
+            room.memory.buildQueue.push({ species: species, role: role });
+            requested++;
+        }
+    }
+    return requested;
+}
+
+export function manageTraitDistribution(creeps: Creep[], zoo: Map<string, Species>, traitDistribution: Map<Trait, number>): void {
+    const currentDistribution: Map<Trait, number> = new Map();
+    for (const creep of creeps) {
+        // update traits from blueprint
+            const species = zoo.get(creep.memory.speciesName);
+            creep.memory.traits = species?.traits ?? [];
+
+        // assign occupation
+        creep.memory.occupation = applyTraitDistribution(creep, creeps.length, currentDistribution, traitDistribution);
+        log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`, Loglevel.DEBUG);
+    }
 }
 
 export function creepMaintenance(): void {

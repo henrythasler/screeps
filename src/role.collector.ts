@@ -22,9 +22,8 @@ export function run(creep: Creep) {
     // creep.memory.task = structureStore.check(creep);
     // creep.memory.task = charge.check(creep);    // manage creep charging
 
-    // console.log(`${creep.memory.speciesName}: ${creep.memory.task}`);
-    log(`name: ${creep.name}, task: ${creep.memory.task}`, Loglevel.DEBUG);
 
+    // log(`name: ${creep.name}, task: ${creep.memory.task}`, Loglevel.DEBUG);
     let match = charge.execute(creep);
     if(!match) match = renew.execute(creep);
     if(!match) match = structureStore.execute(creep);

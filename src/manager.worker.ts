@@ -1,6 +1,6 @@
 import { Loglevel, log } from "./debug";
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, applyTraitDistribution } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, applyTraitDistribution, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -134,34 +134,18 @@ const workerZoo: Map<string, Species> = new Map([
     // }],     
 ]);
 
-export function run(room: Room): number {
-    const activeWorker: Creep[] = room.find(FIND_MY_CREEPS, {
-        filter: (creep) => {
-            return creep.memory.homeBase == room.name && creep.memory.role == Role.WORKER;
-        }
-    });
-
-    // log(activeWorker.length.toString(), Loglevel.DEBUG);
-
-    if (activeWorker.length < Config.worker.minCount) {
-        const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, workerZoo);
-        if (species) {
-            room.memory.buildQueue.push({species: species, role: Role.WORKER});
-        }
-    }
-
-    // apply trait distribution
+export function run(room: Room): void {
     if ((Game.time % 10) == 0) {
-        const currentDistribution: Map<Trait, number> = new Map();
-        for (const creep of activeWorker) {
-            // update traits from blueprint
-                const species = workerZoo.get(creep.memory.speciesName);
-                creep.memory.traits = species?.traits ?? [];
+        const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
+            filter: (creep) => {
+                return creep.memory.role == Role.WORKER;
+            }
+        });
 
-            // assign occupation
-            creep.memory.occupation = applyTraitDistribution(creep, activeWorker.length, currentDistribution, Config.worker.traitDistribution);
-            log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`, Loglevel.DEBUG);
-        }
+        log(`[${room.name}] worker: ${creeps.length}/${Config.worker.minCount}`, Loglevel.INFO);
+
+        managePopulation(Config.worker.minCount, creeps.length, room, workerZoo, Role.WORKER);
+        manageTraitDistribution(creeps, workerZoo, Config.worker.traitDistribution);
     }    
 /*
     // create an array for all creeps to work with
@@ -230,5 +214,4 @@ export function run(room: Room): number {
         }
     }
     */
-    return activeWorker.length;
 }
