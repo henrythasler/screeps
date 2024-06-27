@@ -6,6 +6,8 @@ import * as spawnManager from "./manager.spawn";
 import * as workerManager from "./manager.worker";
 import * as scoutManager from "./manager.scout";
 import * as collectorManager from "./manager.collector";
+import * as harvesterManager from "./manager.harvester";
+
 import * as roomManager from "./manager.room";
 import * as tower from "./tower";
 import { RequiredSpecies } from "./manager.spawn";
@@ -98,9 +100,10 @@ export const loop = () => {
 
         workerManager.run(room);  // manage worker population in that room
         collectorManager.run(room);  // manage worker population in that room
+        harvesterManager.run(room);  // manage harvester population in that room
 
         roomManager.run(room);  // execute creep action
-        
+
         spawnManager.run(room); // spawn/heal creeps
     }
 /*        

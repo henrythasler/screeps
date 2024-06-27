@@ -6,6 +6,7 @@ export enum Role {
     WORKER,
     SCOUT,
     COLLECTOR,
+    HARVESTER,
 }
 
 export enum Class {
@@ -22,6 +23,7 @@ export enum EnergyLocation {
     OTHER,
     SOURCE,
     CONTAINER,
+    STORAGE,
 }
 
 export function roleToString(role: Role): string {

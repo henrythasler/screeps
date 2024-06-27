@@ -9,7 +9,7 @@ const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STOR
 const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE];
 
 // all types share the 'pos' property, so we can have that mixed type
-type energySource = (Tombstone | Ruin | StructureContainer)[];
+type energySource = (Tombstone | Ruin | StructureContainer | StructureStorage)[];
 
 function withdrawEnergy(creep: Creep, source: energySource, sortByDistance: boolean, lastChargeSource: EnergyLocation): Task {
     source.sort((a, b): number => {
@@ -73,7 +73,7 @@ function check(creep: Creep): boolean {
         return true;
     }
 
-    if ((creep.store[RESOURCE_ENERGY] == 0) || (/*idleTasks.includes(creep.memory.task) && */creep.store.getFreeCapacity() > 0)) {
+    if (creep.store[RESOURCE_ENERGY] == 0 /*|| (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0)*/) {
         if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
             creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
             (creep.memory.homeBase == "")) {
@@ -137,16 +137,31 @@ export function execute(creep: Creep): boolean {
         if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && creep.memory.occupation.includes(Trait.CHARGE_STORAGE)) {
             const container = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return !isNearHostile(structure, hostiles) && containerTypes.includes(structure.structureType) &&
-                        ((structure as StructureContainer).store[RESOURCE_ENERGY] > 0);
+                    return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_CONTAINER &&
+                        structure.store[RESOURCE_ENERGY] > 0;
                 }
             }) as StructureContainer[];
+
             if (container.length > 0) {
                 withdrawEnergy(creep, container, true, EnergyLocation.CONTAINER);
                 return true;
             }
         }
 
+        // storage
+        if (creep.memory.lastEnergyDeposit != EnergyLocation.STORAGE && creep.memory.occupation.includes(Trait.CHARGE_STORAGE)) {
+            const storage = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_STORAGE &&
+                        structure.store[RESOURCE_ENERGY] > 0;
+                }
+            }) as StructureStorage[];
+
+            if (storage.length > 0) {
+                withdrawEnergy(creep, storage, true, EnergyLocation.STORAGE);
+                return true;
+            }
+        }
 
         const sources: Source[] = creep.room.find(FIND_SOURCES, {
             filter: (source) => {
@@ -158,7 +173,7 @@ export function execute(creep: Creep): boolean {
             let sourceId = 0;
             // randomly select a source; static per creep
             if (creep.memory.homeBase == creep.room.name) {
-                sourceId = creep.memory.percentile % sources.length ;
+                sourceId = creep.memory.percentile % sources.length;
             }
             else {
                 // sort by distance if in another room
