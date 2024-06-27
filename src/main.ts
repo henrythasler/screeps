@@ -1,4 +1,4 @@
-import { EnergyLocation, Role, Species } from "./manager.global";
+import { EnergyLocation, Role, Species, creepMaintenance } from "./manager.global";
 import { Config } from "./config";
 import { Task } from "./task";
 import { Trait } from "./trait";
@@ -6,10 +6,11 @@ import * as spawnManager from "./manager.spawn";
 import * as workerManager from "./manager.worker";
 import * as scoutManager from "./manager.scout";
 import * as collectorManager from "./manager.collector";
-import * as worker from "./role.worker";
-import * as scout from "./role.scout";
-import * as collector from "./role.collector";
+import * as harvesterManager from "./manager.harvester";
+
+import * as roomManager from "./manager.room";
 import * as tower from "./tower";
+import { RequiredSpecies } from "./manager.spawn";
 
 
 declare global {
@@ -25,12 +26,11 @@ declare global {
     interface Memory {
         uuid: number,
         log: any,
-        sources: string[],  // stores the ID of all known sources
-        ticksWithoutSpawn: number,
+        sources: Array<Id<Source>>,  // stores the ID of all known sources
     }
 
     interface CreepMemory {
-        speciesName?: string,
+        speciesName: string,
         role: Role,
         task: Task, // current action that the creep is doing
         traits: Trait[], // potential actions that a creep can perform
@@ -42,7 +42,11 @@ declare global {
     }
 
     interface SpawnMemory {
-        buildQueue: Species[],
+    }
+
+    interface RoomMemory {
+        buildQueue: RequiredSpecies[],
+        ticksWithPendingSpawns: number;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -54,13 +58,9 @@ declare global {
 }
 
 export const loop = () => {
-    const numWorker = workerManager.run();
-    if (numWorker >= Config.worker.minCount) {
-        scoutManager.run();
-        collectorManager.run();
-    }
-    tower.run();
+    creepMaintenance();
 
+    // FIXME: remove workaround
     if((Game.time % 5000) == 0) {
         Game.spawns["Spawn1"].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], "agent");
     }
@@ -89,13 +89,31 @@ export const loop = () => {
                 console.log(`upgradeController: ${res}`);
             }
         }
+    }    
+    /** END OF WORKAROUND */
+
+    for (const roomId in Game.rooms) {
+        const room = Game.rooms[roomId];
+        tower.run(room);
+
+        room.memory.buildQueue = [];
+
+        workerManager.run(room);  // manage worker population in that room
+        collectorManager.run(room);  // manage worker population in that room
+        harvesterManager.run(room);  // manage harvester population in that room
+
+        roomManager.run(room);  // execute creep action
+
+        spawnManager.run(room); // spawn/heal creeps
+    }
+/*        
+    const numWorker = workerManager.run();
+    if (numWorker >= Config.worker.minCount) {
+        scoutManager.run();
+        collectorManager.run();
     }
 
-    // Game.creeps["agent"].moveTo(26, 8);
-    // Game.creeps["agent"].harvest(Game.getObjectById("5bbcaf259099fc012e63a3bc"))
-    // Game.creeps["agent"].moveTo(34, 16);
-    // Game.creeps["agent"].upgradeController(Game.getObjectById("5bbcaf259099fc012e63a3bd"))
-
+    spawnManager.resetBuildQueue();
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
 
@@ -110,4 +128,5 @@ export const loop = () => {
         }
     }
     spawnManager.run();
+*/    
 };

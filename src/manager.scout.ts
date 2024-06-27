@@ -24,14 +24,14 @@ const scoutZoo: Map<string, Species> = new Map([
             Trait.CLAIM_CONTROLLER,
             Trait.RESERVE_CONTROLLER,
             Trait.SWITCH_ROOM,    
-            Trait.RECON,
+            Trait.RECON_ROOM,
         ],
         cost: 800,
     }],
 ]);
 
-export function run(): void {
-
+export function run(room: Room): void {
+/*
     // create an array for all creeps to work with
     const scouts: Creep[] = [];
     for (const name in Game.creeps) {
@@ -61,7 +61,7 @@ export function run(): void {
     // check number of active creeps; spawn a new one if needed
     if (scouts.length < Config.scout.minCount && !spawn.spawning) {
         const newName = 'scout_' + spawn.room.name + "_" + Game.time;
-        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, scoutZoo);
+        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, scoutZoo);
         if (species) {
             spawn.spawnCreep(species.parts, newName,
                 {
@@ -131,4 +131,5 @@ export function run(): void {
             console.log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`)
         }
     }
+        */
 }

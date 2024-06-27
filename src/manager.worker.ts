@@ -1,5 +1,6 @@
+import { Loglevel, log } from "./debug";
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, applyTraitDistribution, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -16,6 +17,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 200,
     }],
@@ -31,6 +33,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 300,
     }],
@@ -46,6 +49,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 250,
     }],
@@ -61,6 +65,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 300,
     }],
@@ -76,6 +81,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 400,
     }],
@@ -91,6 +97,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 600,
     }],
@@ -106,6 +113,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.RECHARGE_CONTROLLER,
             Trait.BUILD_STRUCTURE,
             Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
         ],
         cost: 700,
     }],
@@ -126,8 +134,20 @@ const workerZoo: Map<string, Species> = new Map([
     // }],     
 ]);
 
-export function run(): number {
+export function run(room: Room): void {
+    if ((Game.time % 10) == 0) {
+        const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
+            filter: (creep) => {
+                return creep.memory.role == Role.WORKER;
+            }
+        });
 
+        log(`[${room.name}] worker: ${creeps.length}/${Config.worker.minCount}`, Loglevel.INFO);
+
+        managePopulation(Config.worker.minCount, creeps.length, room, workerZoo, Role.WORKER);
+        manageTraitDistribution(creeps, workerZoo, Config.worker.traitDistribution);
+    }    
+/*
     // create an array for all creeps to work with
     const worker: Creep[] = [];
     for (const name in Game.creeps) {
@@ -142,71 +162,14 @@ export function run(): number {
         spawns.push(Game.spawns[name]);
     }
 
-    if ((Game.time % 60) == 0) {
-        // clean up dead creeps every n ticks
-        for (const name in Memory.creeps) {
-            if (!Game.creeps[name]) {
-                delete Memory.creeps[name];
-                console.log('Clearing non-existing creep memory:', name);
-            }
-        }
-    }
-
     const spawn = spawns[0];
 
     // check number of active creeps; spawn a new one if needed
     if ((worker.length < Config.worker.minCount) && !spawn.spawning) {
-        const newName = 'worker_' + spawn.room.name + "_" + Game.time;
         const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, workerZoo);
         if (species) {
-            const res = spawn.spawnCreep(species.parts, newName,
-                {
-                    memory: {
-                        speciesName: species.name,
-                        role: Role.WORKER,
-                        task: Task.IDLE,
-                        traits: species.traits,
-                        occupation: [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE],
-                        percentile: -1,
-                        lastChargeSource: EnergyLocation.OTHER,
-                        lastEnergyDeposit: EnergyLocation.OTHER,
-                        homeBase: spawn.room.name,
-                    },
-                });
-            if (res != OK) {
-                console.log(`[ERROR] spawnCreep(${species.parts}) returned ${res}`);
-                if (Memory.ticksWithoutSpawn == undefined) {
-                    Memory.ticksWithoutSpawn = 0;
-                }
-                Memory.ticksWithoutSpawn++;
-            }
-            else {
-                Memory.ticksWithoutSpawn = 0;
-            }
+            spawn.memory.buildQueue.push({species: species, role: Role.WORKER});
         }
-    }
-    else {
-        Memory.ticksWithoutSpawn = 0;
-
-        const needRepair: Creep[] = [];
-        for (const name in Game.creeps) {
-            const creep = Game.creeps[name];
-            if (!creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < 1000) {
-                needRepair.push(creep);
-            }
-        }
-        if (needRepair.length > 0) {
-            spawn.renewCreep(needRepair[0]);
-        }
-    }
-
-    // show some info about new creep
-    if (spawn.spawning) {
-        var spawningCreep = Game.creeps[spawn.spawning.name];
-        // assign a unique number between 0..100
-        spawningCreep.memory.percentile = Math.round(parseInt(spawningCreep.id.substring(22), 16) * 100 / 255);
-        spawningCreep.memory.task = Task.IDLE;
-        spawn.room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.8 });
     }
 
     // apply trait distribution
@@ -241,7 +204,7 @@ export function run(): number {
                             currentDistribution.set(trait, current + 1);
                         }
                     }
-                    else if (creep.memory.traits.includes(trait)) {
+                    else if (creep.memory.traits.includes(trait) && expected && expected > 0) {
                         creep.memory.occupation.push(trait);
                         currentDistribution.set(trait, 1);
                     }
@@ -250,5 +213,5 @@ export function run(): number {
             console.log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`)
         }
     }
-    return worker.length;
+    */
 }
