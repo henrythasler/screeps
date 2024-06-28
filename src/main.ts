@@ -11,6 +11,7 @@ import * as harvesterManager from "./manager.harvester";
 import * as roomManager from "./manager.room";
 import * as tower from "./tower";
 import { RequiredSpecies } from "./manager.spawn";
+import { log, Loglevel } from "./debug";
 
 
 declare global {
@@ -44,9 +45,13 @@ declare global {
     interface SpawnMemory {
     }
 
+    interface FlagMemory {
+    }
+
     interface RoomMemory {
         buildQueue: RequiredSpecies[],
         ticksWithPendingSpawns: number;
+        harvesterPerSource: Map<Id<Source>, number>;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -97,12 +102,23 @@ export const loop = () => {
         tower.run(room);
 
         room.memory.buildQueue = [];
+        room.memory.harvesterPerSource = new Map();
 
         workerManager.run(room);  // manage worker population in that room
         collectorManager.run(room);  // manage worker population in that room
         harvesterManager.run(room);  // manage harvester population in that room
 
         roomManager.run(room);  // execute creep action
+
+        let str = "";
+        room.memory.harvesterPerSource.forEach((value, key) => {
+            str += `${key}: ${value}, `;
+          });
+          console.log(`{${str}}`);
+
+        // for(const source in room.memory.harvesterPerSource) {
+        //     log(`${source}`);
+        // }
 
         spawnManager.run(room); // spawn/heal creeps
     }

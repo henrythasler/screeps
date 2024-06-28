@@ -1,12 +1,12 @@
 import { Task, nonInterruptableTasks, idleTasks } from "./task";
-import { EnergyLocation } from "./manager.global";
+import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
 import { Loglevel, log } from "./debug";
 import { isNearHostile } from "./helper";
 
 const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
-const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE];
+const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_CONTAINER, Trait.CHARGE_STORAGE];
 
 // all types share the 'pos' property, so we can have that mixed type
 type energySource = (Tombstone | Ruin | StructureContainer | StructureStorage)[];
@@ -73,7 +73,7 @@ function check(creep: Creep): boolean {
         return true;
     }
 
-    if (creep.store[RESOURCE_ENERGY] == 0 /*|| (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0)*/) {
+    if (creep.store[RESOURCE_ENERGY] == 0 || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0)) {
         if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
             creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
             (creep.memory.homeBase == "")) {
@@ -134,7 +134,7 @@ export function execute(creep: Creep): boolean {
         }
 
         // container
-        if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && creep.memory.occupation.includes(Trait.CHARGE_STORAGE)) {
+        if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && creep.memory.occupation.includes(Trait.CHARGE_CONTAINER)) {
             const container = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_CONTAINER &&
@@ -168,8 +168,7 @@ export function execute(creep: Creep): boolean {
                 return !isNearHostile(source, hostiles) && (source.energy > 0 || source.ticksToRegeneration < 40);
             }
         }) as Source[];
-        if (sources.length > 0) {
-
+        if (sources.length && creep.memory.occupation.includes(Trait.CHARGE_SOURCE)) {
             let sourceId = 0;
             // randomly select a source; static per creep
             if (creep.memory.homeBase == creep.room.name) {
@@ -182,16 +181,17 @@ export function execute(creep: Creep): boolean {
                 });
             }
 
+            const source = sources[sourceId];
             // harvest or move towards source
-            const res = creep.harvest(sources[sourceId]);
+            const res = creep.harvest(source);
             if (res == OK) {
                 creep.memory.lastChargeSource = EnergyLocation.SOURCE;
             }
             else if (res == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[sourceId], { visualizePathStyle: { stroke: '#ffaa00' } });
+                creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
             else {
-                console.log(`[ERROR] harvest(${sources[sourceId]}): ${res}`)
+                console.log(`[ERROR] harvest(${source}): ${res}`)
                 return false;
             }
             return true;

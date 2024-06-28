@@ -8,9 +8,10 @@ const zoo: Map<string, Species> = new Map([
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: [
             Trait.CHARGE_LOCAL,
-            Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
             Trait.RENEW_CREEP,
+            Trait.HARVEST_SOURCE,
         ],
         cost: 800,
     }],

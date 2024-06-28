@@ -12,7 +12,8 @@ export enum Task {
     RESERVE_CONTROLLER,
     SWITCH_ROOM,
     RETURN, // return to homeBase
-    RENEW,  // increase ticksToLive at spawn
+    RENEW, // increase ticksToLive at spawn
+    HARVEST, // harvest energy from source
 }
 
 // can always be interrupted by another task

@@ -40,7 +40,7 @@ export function run(creep: Creep) {
     if(!match) match = structureBuild.execute(creep);
     if(!match) match = controllerCharge.execute(creep);
     if(!match) match = structureStore.execute(creep);
-    if(!match) match = moveto.execute(creep);
+    // if(!match) match = moveto.execute(creep);
     if(!match) creep.memory.task = Task.IDLE;
 
     // tell about the new task

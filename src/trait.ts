@@ -3,9 +3,12 @@ export enum Trait {
     CHARGE_AWAY,
 
     CHARGE_STORAGE,
+    CHARGE_CONTAINER,
     CHARGE_SOURCE,
 
     STORE_ENERGY,
+    STORE_CONTAINER,
+    STORE_STORAGE,
 
     REPAIR_STRUCTURE,
 
@@ -26,4 +29,6 @@ export enum Trait {
     SPAWN_CREEP,
     RENEW_CREEP,
     RECYCLE_CREEP,
+
+    HARVEST_SOURCE,
 }
