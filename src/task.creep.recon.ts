@@ -11,7 +11,7 @@ export function execute(creep: Creep): boolean {
 
         for (const source of sources) {
             if (!Memory.knownSources.includes(source.id)) {
-                Memory.knownSources.push(source.id);
+                // Memory.knownSources.push(source.id);
                 log(`[${creep.room.name}][recon] found new source: ${source}`, Loglevel.INFO);
             }
         }

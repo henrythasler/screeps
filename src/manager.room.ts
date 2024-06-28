@@ -14,6 +14,11 @@ const runnables: Map<Role, Function> = new Map([
     [Role.HARVESTER, harvester.run],
 ]);
 
+function sayAlert(creep: Creep): void {
+    creep.say('🏥');
+}
+
+
 export function run(room: Room): void {
     const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
         filter: (creep) => {
@@ -34,5 +39,6 @@ export function run(room: Room): void {
         else if (creep.memory.role == Role.HARVESTER) {
             harvester.run(creep);
         }
+
     });
 }

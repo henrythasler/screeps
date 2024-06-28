@@ -1,4 +1,4 @@
-import { EnergyLocation, Role, Species, creepMaintenance } from "./manager.global";
+import { Alert, EnergyLocation, Role, Species, creepMaintenance } from "./manager.global";
 import { Config } from "./config";
 import { Task } from "./task";
 import { Trait } from "./trait";
@@ -42,6 +42,8 @@ declare global {
         lastChargeSource: EnergyLocation,
         lastEnergyDeposit: EnergyLocation,
         homeBase: string,
+        alerts: Alert[],
+        targetLocation: RoomPosition | undefined,
     }
 
     interface SpawnMemory {
@@ -109,6 +111,7 @@ export const loop = () => {
         harvesterManager.run(room);  // manage harvester population in that room
         workerManager.run(room);  // manage worker population in that room
         collectorManager.run(room);  // manage worker population in that room
+        scoutManager.run(room);  // manage scout population in that room
 
         roomManager.run(room);  // execute creep action
 

@@ -26,6 +26,10 @@ export enum EnergyLocation {
     STORAGE,
 }
 
+export enum Alert {
+    LOW_TTL,
+}
+
 export function roleToString(role: Role): string {
     if (role == Role.WORKER) return "Worker";
     if (role == Role.SCOUT) return "Scout";

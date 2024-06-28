@@ -20,10 +20,10 @@ class Worker {
 }
 
 class Scout {
-    static minCount = 0;
+    static minCount = 1;
     static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.CHARGE_SOURCE, 1],
-        [Trait.ACTION_AWAY, 1],
+        [Trait.CHARGE_SOURCE, 0],
+        [Trait.ACTION_AWAY, 0],
         [Trait.CHARGE_STORAGE, 0],
         [Trait.CHARGE_CONTAINER, 0],
         [Trait.CLAIM_CONTROLLER, 0],
@@ -31,7 +31,7 @@ class Scout {
         [Trait.SWITCH_ROOM, 1],
         [Trait.RECON_ROOM, 1],
         [Trait.SCOUT_ROOMS, 1],
-        [Trait.RENEW_CREEP, 1],
+        [Trait.RENEW_CREEP, 0],
     ]);
 }
 
@@ -82,6 +82,10 @@ export class Config {
     static ruinMaxDistance = 10;   // max linear distance to travel for resource pickup
     static resourcePickupMaxDistance = 10;  // max linear distance to travel for resource pickup
     static minHostileDistance = 10; // min linear distance that non-combatants must keep from hostiles
+
+    static visualizePathColor: string[] = [
+
+    ];
 
     static worker = Worker;
     static scout = Scout;

@@ -45,6 +45,6 @@ export function sayTask(creep: Creep): void {
         case Task.RETURN: creep.say('🏠'); break;
         case Task.RENEW: creep.say('🏥'); break;
         default: creep.say('💤');
-    }    
+    }
 }
 

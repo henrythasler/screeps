@@ -48,6 +48,8 @@ export function run(room: Room): void {
                     lastChargeSource: EnergyLocation.OTHER,
                     lastEnergyDeposit: EnergyLocation.OTHER,
                     homeBase: room.name,
+                    alerts: [],
+                    targetLocation: undefined,
                 },
             });
         if (res == OK) {

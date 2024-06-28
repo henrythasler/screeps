@@ -11,7 +11,7 @@ import * as renew from "./task.creep.renew";
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
 
-    let match = recon.execute(creep);
+    let match = recon.execute(creep);   // uses no action
     if(!match) match = charge.execute(creep);
     if(!match) match = renew.execute(creep);
     if(!match) match = claimController.execute(creep);
