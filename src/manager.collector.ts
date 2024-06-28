@@ -18,14 +18,30 @@ const collectorZoo: Map<string, Species> = new Map([
     ["COLLECTOR_BASIC", {
         parts: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_AWAY,
+            Trait.ACTION_AWAY,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.SWITCH_ROOM,
             Trait.RENEW_CREEP,
         ],
         cost: 750,
     }],
+    ["COLLECTOR_INTERMEDIATE", {
+        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        traits: [
+            Trait.ACTION_AWAY,
+            Trait.CHARGE_SOURCE,
+            Trait.BUILD_STRUCTURE,
+            Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
+            Trait.SWITCH_ROOM,
+            Trait.RENEW_CREEP,
+        ],
+        cost: 1200,
+    }],    
 ]);
 
 export function run(room: Room): void {

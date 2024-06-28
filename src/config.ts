@@ -4,7 +4,7 @@ import { Trait } from "./trait";
 class Worker {
     static minCount = 6;
     static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.CHARGE_LOCAL, 1],
+        [Trait.ACTION_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 0],
         [Trait.CHARGE_CONTAINER, 1],
         [Trait.CHARGE_STORAGE, 1],
@@ -23,22 +23,27 @@ class Scout {
     static minCount = 0;
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 1],
-        [Trait.CHARGE_AWAY, 1],
+        [Trait.ACTION_AWAY, 1],
         [Trait.CHARGE_STORAGE, 0],
+        [Trait.CHARGE_CONTAINER, 0],
         [Trait.CLAIM_CONTROLLER, 0],
-        [Trait.RESERVE_CONTROLLER, 1],
+        [Trait.RESERVE_CONTROLLER, 0],
         [Trait.SWITCH_ROOM, 1],
         [Trait.RECON_ROOM, 1],
+        [Trait.SCOUT_ROOMS, 1],
         [Trait.RENEW_CREEP, 1],
     ]);
 }
 
 class Collector {
-    static minCount = 0;
+    static minCount = 4;
     static traitDistribution: Map<Trait, number> = new Map([
+        [Trait.ACTION_AWAY, 1],
         [Trait.CHARGE_SOURCE, 1],
-        [Trait.CHARGE_AWAY, 1],
         [Trait.STORE_ENERGY, 1],
+        [Trait.STORE_CONTAINER, 1],
+        [Trait.STORE_STORAGE, 1],
+        [Trait.BUILD_STRUCTURE, 1],
         [Trait.SWITCH_ROOM, 1],
         [Trait.RENEW_CREEP, 1],
     ]);       
@@ -47,7 +52,7 @@ class Collector {
 class Harvester {
     static minCount = 2;
     static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.CHARGE_LOCAL, 1],
+        [Trait.ACTION_LOCAL, 1],
         [Trait.HARVEST_SOURCE, 1],
         [Trait.STORE_ENERGY, 1],
         [Trait.STORE_CONTAINER, 1],

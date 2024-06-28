@@ -14,6 +14,7 @@ export enum Task {
     RETURN, // return to homeBase
     RENEW, // increase ticksToLive at spawn
     HARVEST, // harvest energy from source
+    // LOCATE_SOURCE,  // move to a knownSource in another room for charging/harvesting
 }
 
 // can always be interrupted by another task

@@ -15,10 +15,14 @@ import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
     const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-    if (constructionSites.length && creep.memory.occupation.includes(Trait.BUILD_STRUCTURE)) {
+    if (constructionSites.length && creep.memory.occupation.includes(Trait.BUILD_STRUCTURE) &&
+        (creep.memory.occupation.includes(Trait.ACTION_LOCAL) && creep.room.name == creep.memory.homeBase ||
+            creep.memory.occupation.includes(Trait.ACTION_AWAY) && creep.room.name != creep.memory.homeBase)) {
         creep.memory.task = Task.BUILD_STRUCTURE;
+
+        // build by creation order (do not sort)
         const res = creep.build(constructionSites[0]);
-        if(res == OK) {
+        if (res == OK) {
             creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
         }
         else if (res == ERR_NOT_IN_RANGE) {

@@ -16,18 +16,29 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 
 const scoutZoo: Map<string, Species> = new Map([
     ["SCOUT_ENTRY", { 
-        parts: [CLAIM, WORK, CARRY, MOVE, MOVE],
+        parts: [MOVE],
         traits: [
-            // Trait.CHARGE_AWAY,
-            // Trait.CHARGE_STORAGE,
-            // Trait.CHARGE_SOURCE,
-            Trait.CLAIM_CONTROLLER,
-            Trait.RESERVE_CONTROLLER,
             Trait.SWITCH_ROOM,    
             Trait.RECON_ROOM,
+            Trait.SCOUT_ROOMS,
         ],
-        cost: 800,
+        cost: 50,
     }],
+    // ["SCOUT_BASIC", { 
+    //     parts: [CLAIM, WORK, CARRY, MOVE, MOVE],
+    //     traits: [
+    //         Trait.CHARGE_AWAY,
+    //         Trait.CHARGE_STORAGE,
+    //         Trait.CHARGE_CONTAINER,
+    //         Trait.CHARGE_SOURCE,
+    //         Trait.CLAIM_CONTROLLER,
+    //         Trait.RESERVE_CONTROLLER,
+    //         Trait.SWITCH_ROOM,    
+    //         Trait.RECON_ROOM,
+    //         Trait.SCOUT_ROOMS,
+    //     ],
+    //     cost: 800,
+    // }],    
 ]);
 
 export function run(room: Room): void {

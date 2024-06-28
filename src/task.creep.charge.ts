@@ -74,8 +74,8 @@ function check(creep: Creep): boolean {
     }
 
     if (creep.store[RESOURCE_ENERGY] == 0 || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0)) {
-        if ((creep.memory.occupation.includes(Trait.CHARGE_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
-            creep.memory.occupation.includes(Trait.CHARGE_AWAY) && (creep.room.name != creep.memory.homeBase) ||
+        if ((creep.memory.occupation.includes(Trait.ACTION_LOCAL) && (creep.room.name == creep.memory.homeBase)) ||
+            creep.memory.occupation.includes(Trait.ACTION_AWAY) && (creep.room.name != creep.memory.homeBase) ||
             (creep.memory.homeBase == "")) {
             return true;
         }
@@ -165,7 +165,9 @@ export function execute(creep: Creep): boolean {
 
         const sources: Source[] = creep.room.find(FIND_SOURCES, {
             filter: (source) => {
-                return !isNearHostile(source, hostiles) && (source.energy > 0 || source.ticksToRegeneration < 40);
+                return !isNearHostile(source, hostiles) && (source.energy > 0 || source.ticksToRegeneration < 40) &&
+                    (creep.memory.occupation.includes(Trait.ACTION_LOCAL) && creep.room.name == creep.memory.homeBase ||
+                        creep.memory.occupation.includes(Trait.ACTION_AWAY) && creep.room.name != creep.memory.homeBase);
             }
         }) as Source[];
         if (sources.length && creep.memory.occupation.includes(Trait.CHARGE_SOURCE)) {

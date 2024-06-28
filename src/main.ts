@@ -28,6 +28,8 @@ declare global {
         uuid: number,
         log: any,
         sources: Array<Id<Source>>,  // stores the ID of all known sources
+        knownSources: Array<Id<Source>>,  // stores the ID of all known sources
+        knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
     }
 
     interface CreepMemory {
@@ -104,17 +106,17 @@ export const loop = () => {
         room.memory.buildQueue = [];
         room.memory.harvesterPerSource = new Map();
 
+        harvesterManager.run(room);  // manage harvester population in that room
         workerManager.run(room);  // manage worker population in that room
         collectorManager.run(room);  // manage worker population in that room
-        harvesterManager.run(room);  // manage harvester population in that room
 
         roomManager.run(room);  // execute creep action
 
-        let str = "";
-        room.memory.harvesterPerSource.forEach((value, key) => {
-            str += `${key}: ${value}, `;
-          });
-          console.log(`{${str}}`);
+        // let str = "";
+        // room.memory.harvesterPerSource.forEach((value, key) => {
+        //     str += `${key}: ${value}, `;
+        //   });
+        //   console.log(`{${str}}`);
 
         // for(const source in room.memory.harvesterPerSource) {
         //     log(`${source}`);

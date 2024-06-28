@@ -7,7 +7,7 @@ const zoo: Map<string, Species> = new Map([
     ["HARVESTER_BASIC", {
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.STORE_ENERGY,
             Trait.STORE_CONTAINER,
             Trait.RENEW_CREEP,

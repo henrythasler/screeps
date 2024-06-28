@@ -8,7 +8,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY", {
         parts: [WORK, CARRY, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -27,7 +27,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_SLOW", {
         parts: [WORK, CARRY, CARRY, CARRY, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -46,7 +46,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_FAST", {
         parts: [WORK, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -65,7 +65,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_HEAVY", {
         parts: [WORK, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -84,7 +84,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC", {
         parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -103,7 +103,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC_SLOW", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -122,7 +122,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC_FAST", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
