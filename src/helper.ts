@@ -18,13 +18,3 @@ export function actionAllowed(creep: Creep): boolean {
     return (creep.memory.occupation.includes(Trait.ACTION_LOCAL) && creep.room.name == creep.memory.homeBase ||
     creep.memory.occupation.includes(Trait.ACTION_AWAY) && creep.room.name != creep.memory.homeBase)    
 }
-
-class R {
-    id: string;
-    // Add any other attributes relevant to the entity
-  
-    constructor(id: string) {
-      this.id = id;
-    }
-  }
-
