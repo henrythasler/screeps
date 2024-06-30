@@ -15,9 +15,9 @@ export function execute(creep: Creep): boolean {
         !creep.spawning && creep.ticksToLive! < threshold) {
         creep.memory.task = Task.RENEW;
 
-        availableSpawns.sort((a: StructureSpawn, b: StructureSpawn): number => {
-            return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
-        });
+        // availableSpawns.sort((a: StructureSpawn, b: StructureSpawn): number => {
+        //     return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
+        // });
 
         const res = creep.moveTo(availableSpawns[0], { visualizePathStyle: { stroke: '#007f00' } })
         return true;

@@ -2,13 +2,13 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 
 class Worker {
-    static minCount = 6;
+    static minCount = 8;
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_LOCAL, 1],
         [Trait.CHARGE_SOURCE, 0],
         [Trait.CHARGE_CONTAINER, 1],
         [Trait.CHARGE_STORAGE, 1],
-        [Trait.RECHARGE_STRUCTURE, 1],
+        [Trait.RECHARGE_STRUCTURE, 0.5],
         [Trait.RECHARGE_CONTROLLER, 1],
         [Trait.BUILD_STRUCTURE, 1],
         [Trait.STORE_ENERGY, 1],
@@ -20,7 +20,7 @@ class Worker {
 }
 
 class Scout {
-    static minCount = 1;
+    static minCount = 0;
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 0],
         [Trait.ACTION_AWAY, 0],
@@ -44,6 +44,8 @@ class Collector {
         [Trait.STORE_CONTAINER, 1],
         [Trait.STORE_STORAGE, 1],
         [Trait.BUILD_STRUCTURE, 1],
+        [Trait.RECHARGE_STRUCTURE, 1],
+        [Trait.REFRESH_CONTROLLER, 1],
         [Trait.SWITCH_ROOM, 1],
         [Trait.RENEW_CREEP, 1],
     ]);       
@@ -56,13 +58,14 @@ class Harvester {
         [Trait.HARVEST_SOURCE, 1],
         [Trait.STORE_ENERGY, 1],
         [Trait.STORE_CONTAINER, 1],
+        [Trait.STORE_STORAGE, 1],
         [Trait.RENEW_CREEP, 1],
     ]);       
 }
 
 export class Config {
     // Controller
-    static minControllerLevel = 6;
+    static minControllerLevel = 7;
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
     static creepRenewThreshold = 1500 * 0.2; // 

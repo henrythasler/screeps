@@ -20,7 +20,7 @@ import { Trait } from "./trait";
 //     return creep.memory.task;
 // }
 
-export function execute(creep: Creep): boolean {
+export function execute(creep: Creep, maxDistance?: number): boolean {
     if (creep.memory.occupation.includes(Trait.STORE_ENERGY) &&
         // creep.memory.lastChargeSource != EnergyLocation.CONTAINER &&
         creep.store.getFreeCapacity() == 0) {
@@ -28,7 +28,8 @@ export function execute(creep: Creep): boolean {
 
         const container = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return structure.structureType == STRUCTURE_CONTAINER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                return structure.structureType == STRUCTURE_CONTAINER && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+                    creep.pos.getRangeTo(structure) < (maxDistance ?? 100);
             }
         }) as StructureContainer[];
 
@@ -49,7 +50,8 @@ export function execute(creep: Creep): boolean {
 
         const storage = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return structure.structureType == STRUCTURE_STORAGE && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                return structure.structureType == STRUCTURE_STORAGE && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+                    creep.pos.getRangeTo(structure) < (maxDistance ?? 100);
             }
         }) as StructureContainer[];
 

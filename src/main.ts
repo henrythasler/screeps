@@ -27,9 +27,10 @@ declare global {
     interface Memory {
         uuid: number,
         log: any,
-        sources: Array<Id<Source>>,  // stores the ID of all known sources
+        // sources: Array<Id<Source>>,  // stores the ID of all known sources
         knownSources: Array<Id<Source>>,  // stores the ID of all known sources
         knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
+        roomNetwork: string,
     }
 
     interface CreepMemory {
@@ -70,35 +71,35 @@ export const loop = () => {
     creepMaintenance();
 
     // FIXME: remove workaround
-    if((Game.time % 5000) == 0) {
-        Game.spawns["Spawn1"].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], "agent");
-    }
-    if (Game.creeps["agent"]) {
-        if (Game.creeps["agent"].store.getFreeCapacity() > 0 && Game.creeps["agent"].memory.task == Task.CHARGE) {
-            const source = Game.getObjectById("5bbcaf259099fc012e63a3bc") as Source;
-            const res = Game.creeps["agent"].harvest(source);
-            if (res == ERR_NOT_IN_RANGE) {
-                Game.creeps["agent"].moveTo(source);
-            }
-            else {
-                console.log(`harvest: ${res}`);
-            }
-        }
-        else {
-            Game.creeps["agent"].memory.task = Task.CHARGE_CONTROLLER;
-            const controller = Game.getObjectById("5bbcaf259099fc012e63a3bd") as StructureController;
-            const res = Game.creeps["agent"].upgradeController(controller);
-            if (res == ERR_NOT_IN_RANGE) {
-                Game.creeps["agent"].moveTo(controller);
-            }
-            else if (res == ERR_NOT_ENOUGH_RESOURCES) {
-                Game.creeps["agent"].memory.task = Task.CHARGE;
-            }
-            else {
-                console.log(`upgradeController: ${res}`);
-            }
-        }
-    }    
+    // if((Game.time % 5000) == 0) {
+    //     Game.spawns["Spawn1"].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], "agent");
+    // }
+    // if (Game.creeps["agent"]) {
+    //     if (Game.creeps["agent"].store.getFreeCapacity() > 0 && Game.creeps["agent"].memory.task == Task.CHARGE) {
+    //         const source = Game.getObjectById("5bbcaf259099fc012e63a3bc") as Source;
+    //         const res = Game.creeps["agent"].harvest(source);
+    //         if (res == ERR_NOT_IN_RANGE) {
+    //             Game.creeps["agent"].moveTo(source);
+    //         }
+    //         else {
+    //             console.log(`harvest: ${res}`);
+    //         }
+    //     }
+    //     else {
+    //         Game.creeps["agent"].memory.task = Task.CHARGE_CONTROLLER;
+    //         const controller = Game.getObjectById("5bbcaf259099fc012e63a3bd") as StructureController;
+    //         const res = Game.creeps["agent"].upgradeController(controller);
+    //         if (res == ERR_NOT_IN_RANGE) {
+    //             Game.creeps["agent"].moveTo(controller);
+    //         }
+    //         else if (res == ERR_NOT_ENOUGH_RESOURCES) {
+    //             Game.creeps["agent"].memory.task = Task.CHARGE;
+    //         }
+    //         else {
+    //             console.log(`upgradeController: ${res}`);
+    //         }
+    //     }
+    // }    
     /** END OF WORKAROUND */
 
     for (const roomId in Game.rooms) {
@@ -127,27 +128,27 @@ export const loop = () => {
 
         spawnManager.run(room); // spawn/heal creeps
     }
-/*        
-    const numWorker = workerManager.run();
-    if (numWorker >= Config.worker.minCount) {
-        scoutManager.run();
-        collectorManager.run();
-    }
-
-    spawnManager.resetBuildQueue();
-    for (const name in Game.creeps) {
-        const creep = Game.creeps[name];
-
-        if (creep.memory.role == Role.WORKER) {
-            worker.run(creep);
+    /*        
+        const numWorker = workerManager.run();
+        if (numWorker >= Config.worker.minCount) {
+            scoutManager.run();
+            collectorManager.run();
         }
-        else if (creep.memory.role == Role.SCOUT) {
-            scout.run(creep);
+    
+        spawnManager.resetBuildQueue();
+        for (const name in Game.creeps) {
+            const creep = Game.creeps[name];
+    
+            if (creep.memory.role == Role.WORKER) {
+                worker.run(creep);
+            }
+            else if (creep.memory.role == Role.SCOUT) {
+                scout.run(creep);
+            }
+            else if (creep.memory.role == Role.COLLECTOR) {
+                collector.run(creep);
+            }
         }
-        else if (creep.memory.role == Role.COLLECTOR) {
-            collector.run(creep);
-        }
-    }
-    spawnManager.run();
-*/    
+        spawnManager.run();
+    */
 };

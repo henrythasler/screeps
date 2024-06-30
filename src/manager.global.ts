@@ -15,10 +15,6 @@ export enum Class {
     WORKER_REMOTE = 2,
 }
 
-export const TaskPriority: Task[] = [
-
-];
-
 export enum EnergyLocation {
     OTHER,
     SOURCE,
@@ -158,7 +154,6 @@ export function creepMaintenance(): void {
         for (const name in Memory.creeps) {
             if (!Game.creeps[name]) {
                 delete Memory.creeps[name];
-                // console.log('Clearing non-existing creep memory:', name);
             }
         }
     }

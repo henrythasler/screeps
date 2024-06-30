@@ -1,3 +1,5 @@
+import { log, Loglevel } from "./debug";
+import { countRoomHops } from "./helper";
 import { Task, nonInterruptableTasks } from "./task";
 import { Trait } from "./trait";
 
@@ -15,7 +17,17 @@ export function execute(creep: Creep, locations: (Id<Source> | Id<StructureSpawn
     if (creep.memory.occupation.includes(Trait.SWITCH_ROOM) && locations.length) {
 
         const filteredLocations = locations.filter((item) => {
-            return Game.getObjectById(item)?.room.name != creep.memory.homeBase;
+            const target = Game.getObjectById(item);
+            if(target) {
+                // const path: PathFinderPath = PathFinder.search(creep.pos, target.pos);
+                // const hops = countRoomHops(path.path);
+                // const hops = countLinearHops(creep.memory.homeBase, target.room.name);
+                // log(`countRoomHops: ${hops}`, Loglevel.INFO);
+                const hops = Game.map.getRoomLinearDistance(creep.room.name, target.room.name);
+                return target.room.name != creep.memory.homeBase && hops <= 2;
+            }
+            return false;
+            // return Game.getObjectById(item)?.room.name != creep.memory.homeBase;
         });
 
         if (filteredLocations.length) {

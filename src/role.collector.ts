@@ -7,6 +7,8 @@ import * as structureBuild from "./task.structure.build";
 import * as returnHome from "./task.creep.return";
 import * as structureStore from "./task.structure.store";
 import * as renew from "./task.creep.renew";
+import * as controllerRefresh from "./task.controller.refresh";
+import * as structureCharge from "./task.structure.charge";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -27,6 +29,8 @@ export function run(creep: Creep) {
     // log(`name: ${creep.name}, task: ${creep.memory.task}`, Loglevel.DEBUG);
     let match = charge.execute(creep);
     if(!match) match = renew.execute(creep);
+    if(!match) match = controllerRefresh.execute(creep);
+    if(!match) match = structureCharge.execute(creep);
     if(!match) match = structureStore.execute(creep);
     if(!match) match = structureBuild.execute(creep);
     if(!match) match = returnHome.execute(creep);

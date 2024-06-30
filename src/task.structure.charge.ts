@@ -2,6 +2,7 @@ import { EnergyLocation } from "./manager.global";
 import { Loglevel, log } from "./debug";
 import { Task, nonInterruptableTasks } from "./task";
 import { Trait } from "./trait";
+import { actionAllowed } from "./helper";
 
 // export function check(creep: Creep): Task {
 //     if (creep.memory.occupation.includes(Trait.RECHARGE_STRUCTURE)) {
@@ -30,7 +31,7 @@ export function execute(creep: Creep): boolean {
         }
     });
 
-    if (structuresToCharge.length && creep.memory.occupation.includes(Trait.RECHARGE_STRUCTURE) && creep.store[RESOURCE_ENERGY] > 0) {
+    if (structuresToCharge.length && creep.memory.occupation.includes(Trait.RECHARGE_STRUCTURE) && creep.store[RESOURCE_ENERGY] > 0 && actionAllowed(creep)) {
         creep.memory.task = Task.CHARGE_STRUCTURE;
         // FIXME: add priority for charging structures
         structuresToCharge.sort((a: AnyStructure, b: AnyStructure): number => {
