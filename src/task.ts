@@ -12,7 +12,9 @@ export enum Task {
     RESERVE_CONTROLLER,
     SWITCH_ROOM,
     RETURN, // return to homeBase
-    RENEW,  // increase ticksToLive at spawn
+    RENEW, // increase ticksToLive at spawn
+    HARVEST, // harvest energy from source
+    // LOCATE_SOURCE,  // move to a knownSource in another room for charging/harvesting
 }
 
 // can always be interrupted by another task
@@ -43,6 +45,6 @@ export function sayTask(creep: Creep): void {
         case Task.RETURN: creep.say('🏠'); break;
         case Task.RENEW: creep.say('🏥'); break;
         default: creep.say('💤');
-    }    
+    }
 }
 

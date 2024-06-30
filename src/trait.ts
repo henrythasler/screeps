@@ -1,11 +1,14 @@
 export enum Trait {
-    CHARGE_LOCAL,
-    CHARGE_AWAY,
+    ACTION_LOCAL,
+    ACTION_AWAY,
 
     CHARGE_STORAGE,
+    CHARGE_CONTAINER,
     CHARGE_SOURCE,
 
     STORE_ENERGY,
+    STORE_CONTAINER,
+    STORE_STORAGE,
 
     REPAIR_STRUCTURE,
 
@@ -22,8 +25,12 @@ export enum Trait {
 
     SWITCH_ROOM,    // allow movement to another room
     RECON_ROOM,  // can add objects to global memory
+    SCOUT_ROOMS,    // traverse known rooms
 
     SPAWN_CREEP,
     RENEW_CREEP,
     RECYCLE_CREEP,
+
+    HARVEST_SOURCE,
+    // LOCATE_SOURCE,
 }

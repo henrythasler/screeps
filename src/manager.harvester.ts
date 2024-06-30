@@ -5,14 +5,16 @@ import { Trait } from "./trait";
 
 const zoo: Map<string, Species> = new Map([
     ["HARVESTER_BASIC", {
-        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
-            Trait.CHARGE_SOURCE,
+            Trait.ACTION_LOCAL,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,            
             Trait.RENEW_CREEP,
+            Trait.HARVEST_SOURCE,
         ],
-        cost: 800,
+        cost: 850,
     }],
 ]);
 

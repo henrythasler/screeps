@@ -8,10 +8,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY", {
         parts: [WORK, CARRY, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -24,10 +27,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_SLOW", {
         parts: [WORK, CARRY, CARRY, CARRY, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -40,10 +46,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_FAST", {
         parts: [WORK, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -56,10 +65,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_HEAVY", {
         parts: [WORK, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -72,10 +84,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC", {
         parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -88,10 +103,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC_SLOW", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -104,10 +122,13 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC_FAST", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: [
-            Trait.CHARGE_LOCAL,
+            Trait.ACTION_LOCAL,
             Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
             Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
             Trait.REPAIR_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,
             Trait.RECHARGE_CONTROLLER,
@@ -117,6 +138,26 @@ const workerZoo: Map<string, Species> = new Map([
         ],
         cost: 700,
     }],
+    ["WORKER_INTERMEDIATE", {
+        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        traits: [
+            Trait.ACTION_LOCAL,
+            Trait.CHARGE_STORAGE,
+            Trait.CHARGE_CONTAINER,
+            Trait.CHARGE_SOURCE,
+            Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
+            Trait.REPAIR_STRUCTURE,
+            Trait.RECHARGE_STRUCTURE,
+            Trait.RECHARGE_CONTROLLER,
+            Trait.BUILD_STRUCTURE,
+            Trait.REFRESH_CONTROLLER,
+            Trait.RENEW_CREEP,
+        ],
+        cost: 1200,
+    }],
+
     // ["WORKER_BASIC_HEAVY", {
     //     parts: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
     //     traits: [
