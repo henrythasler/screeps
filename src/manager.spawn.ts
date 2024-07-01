@@ -28,10 +28,10 @@ export function run(room: Room): void {
     // FIXME: iterate over available spawns
     const spawn = availableSpawns[0];
 
-    if (room.memory.buildQueue.length && !spawn.spawning) {
+    if (room.memory.buildQueue.length && spawn && !spawn.spawning) {
         log(`[${room.name}][spawn] buildQueue: ${room.memory.buildQueue.length}`, Loglevel.INFO);
         // FIXME: sort build queue
-        const requiredCreep = room.memory.buildQueue[0];
+        const requiredCreep = room.memory.buildQueue[0]!;
 
         log(`[${room.name}][spawn] spawning ${requiredCreep.species.name} (role: ${requiredCreep.role})`, Loglevel.INFO);
         const res = spawn.spawnCreep(requiredCreep.species.parts, generateName(requiredCreep.role, room),
@@ -49,7 +49,7 @@ export function run(room: Room): void {
                     lastEnergyDeposit: EnergyLocation.OTHER,
                     homeBase: room.name,
                     alerts: [],
-                    targetLocation: undefined,
+                    targetLocation: null,
                 },
             });
         if (res == OK) {
@@ -60,7 +60,7 @@ export function run(room: Room): void {
             room.memory.ticksWithPendingSpawns = room.memory.ticksWithPendingSpawns ? room.memory.ticksWithPendingSpawns + 1 : 0;
         }
     }
-    else {
+    else if (spawn){
         room.memory.ticksWithPendingSpawns = 0;
 
         const renew: Creep[] = room.find(FIND_MY_CREEPS, {
@@ -73,14 +73,14 @@ export function run(room: Room): void {
             renew.sort((a: Creep, b: Creep): number => {
                 return (a.ticksToLive! - b.ticksToLive!);
             });
-            spawn.renewCreep(renew[0]);
+            spawn.renewCreep(renew[0]!);
         }
     }
 
     availableSpawns.forEach((spawn) => {
         // show some info about new creep
         if (spawn.spawning) {
-            var spawningCreep = Game.creeps[spawn.spawning.name];
+            var spawningCreep = Game.creeps[spawn.spawning.name]!;
             // assign a unique number between 0..100
             spawningCreep.memory.percentile = Math.round(parseInt(spawningCreep.id.substring(22), 16) * 100 / 255);
             room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.7 });

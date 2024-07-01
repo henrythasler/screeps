@@ -2,7 +2,7 @@ import { Task, nonInterruptableTasks, idleTasks } from "./task";
 import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
-import { Loglevel, log } from "./debug";
+import { log, Loglevel } from "./debug";
 import { isNearHostile } from "./helper";
 
 const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];

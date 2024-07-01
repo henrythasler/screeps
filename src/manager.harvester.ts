@@ -1,4 +1,4 @@
-import { Loglevel, log } from "./debug";
+import { log, Loglevel } from "./debug";
 import { Config } from "./config";
 import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";

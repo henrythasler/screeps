@@ -1,7 +1,6 @@
-import { Loglevel, log } from "./debug";
+import { log, Loglevel } from "./debug";
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, managePopulation, manageTraitDistribution } from "./manager.global";
-import { Task } from "./task";
+import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";
 
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
@@ -48,8 +47,8 @@ export function run(room: Room): void {
         // these creeps can be anywhere, so we just filter by their homebase
         const creeps: Creep[] = [];
         for (const name in Game.creeps) {
-            if (Game.creeps[name].memory.role == Role.SCOUT && Game.creeps[name].memory.homeBase == room.name) {
-                creeps.push(Game.creeps[name]);
+            if (Game.creeps[name]!.memory.role == Role.SCOUT && Game.creeps[name]!.memory.homeBase == room.name) {
+                creeps.push(Game.creeps[name]!);
             }
         }
 

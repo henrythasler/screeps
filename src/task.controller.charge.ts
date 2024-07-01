@@ -30,7 +30,7 @@ export function execute(creep: Creep): boolean {
         else if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(controller, { visualizePathStyle: { stroke: '#00ff00' } });
         }
-        else {
+        else if (res != ERR_NOT_ENOUGH_RESOURCES){
             console.log(`upgradeController(${controller.room.name}) failed: ${res}`);
         }
         return true;

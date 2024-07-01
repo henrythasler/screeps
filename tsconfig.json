@@ -9,7 +9,6 @@
     "moduleDetection": "force",
     "isolatedModules": true,
     "verbatimModuleSyntax": false,
-    "types": ["node", "jest"],                /* Type declaration files to be included in compilation. */
     // Enable strict type checking so you can catch bugs early
     "strict": true,
     "noUncheckedIndexedAccess": true,

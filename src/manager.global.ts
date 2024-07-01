@@ -1,4 +1,5 @@
-import { Loglevel, log } from "./debug";
+import { log, Loglevel } from "./debug";
+import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./roominfo";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -139,8 +140,8 @@ export function manageTraitDistribution(creeps: Creep[], zoo: Map<string, Specie
     const currentDistribution: Map<Trait, number> = new Map();
     for (const creep of creeps) {
         // update traits from blueprint
-            const species = zoo.get(creep.memory.speciesName);
-            creep.memory.traits = species?.traits ?? [];
+        const species = zoo.get(creep.memory.speciesName);
+        creep.memory.traits = species?.traits ?? [];
 
         // assign occupation
         creep.memory.occupation = applyTraitDistribution(creep, creeps.length, currentDistribution, traitDistribution);
@@ -157,4 +158,9 @@ export function creepMaintenance(): void {
             }
         }
     }
+}
+
+export function initializeObjects(): void {
+    Memory.knownSources = [];
+    createRoomInfoMap();
 }

@@ -20,7 +20,7 @@ class Worker {
 }
 
 class Scout {
-    static minCount = 0;
+    static minCount = 1;
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 0],
         [Trait.ACTION_AWAY, 0],
@@ -89,6 +89,9 @@ export class Config {
     static visualizePathColor: string[] = [
 
     ];
+
+    static roomReconTimeout = 120;
+    static roomReconVisuals = true;
 
     static worker = Worker;
     static scout = Scout;
