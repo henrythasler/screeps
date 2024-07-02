@@ -1,5 +1,5 @@
 import { Config } from "./config";
-import { Task, nonInterruptableTasks } from "./task";
+import { Task } from "./task";
 import { Trait } from "./trait";
 
 const repairFilter: StructureConstant[] = [

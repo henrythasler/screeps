@@ -23,12 +23,6 @@ export const idleTasks: Task[] = [
     Task.MOVETO,
 ];
 
-// must not be interrupted
-export const nonInterruptableTasks: Task[] = [
-    Task.CHARGE,
-    Task.REFRESH_CONTROLLER,
-];
-
 export function sayTask(creep: Creep): void {
     switch (creep.memory.task) {
         case Task.CHARGE: creep.say('🪫'); break;
@@ -44,6 +38,7 @@ export function sayTask(creep: Creep): void {
         case Task.SWITCH_ROOM: creep.say('🚪'); break;
         case Task.RETURN: creep.say('🏠'); break;
         case Task.RENEW: creep.say('🏥'); break;
+        case Task.HARVEST: creep.say('🚜'); break;
         default: creep.say('💤');
     }
 }

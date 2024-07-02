@@ -21,6 +21,7 @@ export enum EnergyLocation {
     SOURCE,
     CONTAINER,
     STORAGE,
+    LINK,
 }
 
 export enum Alert {
@@ -126,7 +127,11 @@ export function applyTraitDistribution(creep: Creep, population: number, creepsP
 
 export function managePopulation(required: number, current: number, room: Room, zoo: Map<string, Species>, role: Role): number {
     let requested = 0;
-    if (current < required) {
+    const alreadyQueued = room.memory.buildQueue.some( (species) => {
+        if(species.role == role) return true;
+        return false;
+    });
+    if (current < required && !alreadyQueued) {
         const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, zoo);
         if (species) {
             room.memory.buildQueue.push({ species: species, role: role });

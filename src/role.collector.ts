@@ -1,5 +1,5 @@
 import { Loglevel, log } from "./debug";
-import { Task, nonInterruptableTasks, sayTask } from "./task";
+import { Task, sayTask } from "./task";
 import * as charge from "./task.creep.charge";
 import * as moveto from "./task.creep.moveto";
 import * as switchRoom from "./task.creep.switchRoom";

@@ -21,7 +21,7 @@ export function run(room: Room): void {
     const availableSpawns = room.find(FIND_MY_SPAWNS);
 
     if (!availableSpawns.length) {
-        log(`[${room.name}] no spawn available`, Loglevel.INFO);
+        log(`[${room.name}] no spawn available`, Loglevel.DEBUG);
         return;
     }
 
@@ -57,7 +57,7 @@ export function run(room: Room): void {
         }
         else {
             // console.log(`[ERROR][${room.name}][spawn] spawnCreep(${requiredCreep.species.parts}) returned ${res}`);
-            room.memory.ticksWithPendingSpawns = room.memory.ticksWithPendingSpawns ? room.memory.ticksWithPendingSpawns + 1 : 0;
+            room.memory.ticksWithPendingSpawns += 1;
         }
     }
     else if (spawn){
@@ -86,60 +86,4 @@ export function run(room: Room): void {
             room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.7 });
         }
     });
-    /*    
-        for (const name in Game.spawns) {
-            const spawn = Game.spawns[name];
-    
-            if (spawn.memory.buildQueue.length > 0) {
-                // FIXME: sort queue
-                const toSpawn = spawn.memory.buildQueue[0];
-                const res = spawn.spawnCreep(toSpawn.species.parts, generateName(toSpawn.role, spawn.room),
-                    {
-                        memory: {
-                            speciesName: toSpawn.species.name,
-                            role: toSpawn.role,
-                            task: Task.IDLE,
-                            traits: toSpawn.species.traits,
-                            occupation: [Trait.CHARGE_SOURCE, Trait.CHARGE_STORAGE],
-                            percentile: -1,
-                            lastChargeSource: EnergyLocation.OTHER,
-                            lastEnergyDeposit: EnergyLocation.OTHER,
-                            homeBase: spawn.room.name,
-                        },
-                    });
-                if (res != OK) {
-                    console.log(`[ERROR] spawnCreep(${toSpawn.species.parts}) returned ${res}`);
-                    if (Memory.ticksWithoutSpawn == undefined) {
-                        Memory.ticksWithoutSpawn = 0;
-                    }
-                    Memory.ticksWithoutSpawn++;
-                }
-                else {
-                    Memory.ticksWithoutSpawn = 0;
-                }
-            }
-            else {
-                Memory.ticksWithoutSpawn = 0;
-    
-                const needRepair: Creep[] = [];
-                for (const name in Game.creeps) {
-                    if (Game.creeps[name].memory.role == Role.WORKER && !Game.creeps[name].spawning &&
-                        spawn.pos.getRangeTo(Game.creeps[name].pos) <= 1) {
-                        needRepair.push(Game.creeps[name]);
-                    }
-                }
-                if (needRepair.length > 0) {
-                    spawn.renewCreep(needRepair[0]);
-                }
-            }
-    
-            // show some info about new creep
-            if (spawn.spawning) {
-                var spawningCreep = Game.creeps[spawn.spawning.name];
-                // assign a unique number between 0..100
-                spawningCreep.memory.percentile = Math.round(parseInt(spawningCreep.id.substring(22), 16) * 100 / 255);
-                spawn.room.visual.text('🍼 ' + spawningCreep.memory.speciesName, spawn.pos.x + 1, spawn.pos.y, { align: 'left', opacity: 0.8 });
-            }
-        }
-    */
 }

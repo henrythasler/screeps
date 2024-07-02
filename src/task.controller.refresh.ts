@@ -1,7 +1,7 @@
 import { Loglevel, log } from "./debug";
 import { Config } from "./config";
 import { EnergyLocation } from "./manager.global";
-import { Task, nonInterruptableTasks } from "./task";
+import { Task } from "./task";
 import { Trait } from "./trait";
 
 // export function check(creep: Creep): Task {

@@ -1,4 +1,4 @@
-import { Task, nonInterruptableTasks, idleTasks } from "./task";
+import { Task } from "./task";
 import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";

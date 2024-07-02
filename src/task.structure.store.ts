@@ -1,30 +1,34 @@
-import { Task, nonInterruptableTasks } from "./task";
+import { Task } from "./task";
 import { EnergyLocation } from "./manager.global";
 import { Trait } from "./trait";
-
-// const structureTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
-
-// export function check(creep: Creep): Task {
-//     if ((creep.memory.lastChargeSource != EnergyLocation.CONTAINER) && creep.memory.occupation.includes(Trait.STORE_ENERGY) &&
-//         (creep.store.getFreeCapacity() == 0)) {
-//         const stores = creep.room.find(FIND_STRUCTURES, {
-//             filter: (structure) => {
-//                 return (structureTypes.includes(structure.structureType) &&
-//                     ((structure as StructureContainer).store.getFreeCapacity(RESOURCE_ENERGY) > 0));
-//             }
-//         });
-//         if ((stores.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-//             return Task.STORE_ENERGY;
-//         }
-//     }
-//     return creep.memory.task;
-// }
 
 export function execute(creep: Creep, maxDistance?: number): boolean {
     if (creep.memory.occupation.includes(Trait.STORE_ENERGY) &&
         // creep.memory.lastChargeSource != EnergyLocation.CONTAINER &&
         creep.store.getFreeCapacity() == 0) {
         creep.memory.task = Task.STORE_ENERGY;
+
+        const links = creep.room.find(FIND_MY_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_LINK && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+                    creep.pos.getRangeTo(structure) < (maxDistance ?? 100);
+            }
+        }) as StructureLink[];
+
+        if (links.length && creep.memory.occupation.includes(Trait.STORE_LINK)) {
+            // sort by distance
+            links.sort((a: StructureLink, b: StructureLink): number => {
+                return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
+            });
+
+            if (creep.transfer(links[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(links[0], { visualizePathStyle: { stroke: '#ffffff' } });
+            }
+            else {
+                creep.memory.lastEnergyDeposit = EnergyLocation.LINK;
+            }
+            return true;
+        }        
 
         const container = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {

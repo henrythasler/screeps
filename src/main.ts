@@ -9,8 +9,10 @@ import * as harvesterManager from "./manager.harvester";
 
 import * as roomManager from "./manager.room";
 import * as tower from "./tower";
+import * as link from "./structure.link";
 import { RequiredSpecies } from "./manager.spawn";
 import { SerializableRoomInfo, loadRoomInfoMap, saveRoomInfoMap } from "./roominfo";
+import { Config } from "./config";
 
 declare global {
     /*
@@ -54,6 +56,7 @@ declare global {
         buildQueue: RequiredSpecies[],
         ticksWithPendingSpawns: number;
         harvesterPerSource: Map<Id<Source>, number>;
+        threatLevel: number;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -73,17 +76,18 @@ export const loop = () => {
     for (const roomId in Game.rooms) {
         const room = Game.rooms[roomId]!;
         tower.run(room);
+        link.run(room);
 
-        room.memory.buildQueue = [];
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
 
-        harvesterManager.run(room);  // manage harvester population in that room
-        workerManager.run(room);  // manage worker population in that room
-        collectorManager.run(room);  // manage worker population in that room
-        scoutManager.run(room);  // manage scout population in that room
+        if(Config.mainBase.includes(room.name)) {
+            harvesterManager.run(room);  // manage harvester population in that room
+            workerManager.run(room);  // manage worker population in that room
+            collectorManager.run(room);  // manage worker population in that room
+            scoutManager.run(room);  // manage scout population in that room   
+        }
 
         roomManager.run(room);  // execute creep action
-
         spawnManager.run(room); // spawn/heal creeps
     }
 

@@ -17,7 +17,7 @@ export function execute(creep: Creep): boolean {
         else if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(constructionSites[0]!, { visualizePathStyle: { stroke: '#ffff00' } });
         }
-        else {
+        else if (res != ERR_NOT_ENOUGH_ENERGY){
             log(`[${creep.room.name}][${creep.name}] build(${constructionSites[0]}) failed: ${res}`, Loglevel.ERROR);
         }
         return true;
