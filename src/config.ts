@@ -11,7 +11,7 @@ class Worker {
         [Trait.CHARGE_STORAGE, 1],
         [Trait.CHARGE_LINK, 1],
         [Trait.RECHARGE_STRUCTURE, 0.75],
-        [Trait.RECHARGE_CONTROLLER, 1],
+        [Trait.RECHARGE_CONTROLLER, 0.66],
         [Trait.BUILD_STRUCTURE, 1],
         [Trait.STORE_ENERGY, 1],
         [Trait.STORE_STORAGE, 1],

@@ -78,6 +78,8 @@ export const loop = () => {
         tower.run(room);
         link.run(room);
 
+        // FIXME: persist and handle build queue correctly
+        room.memory.buildQueue = [];
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
 
         if(Config.mainBase.includes(room.name)) {

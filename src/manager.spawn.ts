@@ -53,6 +53,7 @@ export function run(room: Room): void {
                 },
             });
         if (res == OK) {
+            room.memory.buildQueue.pop();
             room.memory.ticksWithPendingSpawns = 0;
         }
         else {
@@ -60,7 +61,9 @@ export function run(room: Room): void {
             room.memory.ticksWithPendingSpawns += 1;
         }
     }
-    else if (spawn){
+
+    // FIXME: make healing creeps a priority for spawns
+    if (spawn){
         room.memory.ticksWithPendingSpawns = 0;
 
         const renew: Creep[] = room.find(FIND_MY_CREEPS, {
