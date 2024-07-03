@@ -1,4 +1,4 @@
-import { Loglevel, log } from "./debug";
+import { log, Loglevel } from "./debug";
 import { Config } from "./config";
 import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";
@@ -10,7 +10,8 @@ const zoo: Map<string, Species> = new Map([
             Trait.ACTION_LOCAL,
             Trait.STORE_ENERGY,
             Trait.STORE_CONTAINER,
-            Trait.STORE_STORAGE,            
+            Trait.STORE_STORAGE,
+            Trait.STORE_LINK,
             Trait.RENEW_CREEP,
             Trait.HARVEST_SOURCE,
         ],

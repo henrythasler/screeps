@@ -55,15 +55,33 @@ function repairStructure(room: Room, towers: StructureTower[]): void {
     }
 }
 
-function reinforceRamparts(room: Room, towers: StructureTower[], threat: boolean): void {
+// function reinforceRamparts(room: Room, towers: StructureTower[], threat: boolean): void {
+//     const toReinforce = room.find(FIND_STRUCTURES, {
+//         filter: (structure) => {
+//             return (structure.structureType == STRUCTURE_RAMPART)
+//                 && (structure.hits < (threat ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace) * structure.hitsMax);
+//         }
+//     }) as Structure[];
+
+//     if (toReinforce.length > 0) {
+//         toReinforce.sort((a: Structure, b: Structure): number => {
+//             return (a.hits - b.hits);
+//         });
+//         towers.forEach(tower => tower.repair(toReinforce[0]));
+//     }
+// }
+
+type ReinforcableStructures = STRUCTURE_RAMPART | STRUCTURE_WALL;
+
+function reinforceStructure(room: Room, towers: StructureTower[], structureToReinforce: ReinforcableStructures, minHits: number): void {
     const toReinforce = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_RAMPART)
-                && (structure.hits < (threat ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace) * structure.hitsMax);
+            return (structure.structureType == structureToReinforce)
+                && (structure.hits < minHits * structure.hitsMax);
         }
     }) as Structure[];
 
-    if (toReinforce.length > 0) {
+    if (toReinforce.length) {
         toReinforce.sort((a: Structure, b: Structure): number => {
             return (a.hits - b.hits);
         });
@@ -76,12 +94,18 @@ export function run(room: Room): void {
 
     if (towers.length > 0) {
         const hostileStats = defendRoom(room, towers);
-        reinforceRamparts(room, towers, hostileStats.count > 0);
+
         if (hostileStats.count == 0) {
             healCreeps(room, towers);
             repairStructure(room, towers);
+
+            const needStructureReinforcements = room.memory.threatLevel > Config.threatLevelStructureReinforcementThreshold;
+            reinforceStructure(room, towers, STRUCTURE_RAMPART, needStructureReinforcements ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace);
+            reinforceStructure(room, towers, STRUCTURE_WALL, needStructureReinforcements ? Config.wallTowerRepairThresholdThreat : Config.wallTowerRepairThresholdPeace);
+            room.memory.threatLevel = Math.max(0, room.memory.threatLevel - Config.threatLevelCooldown);
         }
         else {
+            room.memory.threatLevel += hostileStats.hits;
             if (hostileStats.hits > Config.safeModeThreshold) {
                 console.log(`[ALERT] ${hostileStats.count} hostiles (${hostileStats.hits} hits) in ${room}`);
                 const res = room.controller?.activateSafeMode();

@@ -1,5 +1,4 @@
-import { Alert, EnergyLocation, Role, Species, creepMaintenance } from "./manager.global";
-import { Config } from "./config";
+import { Alert, EnergyLocation, Role, creepMaintenance, initializeObjects } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import * as spawnManager from "./manager.spawn";
@@ -10,9 +9,10 @@ import * as harvesterManager from "./manager.harvester";
 
 import * as roomManager from "./manager.room";
 import * as tower from "./tower";
+import * as link from "./structure.link";
 import { RequiredSpecies } from "./manager.spawn";
-import { log, Loglevel } from "./debug";
-
+import { SerializableRoomInfo, loadRoomInfoMap, saveRoomInfoMap } from "./roominfo";
+import { Config } from "./config";
 
 declare global {
     /*
@@ -27,10 +27,9 @@ declare global {
     interface Memory {
         uuid: number,
         log: any,
-        // sources: Array<Id<Source>>,  // stores the ID of all known sources
         knownSources: Array<Id<Source>>,  // stores the ID of all known sources
         knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
-        roomNetwork: string,
+        roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
     }
 
     interface CreepMemory {
@@ -44,7 +43,7 @@ declare global {
         lastEnergyDeposit: EnergyLocation,
         homeBase: string,
         alerts: Alert[],
-        targetLocation: RoomPosition | undefined,
+        targetLocation: string | null,
     }
 
     interface SpawnMemory {
@@ -57,6 +56,7 @@ declare global {
         buildQueue: RequiredSpecies[],
         ticksWithPendingSpawns: number;
         harvesterPerSource: Map<Id<Source>, number>;
+        threatLevel: number;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -69,86 +69,29 @@ declare global {
 
 export const loop = () => {
     creepMaintenance();
+    // initializeObjects();     // use this only to reset global Memory
 
-    // FIXME: remove workaround
-    // if((Game.time % 5000) == 0) {
-    //     Game.spawns["Spawn1"].spawnCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], "agent");
-    // }
-    // if (Game.creeps["agent"]) {
-    //     if (Game.creeps["agent"].store.getFreeCapacity() > 0 && Game.creeps["agent"].memory.task == Task.CHARGE) {
-    //         const source = Game.getObjectById("5bbcaf259099fc012e63a3bc") as Source;
-    //         const res = Game.creeps["agent"].harvest(source);
-    //         if (res == ERR_NOT_IN_RANGE) {
-    //             Game.creeps["agent"].moveTo(source);
-    //         }
-    //         else {
-    //             console.log(`harvest: ${res}`);
-    //         }
-    //     }
-    //     else {
-    //         Game.creeps["agent"].memory.task = Task.CHARGE_CONTROLLER;
-    //         const controller = Game.getObjectById("5bbcaf259099fc012e63a3bd") as StructureController;
-    //         const res = Game.creeps["agent"].upgradeController(controller);
-    //         if (res == ERR_NOT_IN_RANGE) {
-    //             Game.creeps["agent"].moveTo(controller);
-    //         }
-    //         else if (res == ERR_NOT_ENOUGH_RESOURCES) {
-    //             Game.creeps["agent"].memory.task = Task.CHARGE;
-    //         }
-    //         else {
-    //             console.log(`upgradeController: ${res}`);
-    //         }
-    //     }
-    // }    
-    /** END OF WORKAROUND */
+    loadRoomInfoMap();
 
     for (const roomId in Game.rooms) {
-        const room = Game.rooms[roomId];
+        const room = Game.rooms[roomId]!;
         tower.run(room);
+        link.run(room);
 
+        // FIXME: persist and handle build queue correctly
         room.memory.buildQueue = [];
-        room.memory.harvesterPerSource = new Map();
+        room.memory.harvesterPerSource = new Map<Id<Source>, number>();
 
-        harvesterManager.run(room);  // manage harvester population in that room
-        workerManager.run(room);  // manage worker population in that room
-        collectorManager.run(room);  // manage worker population in that room
-        scoutManager.run(room);  // manage scout population in that room
+        if(Config.mainBase.includes(room.name)) {
+            harvesterManager.run(room);  // manage harvester population in that room
+            workerManager.run(room);  // manage worker population in that room
+            collectorManager.run(room);  // manage worker population in that room
+            scoutManager.run(room);  // manage scout population in that room   
+        }
 
         roomManager.run(room);  // execute creep action
-
-        // let str = "";
-        // room.memory.harvesterPerSource.forEach((value, key) => {
-        //     str += `${key}: ${value}, `;
-        //   });
-        //   console.log(`{${str}}`);
-
-        // for(const source in room.memory.harvesterPerSource) {
-        //     log(`${source}`);
-        // }
-
         spawnManager.run(room); // spawn/heal creeps
     }
-    /*        
-        const numWorker = workerManager.run();
-        if (numWorker >= Config.worker.minCount) {
-            scoutManager.run();
-            collectorManager.run();
-        }
-    
-        spawnManager.resetBuildQueue();
-        for (const name in Game.creeps) {
-            const creep = Game.creeps[name];
-    
-            if (creep.memory.role == Role.WORKER) {
-                worker.run(creep);
-            }
-            else if (creep.memory.role == Role.SCOUT) {
-                scout.run(creep);
-            }
-            else if (creep.memory.role == Role.COLLECTOR) {
-                collector.run(creep);
-            }
-        }
-        spawnManager.run();
-    */
+
+    saveRoomInfoMap();
 };

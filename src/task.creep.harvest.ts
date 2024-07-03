@@ -1,4 +1,4 @@
-import { Task, nonInterruptableTasks, idleTasks } from "./task";
+import { Task } from "./task";
 import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
@@ -32,7 +32,7 @@ export function execute(creep: Creep): boolean {
             return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
         });
 
-        const source = sources[sourceId];
+        const source = sources[sourceId]!;
         if (creep.room.memory.harvesterPerSource.has(source.id)) {
             creep.room.memory.harvesterPerSource.set(source.id, creep.room.memory.harvesterPerSource.get(source.id)! + 1);
         }

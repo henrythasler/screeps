@@ -1,11 +1,11 @@
-import { Task, nonInterruptableTasks, idleTasks } from "./task";
+import { Task, idleTasks } from "./task";
 import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
-import { Loglevel, log } from "./debug";
+import { log, Loglevel } from "./debug";
 import { isNearHostile } from "./helper";
 
-const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
+const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK];
 const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_CONTAINER, Trait.CHARGE_STORAGE];
 
 // all types share the 'pos' property, so we can have that mixed type
@@ -133,6 +133,21 @@ export function execute(creep: Creep): boolean {
             withdrawEnergy(creep, ruins, true, EnergyLocation.OTHER);
             return true;
         }
+
+        // link
+        if (creep.memory.lastEnergyDeposit != EnergyLocation.LINK && creep.memory.occupation.includes(Trait.CHARGE_LINK)) {
+            const container = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_LINK &&
+                        structure.store[RESOURCE_ENERGY] > 0 && structure.pos.getRangeTo(creep.pos) < Config.linkChargeMaxDistance;
+                }
+            }) as StructureContainer[];
+
+            if (container.length > 0) {
+                withdrawEnergy(creep, container, true, EnergyLocation.LINK);
+                return true;
+            }
+        }        
 
         // container
         if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && creep.memory.occupation.includes(Trait.CHARGE_CONTAINER)) {

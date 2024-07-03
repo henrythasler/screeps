@@ -1,14 +1,5 @@
-import { Task, nonInterruptableTasks } from "./task";
+import { Task } from "./task";
 import { Trait } from "./trait";
-
-// export function check(creep: Creep): Task {
-//     if (creep.memory.occupation.includes(Trait.SWITCH_ROOM) && !nonInterruptableTasks.includes(creep.memory.task)) {
-//         if (creep.room.name != creep.memory.homeBase) {
-//             return Task.RETURN;
-//         }
-//     }
-//     return creep.memory.task;
-// }
 
 export function execute(creep: Creep): boolean {
     if (creep.room.name != creep.memory.homeBase && creep.memory.occupation.includes(Trait.SWITCH_ROOM)) {

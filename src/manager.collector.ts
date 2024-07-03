@@ -39,6 +39,7 @@ const collectorZoo: Map<string, Species> = new Map([
             Trait.STORE_ENERGY,
             Trait.STORE_CONTAINER,
             Trait.STORE_STORAGE,
+            Trait.STORE_LINK,
             Trait.SWITCH_ROOM,
             Trait.RENEW_CREEP,
         ],

@@ -6,7 +6,7 @@ export enum Loglevel {
     DEBUG,
 }
 
-export function log(message: string, level: Loglevel): void {
+export function log(message: string, level: Loglevel = Loglevel.INFO): void {
     if(level <= Loglevel.INFO) {
         console.log(message);
     }
