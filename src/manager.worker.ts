@@ -183,84 +183,15 @@ const workerZoo: Map<string, Species> = new Map([
     // }],     
 ]);
 
-export function run(room: Room): void {
-    if ((Game.time % 10) == 0) {
-        const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
-            filter: (creep) => {
-                return creep.memory.role == Role.WORKER;
-            }
-        });
-
-        log(`[${room.name}] worker: ${creeps.length}/${Config.worker.minCount}`, Loglevel.INFO);
-
-        managePopulation(Config.worker.minCount, creeps.length, room, workerZoo, Role.WORKER);
-        manageTraitDistribution(creeps, workerZoo, Config.worker.traitDistribution);
-    }    
-/*
-    // create an array for all creeps to work with
-    const worker: Creep[] = [];
-    for (const name in Game.creeps) {
-        if (Game.creeps[name].memory.role == Role.WORKER && !Game.creeps[name].spawning) {
-            worker.push(Game.creeps[name]);
+export function run(room: Room, role: Role): void {
+    const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return creep.memory.role == role;
         }
-    }
+    });
 
-    // create an array for all spawns
-    const spawns: StructureSpawn[] = [];
-    for (const name in Game.spawns) {
-        spawns.push(Game.spawns[name]);
-    }
+    room.memory.creepCensus.set(role, {current: creeps.length, required: Config.worker.minCount});
 
-    const spawn = spawns[0];
-
-    // check number of active creeps; spawn a new one if needed
-    if ((worker.length < Config.worker.minCount) && !spawn.spawning) {
-        const species = findMostExpensiveSpecies(spawn.room.energyCapacityAvailable, Memory.ticksWithoutSpawn, workerZoo);
-        if (species) {
-            spawn.memory.buildQueue.push({species: species, role: Role.WORKER});
-        }
-    }
-
-    // apply trait distribution
-    if ((Game.time % 30) == 0) {
-        const numCreeps = worker.length;
-        const currentDistribution: Map<Trait, number> = new Map();
-        for (const creep of worker) {
-            // update traits from blueprint
-            if (creep.memory.speciesName) {
-                const species = workerZoo.get(creep.memory.speciesName);
-                if (species) {
-                    creep.memory.traits = species.traits;
-                }
-            }
-
-            // assign occupation
-            creep.memory.occupation = [];
-            for (const trait of Config.worker.availableTraits) {
-
-                const current = currentDistribution.get(trait);
-                const expected = Config.worker.traitDistribution.get(trait);
-
-                if (numCreeps >= 10) {
-                    if (creep.memory.traits.includes(trait) && expected && (creep.memory.percentile <= (expected * 100))) {
-                        creep.memory.occupation.push(trait);
-                    }
-                }
-                else {
-                    if (current && expected) {
-                        if (creep.memory.traits.includes(trait) && (current < Math.ceil(expected * numCreeps))) {
-                            creep.memory.occupation.push(trait);
-                            currentDistribution.set(trait, current + 1);
-                        }
-                    }
-                    else if (creep.memory.traits.includes(trait) && expected && expected > 0) {
-                        creep.memory.occupation.push(trait);
-                        currentDistribution.set(trait, 1);
-                    }
-                }
-            }
-            console.log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`)
-        }
-    }
-    */
+    managePopulation(Config.worker.minCount, creeps.length, room, workerZoo, role);
+    manageTraitDistribution(creeps, workerZoo, Config.worker.traitDistribution);
 }

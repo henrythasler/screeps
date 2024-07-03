@@ -48,7 +48,7 @@ export function execute(creep: Creep): boolean {
         else if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
         }
-        else {
+        else if (res != ERR_NOT_ENOUGH_ENERGY){
             console.log(`[ERROR] harvest(${source}): ${res}`)
             return false;
         }

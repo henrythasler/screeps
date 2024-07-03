@@ -19,18 +19,15 @@ const zoo: Map<string, Species> = new Map([
     }],
 ]);
 
-export function run(room: Room): void {
-    // apply trait distribution
-    if ((Game.time % 10) == 0) {
-        const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
-            filter: (creep) => {
-                return creep.memory.role == Role.HARVESTER;
-            }
-        });
+export function run(room: Room, role: Role): void {
+    const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return creep.memory.role == role;
+        }
+    });
 
-        log(`[${room.name}] harvester: ${creeps.length}/${Config.harvester.minCount}`, Loglevel.INFO);
+    room.memory.creepCensus.set(role, {current: creeps.length, required: Config.harvester.minCount});
 
-        managePopulation(Config.harvester.minCount, creeps.length, room, zoo, Role.HARVESTER);
-        manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);
-    }
+    managePopulation(Config.harvester.minCount, creeps.length, room, zoo, role);
+    manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);
 }

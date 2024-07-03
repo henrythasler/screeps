@@ -32,6 +32,7 @@ export function roleToString(role: Role): string {
     if (role == Role.WORKER) return "Worker";
     if (role == Role.SCOUT) return "Scout";
     if (role == Role.COLLECTOR) return "Collector";
+    if (role == Role.HARVESTER) return "Harvester";
     return "unknown";
 }
 
@@ -62,10 +63,9 @@ export interface Species {
     name?: string,
 }
 
-export function findMostExpensiveSpecies(budget: number, ticksWithoutSpawn: number | undefined, zoo: Map<string, Species>): Species | undefined {
+export function findMostExpensiveSpecies(budget: number, ticksWithPendingSpawns: number, zoo: Map<string, Species>): Species | undefined {
     let speciesName: string = "null";
-    ticksWithoutSpawn = ticksWithoutSpawn ? ticksWithoutSpawn : 0;
-    const actualBudget = budget - ticksWithoutSpawn;
+    const actualBudget = budget - ticksWithPendingSpawns;
     zoo.forEach((value, key) => {
         if ((value.cost <= actualBudget) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
             speciesName = key;
@@ -96,42 +96,28 @@ export function applyTraitDistribution(creep: Creep, population: number, creepsP
         }
     });
     return occupation;
-
-
-    /*    
-        for (const trait of Config.worker.availableTraits) {
-    
-            const current = currentDistribution.get(trait);
-            const expected = Config.worker.traitDistribution.get(trait);
-    
-            if (numCreeps >= 10) {
-                if (creep.memory.traits.includes(trait) && expected && (creep.memory.percentile <= (expected * 100))) {
-                    creep.memory.occupation.push(trait);
-                }
-            }
-            else {
-                if (current && expected) {
-                    if (creep.memory.traits.includes(trait) && (current < Math.ceil(expected * numCreeps))) {
-                        creep.memory.occupation.push(trait);
-                        currentDistribution.set(trait, current + 1);
-                    }
-                }
-                else if (creep.memory.traits.includes(trait) && expected && expected > 0) {
-                    creep.memory.occupation.push(trait);
-                    currentDistribution.set(trait, 1);
-                }
-            }
-        }    
-    */
 }
 
 export function managePopulation(required: number, current: number, room: Room, zoo: Map<string, Species>, role: Role): number {
     let requested = 0;
-    const alreadyQueued = room.memory.buildQueue.some( (species) => {
-        if(species.role == role) return true;
+    const alreadyQueued = room.memory.buildQueue.some((species) => {
+        if (species.role == role) return true;
         return false;
     });
-    if (current < required && !alreadyQueued) {
+
+    let spawning = 0;
+
+    const availableSpawns = room.find(FIND_MY_SPAWNS);
+    availableSpawns.forEach((spawn) => {
+        if (spawn.spawning) {
+            var spawningCreep = Game.creeps[spawn.spawning.name]!;
+            if (spawningCreep.memory.role == role) {
+                spawning++;
+            }
+        }
+    });
+
+    if (current + spawning < required && !alreadyQueued) {
         const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, zoo);
         if (species) {
             room.memory.buildQueue.push({ species: species, role: role });
@@ -165,7 +151,20 @@ export function creepMaintenance(): void {
     }
 }
 
+export function showCreepCensus(roomName: string, census: Map<Role, {current: number, required: number}>): void {
+    let text = `[${roomName}] `;
+    census.forEach( (details, role) => text+=`${roleToString(role)}: ${details.current}/${details.required}, `);
+    log(text);
+}
+
 export function initializeObjects(): void {
     Memory.knownSources = [];
     createRoomInfoMap();
+
+    for (const roomId in Game.rooms) {
+        const room = Game.rooms[roomId]!;
+        room.memory.buildQueue = [];
+        room.memory.ticksWithPendingSpawns = 0;
+        room.memory.threatLevel = 0;
+    }
 }

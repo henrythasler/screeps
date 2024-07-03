@@ -25,47 +25,7 @@ export function run(room: Room): void {
         return;
     }
 
-    // FIXME: iterate over available spawns
-    const spawn = availableSpawns[0];
-
-    if (room.memory.buildQueue.length && spawn && !spawn.spawning) {
-        log(`[${room.name}][spawn] buildQueue: ${room.memory.buildQueue.length}`, Loglevel.INFO);
-        // FIXME: sort build queue
-        const requiredCreep = room.memory.buildQueue[0]!;
-
-        log(`[${room.name}][spawn] spawning ${requiredCreep.species.name} (role: ${requiredCreep.role})`, Loglevel.INFO);
-        const res = spawn.spawnCreep(requiredCreep.species.parts, generateName(requiredCreep.role, room),
-            {   
-                dryRun: Config.spawnDryRun,
-                directions: [TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT],
-                memory: {
-                    speciesName: requiredCreep.species.name ?? "undefined",
-                    role: requiredCreep.role,
-                    task: Task.IDLE,
-                    traits: requiredCreep.species.traits,
-                    occupation: [],
-                    percentile: -1,
-                    lastChargeSource: EnergyLocation.OTHER,
-                    lastEnergyDeposit: EnergyLocation.OTHER,
-                    homeBase: room.name,
-                    alerts: [],
-                    targetLocation: null,
-                },
-            });
-        if (res == OK) {
-            room.memory.buildQueue.pop();
-            room.memory.ticksWithPendingSpawns = 0;
-        }
-        else {
-            // console.log(`[ERROR][${room.name}][spawn] spawnCreep(${requiredCreep.species.parts}) returned ${res}`);
-            room.memory.ticksWithPendingSpawns += 1;
-        }
-    }
-
-    // FIXME: make healing creeps a priority for spawns
-    if (spawn){
-        room.memory.ticksWithPendingSpawns = 0;
-
+    availableSpawns.forEach((spawn) => {
         const renew: Creep[] = room.find(FIND_MY_CREEPS, {
             filter: (creep) => {
                 return !creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < Config.creepRenewMax && creep.memory.task == Task.RENEW;
@@ -78,9 +38,45 @@ export function run(room: Room): void {
             });
             spawn.renewCreep(renew[0]!);
         }
-    }
 
-    availableSpawns.forEach((spawn) => {
+        if (room.memory.buildQueue.length && !spawn.spawning) {
+            log(`[${room.name}][spawn] buildQueue: [${room.memory.buildQueue.reduce( (str, val) => str+=roleToString(val.role) + " ", "")}], ticksWithPendingSpawns:${room.memory.ticksWithPendingSpawns}`, Loglevel.INFO);
+            const requiredCreep = room.memory.buildQueue[0]!;
+
+            const res = spawn.spawnCreep(requiredCreep.species.parts, generateName(requiredCreep.role, room),
+                {
+                    dryRun: Config.spawnDryRun,
+                    directions: [TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT],
+                    memory: {
+                        speciesName: requiredCreep.species.name ?? "undefined",
+                        role: requiredCreep.role,
+                        task: Task.IDLE,
+                        traits: requiredCreep.species.traits,
+                        occupation: [],
+                        percentile: -1,
+                        lastChargeSource: EnergyLocation.OTHER,
+                        lastEnergyDeposit: EnergyLocation.OTHER,
+                        homeBase: room.name,
+                        alerts: [],
+                        targetLocation: null,
+                    },
+                });
+            if (res == OK) {
+                log(`[${room.name}][spawn] spawning ${requiredCreep.species.name} (role: ${requiredCreep.role})`, Loglevel.INFO);
+                room.memory.buildQueue.shift();
+                room.memory.ticksWithPendingSpawns = 0;
+            }
+            else {
+                // console.log(`[ERROR][${room.name}][spawn] spawnCreep(${requiredCreep.species.parts}) returned ${res}`);
+                room.memory.ticksWithPendingSpawns += 1;
+
+                // remove item prom the queue after a while
+                if(room.memory.ticksWithPendingSpawns > 60) {
+                    room.memory.buildQueue.shift();
+                }
+            }
+        }
+
         // show some info about new creep
         if (spawn.spawning) {
             var spawningCreep = Game.creeps[spawn.spawning.name]!;
