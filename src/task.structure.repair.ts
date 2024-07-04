@@ -6,23 +6,9 @@ const repairFilter: StructureConstant[] = [
     STRUCTURE_EXTENSION,
     STRUCTURE_SPAWN,
     // STRUCTURE_RAMPART,
+    // STRUCTURE_WALL,
     STRUCTURE_TOWER,
 ];
-
-// export function check(creep: Creep): Task {
-//     if (creep.memory.occupation.includes(Trait.REPAIR_STRUCTURE)) {
-//         const structuresToRepair: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
-//             filter: (structure) => {
-//                 return repairFilter.includes(structure.structureType) &&
-//                     (structure.hits / structure.hitsMax < 0.2);
-//             }
-//         });
-//         if ((structuresToRepair.length > 0) && (nonInterruptableTasks.indexOf(creep.memory.task) < 0)) {
-//             return Task.REPAIR_STRUCTURE;
-//         }
-//     }
-//     return creep.memory.task;
-// }
 
 // FIXME: add hysteresis
 export function execute(creep: Creep): boolean {

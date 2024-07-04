@@ -65,13 +65,13 @@ class Harvester {
         [Trait.STORE_ENERGY, 1],
         [Trait.STORE_CONTAINER, 1],
         [Trait.STORE_STORAGE, 1],
-        [Trait.STORE_LINK, 0],
+        [Trait.STORE_LINK, 1],
         [Trait.RENEW_CREEP, 1],
     ]);
 }
 
 export class Config {
-    static mainBase = ["E37S37"];
+    static mainBase = ["E37S37", "sim"];
     static outpost = ["E37S38"];
 
     // Controller

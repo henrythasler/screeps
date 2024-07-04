@@ -15,10 +15,10 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 ]);
 
 const zoo: Map<string, Species> = new Map([
-    ["SCOUT_ENTRY", { 
+    ["SCOUT_ENTRY", {
         parts: [MOVE],
         traits: [
-            Trait.SWITCH_ROOM,    
+            Trait.SWITCH_ROOM,
             Trait.RECON_ROOM,
             Trait.SCOUT_ROOMS,
         ],
@@ -41,20 +41,17 @@ const zoo: Map<string, Species> = new Map([
     // }],    
 ]);
 
-export function run(room: Room): void {
-    // apply trait distribution
-    if ((Game.time % 10) == 0) {
-        // these creeps can be anywhere, so we just filter by their homebase
-        const creeps: Creep[] = [];
-        for (const name in Game.creeps) {
-            if (Game.creeps[name]!.memory.role == Role.SCOUT && Game.creeps[name]!.memory.homeBase == room.name) {
-                creeps.push(Game.creeps[name]!);
-            }
+export function run(room: Room, role: Role): void {
+    // these creeps can be anywhere, so we just filter by their homebase
+    const creeps: Creep[] = [];
+    for (const name in Game.creeps) {
+        if (Game.creeps[name]!.memory.role == role && Game.creeps[name]!.memory.homeBase == room.name) {
+            creeps.push(Game.creeps[name]!);
         }
+    }
 
-        log(`[${room.name}] scout: ${creeps.length}/${Config.scout.minCount}`, Loglevel.INFO);
+    room.memory.creepCensus.set(role, {current: creeps.length, required: Config.scout.minCount});
 
-        managePopulation(Config.scout.minCount, creeps.length, room, zoo, Role.SCOUT);
-        manageTraitDistribution(creeps, zoo, Config.scout.traitDistribution);
-    }    
+    managePopulation(Config.scout.minCount, creeps.length, room, zoo, role);
+    manageTraitDistribution(creeps, zoo, Config.scout.traitDistribution);
 }
