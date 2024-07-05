@@ -1,5 +1,6 @@
 export enum Trait {
-    ACTION_LOCAL,
+    ACTION_HOME,
+    ACTION_OUTPOST,
     ACTION_AWAY,
 
     CHARGE_STORAGE,

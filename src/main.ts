@@ -79,11 +79,9 @@ export const loop = () => {
         tower.run(room);
         link.run(room);
 
-        // FIXME: persist and handle build queue correctly
-        // room.memory.buildQueue = [];
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
 
-        if(Config.mainBase.includes(room.name) && (Game.time % 11) == 0) {
+        if((Game.time % 11) == 0) {
             room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
             // order defines priority
             workerManager.run(room, Role.WORKER);  // manage worker population in that room

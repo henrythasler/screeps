@@ -28,7 +28,8 @@ export function run(room: Room): void {
     availableSpawns.forEach((spawn) => {
         const renew: Creep[] = room.find(FIND_MY_CREEPS, {
             filter: (creep) => {
-                return !creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < Config.creepRenewMax && creep.memory.task == Task.RENEW;
+                return !creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < Config.creepRenewMax && 
+                creep.memory.task == Task.RENEW;
             }
         });
 

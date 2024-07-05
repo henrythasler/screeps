@@ -4,10 +4,22 @@ import { Role, Species, managePopulation, manageTraitDistribution } from "./mana
 import { Trait } from "./trait";
 
 const zoo: Map<string, Species> = new Map([
-    ["HARVESTER_BASIC", {
+    ["HARVESTER_ENTRY", {
+        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        traits: [
+            Trait.ACTION_HOME,
+            Trait.STORE_ENERGY,
+            Trait.STORE_CONTAINER,
+            Trait.STORE_STORAGE,
+            Trait.STORE_LINK,
+            Trait.RENEW_CREEP,
+            Trait.HARVEST_SOURCE,
+        ],
+        cost: 800,
+    }],    ["HARVESTER_BASIC", {
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.STORE_ENERGY,
             Trait.STORE_CONTAINER,
             Trait.STORE_STORAGE,
@@ -26,8 +38,9 @@ export function run(room: Room, role: Role): void {
         }
     });
 
-    room.memory.creepCensus.set(role, {current: creeps.length, required: Config.harvester.minCount});
+    const minCount = Config.harvester.minCount.get(room.name) ?? 0;
+    room.memory.creepCensus.set(role, {current: creeps.length, required: minCount});
 
-    managePopulation(Config.harvester.minCount, creeps.length, room, zoo, role);
+    managePopulation(minCount, creeps.length, room, zoo, role);
     manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);
 }

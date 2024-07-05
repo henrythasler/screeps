@@ -8,7 +8,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY", {
         parts: [WORK, CARRY, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -28,7 +28,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_SLOW", {
         parts: [WORK, CARRY, CARRY, CARRY, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -48,7 +48,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_FAST", {
         parts: [WORK, CARRY, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -68,7 +68,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_ENTRY_HEAVY", {
         parts: [WORK, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -88,7 +88,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC", {
         parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -108,7 +108,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC_SLOW", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -128,7 +128,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_BASIC_FAST", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -148,7 +148,7 @@ const workerZoo: Map<string, Species> = new Map([
     ["WORKER_INTERMEDIATE", {
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: [
-            Trait.ACTION_LOCAL,
+            Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
             Trait.CHARGE_SOURCE,
@@ -190,8 +190,9 @@ export function run(room: Room, role: Role): void {
         }
     });
 
-    room.memory.creepCensus.set(role, {current: creeps.length, required: Config.worker.minCount});
+    const minCount = Config.worker.minCount.get(room.name) ?? 0;
+    room.memory.creepCensus.set(role, {current: creeps.length, required: minCount});
 
-    managePopulation(Config.worker.minCount, creeps.length, room, workerZoo, role);
+    managePopulation(minCount, creeps.length, room, workerZoo, role);
     manageTraitDistribution(creeps, workerZoo, Config.worker.traitDistribution);
 }

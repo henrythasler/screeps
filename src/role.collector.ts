@@ -9,6 +9,7 @@ import * as structureStore from "./task.structure.store";
 import * as renew from "./task.creep.renew";
 import * as controllerRefresh from "./task.controller.refresh";
 import * as structureCharge from "./task.structure.charge";
+import { Trait } from "./trait";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;

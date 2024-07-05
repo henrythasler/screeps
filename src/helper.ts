@@ -16,7 +16,7 @@ export function countRoomHops(path: RoomPosition[]): number {
 }
 
 export function actionAllowed(creep: Creep): boolean {
-    return (creep.memory.occupation.includes(Trait.ACTION_LOCAL) && creep.room.name == creep.memory.homeBase ||
+    return (creep.memory.occupation.includes(Trait.ACTION_HOME) && creep.room.name == creep.memory.homeBase ||
         creep.memory.occupation.includes(Trait.ACTION_AWAY) && creep.room.name != creep.memory.homeBase)
 }
 
