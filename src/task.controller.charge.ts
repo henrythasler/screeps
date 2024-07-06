@@ -5,8 +5,9 @@ import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
     const controller = creep.room.controller;
+    const minControllerLevel = Config.minControllerLevel.get(creep.room.name) ?? 0;
     if (controller && creep.memory.occupation.includes(Trait.RECHARGE_CONTROLLER) &&
-        controller.level < Config.minControllerLevel &&
+        controller.level < minControllerLevel &&
         controller.progress < controller.progressTotal) {
         creep.memory.task = Task.CHARGE_CONTROLLER;
         

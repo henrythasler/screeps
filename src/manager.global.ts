@@ -1,3 +1,4 @@
+import { Config } from "./config";
 import { log, Loglevel } from "./debug";
 import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./roominfo";
 import { Task } from "./task";
@@ -75,7 +76,7 @@ export function findMostExpensiveSpecies(budget: number, ticksWithPendingSpawns:
     const species = zoo.get(speciesName);
     if (species) {
         species.name = speciesName;
-        console.log(`Selected species: ${speciesName} (${species.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
+        console.log(`selected species: ${speciesName} (${species.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
     }
     return species;
 }
@@ -99,14 +100,12 @@ export function applyTraitDistribution(creep: Creep, population: number, creepsP
 }
 
 export function managePopulation(required: number, current: number, room: Room, zoo: Map<string, Species>, role: Role): number {
-    let requested = 0;
     const alreadyQueued = room.memory.buildQueue.some((species) => {
         if (species.role == role) return true;
         return false;
     });
 
-    let spawning = 0;
-
+    let spawning = 0;    
     const availableSpawns = room.find(FIND_MY_SPAWNS);
     availableSpawns.forEach((spawn) => {
         if (spawn.spawning) {
@@ -117,6 +116,7 @@ export function managePopulation(required: number, current: number, room: Room, 
         }
     });
 
+    let requested = 0;
     if (current + spawning < required && !alreadyQueued) {
         const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, zoo);
         if (species) {
@@ -158,13 +158,12 @@ export function showCreepCensus(roomName: string, census: Map<Role, {current: nu
 }
 
 export function initializeObjects(): void {
-    Memory.knownSources = [];
     createRoomInfoMap();
 
-    for (const roomId in Game.rooms) {
-        const room = Game.rooms[roomId]!;
-        room.memory.buildQueue = [];
-        room.memory.ticksWithPendingSpawns = 0;
-        room.memory.threatLevel = 0;
-    }
+    // for (const roomId in Game.rooms) {
+    //     const room = Game.rooms[roomId]!;
+    //     room.memory.buildQueue = [];
+    //     room.memory.ticksWithPendingSpawns = 0;
+    //     room.memory.threatLevel = 0;
+    // }
 }

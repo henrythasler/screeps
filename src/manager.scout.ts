@@ -50,8 +50,9 @@ export function run(room: Room, role: Role): void {
         }
     }
 
-    room.memory.creepCensus.set(role, {current: creeps.length, required: Config.scout.minCount});
+    const minCount = Config.scout.minCount.get(room.name) ?? 0;
+    room.memory.creepCensus.set(role, {current: creeps.length, required: minCount});
 
-    managePopulation(Config.scout.minCount, creeps.length, room, zoo, role);
+    managePopulation(minCount, creeps.length, room, zoo, role);
     manageTraitDistribution(creeps, zoo, Config.scout.traitDistribution);
 }

@@ -1,6 +1,7 @@
 import { Task } from "./task";
 import { EnergyLocation } from "./manager.global";
 import { Trait } from "./trait";
+import { actionAllowed } from "./helper";
 
 export function execute(creep: Creep, maxDistance?: number): boolean {
     if (creep.memory.occupation.includes(Trait.STORE_ENERGY) &&
