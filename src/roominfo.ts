@@ -13,6 +13,7 @@ export interface RoomInfo {
     exits: Map<Direction, ExitDetail>;
     lastVisit: number;
     hostile: boolean;
+    availableSources: number;
 }
 
 // First, let's define a serializable version of RoomInfo
@@ -20,6 +21,7 @@ export interface SerializableRoomInfo {
     exits: { [key in Direction]?: ExitDetail };
     lastVisit: number;
     hostile: boolean;
+    availableSources: number;
 }
 
 // Function to serialize a RoomInfo object
@@ -31,7 +33,8 @@ export function serializeRoomInfo(roomInfo: RoomInfo): SerializableRoomInfo {
     return {
         exits: serializedExits,
         lastVisit: roomInfo.lastVisit,
-        hostile: roomInfo.hostile
+        hostile: roomInfo.hostile,
+        availableSources: roomInfo.availableSources,
     };
 }
 
@@ -40,7 +43,8 @@ function deserializeRoomInfo(serialized: SerializableRoomInfo): RoomInfo {
     return {
         exits: new Map(Object.entries(serialized.exits) as [Direction, ExitDetail][]),
         lastVisit: serialized.lastVisit,
-        hostile: serialized.hostile
+        hostile: serialized.hostile,
+        availableSources: serialized.availableSources,
     };
 }
 

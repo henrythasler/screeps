@@ -3,7 +3,7 @@ import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
-import { isNearHostile } from "./helper";
+import { actionAllowed, isNearHostile } from "./helper";
 
 const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK];
 const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_CONTAINER, Trait.CHARGE_STORAGE];
@@ -63,6 +63,9 @@ function pickupItem(creep: Creep, item: Resource[], sortByDistance: boolean, las
 // }
 
 function check(creep: Creep): boolean {
+    if (!actionAllowed(creep, creep.room.name)) {
+        return false;
+    }
 
     if (!creep.memory.occupation.some((trait: Trait) => chargeTraits.includes(trait))) {
         return false;
@@ -73,13 +76,9 @@ function check(creep: Creep): boolean {
         return true;
     }
 
-    if (creep.store[RESOURCE_ENERGY] == 0 || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0) || 
-    (creep.room.name != creep.memory.homeBase && creep.store.getFreeCapacity() > 0 && creep.memory.task != Task.BUILD_STRUCTURE)) {
-        if ((creep.memory.occupation.includes(Trait.ACTION_HOME) && (creep.room.name == creep.memory.homeBase)) ||
-            creep.memory.occupation.includes(Trait.ACTION_AWAY) && (creep.room.name != creep.memory.homeBase) ||
-            (creep.memory.homeBase == "")) {
-            return true;
-        }
+    if (creep.store[RESOURCE_ENERGY] == 0 || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0) ||
+        (creep.room.name != creep.memory.homeBase && creep.store.getFreeCapacity() > 0 && creep.memory.task != Task.BUILD_STRUCTURE)) {
+        return true;
     }
     return false;
 }
@@ -104,7 +103,7 @@ export function execute(creep: Creep): boolean {
         // Tombstones with energy
         const tombstones: Tombstone[] = creep.room.find(FIND_TOMBSTONES, {
             filter: (structure) => {
-                return !isNearHostile(structure, hostiles) && structure.store[RESOURCE_ENERGY] > 0 && structure.pos.getRangeTo(creep.pos) < Config.tombstoneMaxDistance;
+                return !isNearHostile(structure, hostiles) && structure.store[RESOURCE_ENERGY] > 0 && structure.pos.getRangeTo(creep.pos) < (structure.store[RESOURCE_ENERGY] * Config.tombstoneGatherFactor);
             }
         });
         if (tombstones.length) {
@@ -147,7 +146,7 @@ export function execute(creep: Creep): boolean {
                 withdrawEnergy(creep, container, true, EnergyLocation.LINK);
                 return true;
             }
-        }        
+        }
 
         // container
         if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && creep.memory.occupation.includes(Trait.CHARGE_CONTAINER)) {
@@ -189,7 +188,7 @@ export function execute(creep: Creep): boolean {
         if (sources.length && creep.memory.occupation.includes(Trait.CHARGE_SOURCE)) {
             let sourceId = 0;
             // randomly select a source; static per creep
-            if (creep.memory.homeBase == creep.room.name) {
+            if (creep.memory.homeBase == creep.room.name && creep.room.find(FIND_MY_CREEPS).length > 2) {
                 sourceId = creep.memory.percentile % sources.length;
             }
             else {

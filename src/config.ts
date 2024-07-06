@@ -9,7 +9,7 @@ class Worker {
     ]);    
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_HOME, 1],
-        [Trait.CHARGE_SOURCE, 0],
+        [Trait.CHARGE_SOURCE, 1],
         [Trait.CHARGE_CONTAINER, 1],
         [Trait.CHARGE_STORAGE, 1],
         [Trait.CHARGE_LINK, 1],
@@ -47,11 +47,12 @@ class Scout {
 class Collector {
     static minCount = new Map<string, number>([
         ["sim", 4],
-        ["E37S37", 2],
+        ["E37S37", 6],
         ["E37S38", 0],
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_AWAY, 1],
+        [Trait.ACTION_OUTPOST, 0],
         [Trait.CHARGE_SOURCE, 1],
         [Trait.STORE_ENERGY, 1],
         [Trait.STORE_CONTAINER, 1],
@@ -91,6 +92,8 @@ export class Config {
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
+    static spawnManagerInterval = 11; // Ticks
+    static resetBuildQueueTimeout = 300; // Ticks
     static creepRenewThreshold = 1500 * 0.2; // 
     static creepRenewMax = 1500 * 0.9; // 
     static spawnRenewMinEnergy = 0.8;  // min energy needed to be able to renew spawns
@@ -102,7 +105,7 @@ export class Config {
     static rampartTowerRepairThresholdPeace = 0.01;
     static rampartTowerRepairThresholdThreat = 0.5;
 
-    static wallTowerRepairThresholdPeace = 0.001;
+    static wallTowerRepairThresholdPeace = 0.0001;
     static wallTowerRepairThresholdThreat = 0.05;
 
     static threatLevelStructureReinforcementThreshold = 50_000;   // triggers reinforcement of structures
@@ -110,7 +113,7 @@ export class Config {
     static safeModeThreshold = 16_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
     static threatLevelCooldown = 1_000;
 
-    static tombstoneMaxDistance = 10;   // max linear distance to travel for resource pickup
+    static tombstoneGatherFactor = 0.08;   // max linear distance to travel for resource pickup
     static ruinMaxDistance = 10;   // max linear distance to travel for resource pickup
     static resourcePickupMaxDistance = 10;  // max linear distance to travel for resource pickup
     static minHostileDistance = 10; // min linear distance that non-combatants must keep from hostiles

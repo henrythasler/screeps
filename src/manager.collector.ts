@@ -32,6 +32,7 @@ const collectorZoo: Map<string, Species> = new Map([
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: [
             Trait.ACTION_AWAY,
+            Trait.ACTION_OUTPOST,
             Trait.CHARGE_SOURCE,
             Trait.BUILD_STRUCTURE,
             Trait.RECHARGE_STRUCTURE,

@@ -18,7 +18,7 @@ function defendRoom(room: Room, towers: StructureTower[]): Hostiles {
     return stats;
 }
 
-function healCreeps(room: Room, towers: StructureTower[]): void {
+function healCreeps(room: Room, towers: StructureTower[]): boolean {
     const injuredCreeps: Creep[] = room.find(FIND_MY_CREEPS, {
         filter: (creep) => {
             return creep.hits / creep.hitsMax < Config.creepHealThreshold;
@@ -33,14 +33,17 @@ function healCreeps(room: Room, towers: StructureTower[]): void {
         towers.forEach((tower, index) => {
             tower.heal(injuredCreeps[0]);
         });
+        return true;
     }
+    return false;
 }
 
-function repairStructure(room: Room, towers: StructureTower[]): void {
+function repairStructure(room: Room, towers: StructureTower[]): boolean {
     const needRepair = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_ROAD ||
                 structure.structureType == STRUCTURE_SPAWN ||
+                structure.structureType == STRUCTURE_TOWER ||
                 structure.structureType == STRUCTURE_CONTAINER ||
                 structure.structureType == STRUCTURE_EXTENSION)
                 && structure.hits < Config.structureTowerRepairThreshold * structure.hitsMax;
@@ -52,7 +55,9 @@ function repairStructure(room: Room, towers: StructureTower[]): void {
             return (a.hits - b.hits);
         });
         towers.forEach(tower => tower.repair(needRepair[0]));
+        return true;
     }
+    return false;
 }
 
 // function reinforceRamparts(room: Room, towers: StructureTower[], threat: boolean): void {
@@ -96,12 +101,16 @@ export function run(room: Room): void {
         const hostileStats = defendRoom(room, towers);
 
         if (hostileStats.count == 0) {
-            healCreeps(room, towers);
-            repairStructure(room, towers);
+            let busy = healCreeps(room, towers);
+            if (!busy) {
+                busy = repairStructure(room, towers);
+            }
 
-            const needStructureReinforcements = room.memory.threatLevel > Config.threatLevelStructureReinforcementThreshold;
-            reinforceStructure(room, towers, STRUCTURE_RAMPART, needStructureReinforcements ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace);
-            reinforceStructure(room, towers, STRUCTURE_WALL, needStructureReinforcements ? Config.wallTowerRepairThresholdThreat : Config.wallTowerRepairThresholdPeace);
+            if (!busy) {
+                const needStructureReinforcements = room.memory.threatLevel > Config.threatLevelStructureReinforcementThreshold;
+                reinforceStructure(room, towers, STRUCTURE_RAMPART, needStructureReinforcements ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace);
+                reinforceStructure(room, towers, STRUCTURE_WALL, needStructureReinforcements ? Config.wallTowerRepairThresholdThreat : Config.wallTowerRepairThresholdPeace);
+            }
             room.memory.threatLevel = Math.max(0, room.memory.threatLevel - Config.threatLevelCooldown);
         }
         else {

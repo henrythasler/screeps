@@ -151,7 +151,7 @@ const workerZoo: Map<string, Species> = new Map([
             Trait.ACTION_HOME,
             Trait.CHARGE_STORAGE,
             Trait.CHARGE_CONTAINER,
-            Trait.CHARGE_SOURCE,
+            // Trait.CHARGE_SOURCE,
             Trait.CHARGE_LINK,
             Trait.STORE_ENERGY,
             Trait.STORE_CONTAINER,

@@ -6,7 +6,7 @@ import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
     const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-    if (constructionSites.length && creep.memory.occupation.includes(Trait.BUILD_STRUCTURE) && actionAllowed(creep)) {
+    if (constructionSites.length && creep.memory.occupation.includes(Trait.BUILD_STRUCTURE) && actionAllowed(creep, creep.room.name)) {
         creep.memory.task = Task.BUILD_STRUCTURE;
 
         // build by creation order (do not sort)

@@ -43,12 +43,14 @@ function evaluateRoomInfo(creep: Creep): RoomInfo {
     log(`[${creep.room.name}] ${JSON.stringify(serializeRoomInfo({
         exits: exits,
         hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
-        lastVisit: Game.time
+        lastVisit: Game.time,
+        availableSources: creep.room.find(FIND_SOURCES).length,
     }))}`, Loglevel.DEBUG);
     return {
         exits: exits,
         hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
-        lastVisit: Game.time
+        lastVisit: Game.time,
+        availableSources: creep.room.find(FIND_SOURCES).length,
     };
 }
 
@@ -57,13 +59,6 @@ export function execute(creep: Creep): boolean {
         const sources: Source[] = creep.room.find(FIND_SOURCES) as Source[];
 
         roomInfoMap.set(creep.room.name, evaluateRoomInfo(creep));
-
-        for (const source of sources) {
-            if (!Memory.knownSources.includes(source.id)) {
-                Memory.knownSources.push(source.id);
-                log(`[${creep.room.name}][recon] found new source: ${source}`, Loglevel.INFO);
-            }
-        }
     }
     return false;
 }

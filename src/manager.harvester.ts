@@ -16,18 +16,6 @@ const zoo: Map<string, Species> = new Map([
             Trait.HARVEST_SOURCE,
         ],
         cost: 800,
-    }],    ["HARVESTER_BASIC", {
-        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-        traits: [
-            Trait.ACTION_HOME,
-            Trait.STORE_ENERGY,
-            Trait.STORE_CONTAINER,
-            Trait.STORE_STORAGE,
-            Trait.STORE_LINK,
-            Trait.RENEW_CREEP,
-            Trait.HARVEST_SOURCE,
-        ],
-        cost: 850,
     }],
 ]);
 
