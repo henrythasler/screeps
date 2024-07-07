@@ -55,7 +55,7 @@ class Collector {
         [Trait.ACTION_OUTPOST, 0],
         [Trait.CHARGE_SOURCE, 1],
         [Trait.STORE_ENERGY, 1],
-        [Trait.STORE_CONTAINER, 0],
+        [Trait.STORE_CONTAINER, 1],
         [Trait.STORE_STORAGE, 0],
         [Trait.STORE_LINK, 1],
         [Trait.BUILD_STRUCTURE, 1],
