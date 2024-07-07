@@ -35,5 +35,6 @@ export enum Trait {
     RECYCLE_CREEP,
 
     HARVEST_SOURCE,
+    ATTACK_HOSTILE,
     // LOCATE_SOURCE,
 }

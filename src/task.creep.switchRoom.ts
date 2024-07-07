@@ -10,7 +10,7 @@ export function execute(creep: Creep, maxHops: number): boolean {
 
         const locations: string[] = [];
         roomInfoMap.forEach( (roomInfo, roomName) => {
-            if(roomInfo.availableSources && !roomInfo.hostile) {
+            if(roomInfo.availableSources && !roomInfo.hostile && !roomInfo.reserved) {
                 locations.push(roomName);
             }
         });

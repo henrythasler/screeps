@@ -41,18 +41,16 @@ function evaluateRoomInfo(creep: Creep): RoomInfo {
     if (exitsTemp[5]) exits.set(Direction.BOTTOM, evaluateExitProperties(exitsTemp[5], Direction.BOTTOM, creep, Config.roomReconVisuals));
     if (exitsTemp[7]) exits.set(Direction.LEFT, evaluateExitProperties(exitsTemp[7], Direction.LEFT, creep, Config.roomReconVisuals));
 
-    log(`[${creep.room.name}] ${JSON.stringify(serializeRoomInfo({
+    const roominfo: RoomInfo = {
         exits: exits,
         hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
-        lastVisit: Game.time,
-        availableSources: creep.room.find(FIND_SOURCES).length,
-    }))}`, Loglevel.DEBUG);
-    return {
-        exits: exits,
-        hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
+        reserved: creep.room.controller?.reservation != undefined,
         lastVisit: Game.time,
         availableSources: creep.room.find(FIND_SOURCES).length,
     };
+
+    log(`[${creep.room.name}] ${JSON.stringify(serializeRoomInfo(roominfo))}`, Loglevel.DEBUG);
+    return roominfo;
 }
 
 export function execute(creep: Creep): boolean {

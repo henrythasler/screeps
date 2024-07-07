@@ -54,16 +54,26 @@ function extractCoordinates(roomName: string): [number, number] | null {
     return null;
 }
 
-export function getRoomNameByDirection(room: string, direction: Direction): string | undefined {
-    const coordinates = extractCoordinates(room);
+export function getRoomNameByDirection(roomName: string, direction: Direction): string | undefined {
+    const coordinates = extractCoordinates(roomName);
     if (coordinates) {
         const [x, y] = coordinates;
-        switch (direction) {
-            case Direction.TOP: return `E${x}S${y - 1}`;
-            case Direction.RIGHT: return `E${x + 1}S${y}`;
-            case Direction.BOTTOM: return `E${x}S${y + 1}`;
-            case Direction.LEFT: return `E${x - 1}S${y}`;
-        }
+
+        return roomName.replace(/([EW])\d+([NS])\d+/, (match, ewDirection, nsDirection) => {
+            const isEast = ewDirection == "E";
+            const isSouth = nsDirection == "S";
+
+            let newEW = x;
+            let newNS = y;
+
+            switch (direction) {
+                case Direction.TOP: newNS += (isSouth ? -1 : 1); break;
+                case Direction.RIGHT: newEW += isEast ? 1 : -1; break;
+                case Direction.BOTTOM: newNS += isSouth ? 1 : -1; break;
+                case Direction.LEFT: newEW += isEast ? -1 : 1; break;
+            }
+            return `${ewDirection}${newEW}${nsDirection}${newNS}`;
+          });
     }
     return undefined;
 }

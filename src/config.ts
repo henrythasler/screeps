@@ -6,6 +6,7 @@ class Worker {
         ["sim", 8],
         ["E37S37", 8],
         ["E37S38", 6],
+        ["W14N19", 8],  // Newbie Land
     ]);    
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_HOME, 1],
@@ -29,6 +30,7 @@ class Scout {
         ["sim", 0],
         ["E37S37", 1],
         ["E37S38", 0],
+        ["W14N19", 0],  // Newbie Land
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.CHARGE_SOURCE, 0],
@@ -49,6 +51,7 @@ class Collector {
         ["sim", 4],
         ["E37S37", 6],
         ["E37S38", 2],
+        ["W14N19", 4],  // Newbie Land
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_AWAY, 1],
@@ -71,6 +74,7 @@ class Harvester {
         ["sim", 2],
         ["E37S37", 2],
         ["E37S38", 2],
+        ["W14N19", 2],  // Newbie Land
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_HOME, 1],
@@ -83,12 +87,26 @@ class Harvester {
     ]);
 }
 
+class Defender {
+    static minCount = new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["W14N19", 0],  // Newbie Land
+    ]);
+    static traitDistribution: Map<Trait, number> = new Map([
+        [Trait.ACTION_HOME, 1],
+        [Trait.ATTACK_HOSTILE, 1],
+    ]);
+}
+
 export class Config {
     // Controller
     static minControllerLevel = new Map<string, number>([
         ["sim", 7],
         ["E37S37", 7],
         ["E37S38", 5],
+        ["W14N19", 4],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -134,4 +152,5 @@ export class Config {
     static scout = Scout;
     static collector = Collector;
     static harvester = Harvester;
+    static defender = Defender;
 }

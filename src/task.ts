@@ -14,6 +14,7 @@ export enum Task {
     RETURN, // return to homeBase
     RENEW, // increase ticksToLive at spawn
     HARVEST, // harvest energy from source
+    ATTACK_HOSTILE, // attack hostile creep
     // LOCATE_SOURCE,  // move to a knownSource in another room for charging/harvesting
 }
 
@@ -39,6 +40,7 @@ export function sayTask(creep: Creep): void {
         case Task.RETURN: creep.say('🏠'); break;
         case Task.RENEW: creep.say('🏥'); break;
         case Task.HARVEST: creep.say('🚜'); break;
+        case Task.ATTACK_HOSTILE: creep.say('⚔️'); break;
         default: creep.say('💤');
     }
 }

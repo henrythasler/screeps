@@ -1,4 +1,4 @@
-import { Alert, EnergyLocation, Role, creepMaintenance, initializeObjects, showCreepCensus } from "./manager.global";
+import { Alert, EnergyLocation, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import * as spawnManager from "./manager.spawn";
@@ -6,6 +6,7 @@ import * as workerManager from "./manager.worker";
 import * as scoutManager from "./manager.scout";
 import * as collectorManager from "./manager.collector";
 import * as harvesterManager from "./manager.harvester";
+import * as defenderManager from "./manager.defender";
 
 import * as roomManager from "./manager.room";
 import * as tower from "./tower";
@@ -70,12 +71,13 @@ declare global {
 
 export const loop = () => {
     creepMaintenance();
-    // initializeObjects();     // use this only to reset global Memory
-
+    initializeGlobalObjects();
     loadRoomInfoMap();
 
     for (const roomId in Game.rooms) {
         const room = Game.rooms[roomId]!;
+        initializeRoomObjects(room);
+
         tower.run(room);
         link.run(room);
 
@@ -85,6 +87,7 @@ export const loop = () => {
             room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
             // order defines priority
             workerManager.run(room, Role.WORKER);  // manage worker population in that room
+            defenderManager.run(room, Role.DEFENDER);  // manage defender population in that room   
             harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
             collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
             scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
