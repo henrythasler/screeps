@@ -38,7 +38,7 @@ export function execute(creep: Creep, maxDistance?: number): boolean {
             }
         }) as StructureContainer[];
 
-        if (container.length && creep.memory.occupation.includes(Trait.STORE_CONTAINER)) {
+        if (container.length && creep.memory.occupation.includes(Trait.STORE_CONTAINER) && creep.store[RESOURCE_ENERGY] > 0) {
             // sort by distance
             container.sort((a: StructureContainer, b: StructureContainer): number => {
                 return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
@@ -60,7 +60,8 @@ export function execute(creep: Creep, maxDistance?: number): boolean {
             }
         }) as StructureContainer[];
 
-        if (storage.length && creep.memory.occupation.includes(Trait.STORE_STORAGE)) {
+        // may always store at home
+        if (storage.length && (creep.memory.occupation.includes(Trait.STORE_STORAGE) || creep.room.name == creep.memory.homeBase)) {
             // sort by distance
             storage.sort((a: StructureContainer, b: StructureContainer): number => {
                 return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));

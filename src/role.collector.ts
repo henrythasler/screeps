@@ -5,6 +5,7 @@ import * as moveto from "./task.creep.moveto";
 import * as switchRoom from "./task.creep.switchRoom";
 import * as structureBuild from "./task.structure.build";
 import * as returnHome from "./task.creep.return";
+import * as updateRoom from "./task.room.update";
 import * as structureStore from "./task.structure.store";
 import * as renew from "./task.creep.renew";
 import * as controllerRefresh from "./task.controller.refresh";
@@ -27,7 +28,9 @@ export function run(creep: Creep) {
     // creep.memory.task = charge.check(creep);    // manage creep charging
 
 
-    // log(`name: ${creep.name}, task: ${creep.memory.task}`, Loglevel.DEBUG);
+    // always update roomInfo
+    updateRoom.execute(creep);
+
     let match = charge.execute(creep);
     if(!match) match = renew.execute(creep);
     if(!match) match = controllerRefresh.execute(creep);

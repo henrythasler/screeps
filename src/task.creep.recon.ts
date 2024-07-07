@@ -2,6 +2,7 @@ import { Trait } from "./trait";
 import { log, Loglevel } from "./debug";
 import { RoomInfo, Direction, ExitDetail, roomInfoMap, serializeRoomInfo } from "./roominfo";
 import { Config } from "./config";
+import { Task } from "./task";
 
 function evaluateExitProperties(exitTo: string, direction: Direction, creep: Creep, visuals: boolean): ExitDetail {
     let blocked = true;
@@ -55,7 +56,7 @@ function evaluateRoomInfo(creep: Creep): RoomInfo {
 }
 
 export function execute(creep: Creep): boolean {
-    if (creep.memory.occupation.includes(Trait.RECON_ROOM)) {
+    if (creep.memory.occupation.includes(Trait.RECON_ROOM) && !([Task.RESERVE_CONTROLLER, Task.CLAIM_CONTROLLER].includes(creep.memory.task))) {
         const sources: Source[] = creep.room.find(FIND_SOURCES) as Source[];
 
         roomInfoMap.set(creep.room.name, evaluateRoomInfo(creep));

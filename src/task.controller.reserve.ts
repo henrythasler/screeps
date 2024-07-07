@@ -14,8 +14,7 @@ import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
     const controller = creep.room.controller;
-    if (controller && !controller.my && creep.memory.occupation.includes(Trait.RESERVE_CONTROLLER)) {
-        creep.memory.task == Task.RESERVE_CONTROLLER;
+    if (controller && !controller.my && creep.memory.occupation.includes(Trait.RESERVE_CONTROLLER) && creep.room.find(FIND_MY_CREEPS).length > 1) {
         const res = creep.reserveController(controller);
         if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(controller, { visualizePathStyle: { stroke: '#ff0000' } });
@@ -24,6 +23,7 @@ export function execute(creep: Creep): boolean {
             console.log(`reserveController() failed: ${res}`);
             creep.moveTo(controller, { visualizePathStyle: { stroke: '#ff0000' } });
         }
+        creep.memory.task = Task.RESERVE_CONTROLLER;
         return true;
     }
     return false;

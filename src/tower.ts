@@ -101,16 +101,11 @@ export function run(room: Room): void {
         const hostileStats = defendRoom(room, towers);
 
         if (hostileStats.count == 0) {
-            let busy = healCreeps(room, towers);
-            if (!busy) {
-                busy = repairStructure(room, towers);
-            }
-
-            if (!busy) {
-                const needStructureReinforcements = room.memory.threatLevel > Config.threatLevelStructureReinforcementThreshold;
-                reinforceStructure(room, towers, STRUCTURE_RAMPART, needStructureReinforcements ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace);
-                reinforceStructure(room, towers, STRUCTURE_WALL, needStructureReinforcements ? Config.wallTowerRepairThresholdThreat : Config.wallTowerRepairThresholdPeace);
-            }
+            const needStructureReinforcements = room.memory.threatLevel > Config.threatLevelStructureReinforcementThreshold;
+            reinforceStructure(room, towers, STRUCTURE_WALL, needStructureReinforcements ? Config.wallTowerRepairThresholdThreat : Config.wallTowerRepairThresholdPeace);
+            reinforceStructure(room, towers, STRUCTURE_RAMPART, needStructureReinforcements ? Config.rampartTowerRepairThresholdThreat : Config.rampartTowerRepairThresholdPeace);
+            repairStructure(room, towers);
+            healCreeps(room, towers);
             room.memory.threatLevel = Math.max(0, room.memory.threatLevel - Config.threatLevelCooldown);
         }
         else {
