@@ -53,7 +53,7 @@ export function run(room: Room): void {
                         role: requiredCreep.role,
                         task: Task.IDLE,
                         traits: requiredCreep.species.traits,
-                        occupation: [],
+                        occupation: requiredCreep.species.traits,
                         percentile: -1,
                         lastChargeSource: EnergyLocation.OTHER,
                         lastEnergyDeposit: EnergyLocation.OTHER,

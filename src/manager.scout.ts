@@ -24,21 +24,17 @@ const zoo: Map<string, Species> = new Map([
         ],
         cost: 50,
     }],
-    // ["SCOUT_BASIC", { 
-    //     parts: [CLAIM, WORK, CARRY, MOVE, MOVE],
-    //     traits: [
-    //         Trait.CHARGE_AWAY,
-    //         Trait.CHARGE_STORAGE,
-    //         Trait.CHARGE_CONTAINER,
-    //         Trait.CHARGE_SOURCE,
-    //         Trait.CLAIM_CONTROLLER,
-    //         Trait.RESERVE_CONTROLLER,
-    //         Trait.SWITCH_ROOM,    
-    //         Trait.RECON_ROOM,
-    //         Trait.SCOUT_ROOMS,
-    //     ],
-    //     cost: 800,
-    // }],    
+    ["SCOUT_BASIC", {
+        parts: [CLAIM, MOVE],
+        traits: [
+            Trait.SWITCH_ROOM,
+            Trait.RECON_ROOM,
+            Trait.SCOUT_ROOMS,
+            Trait.CLAIM_CONTROLLER,
+            Trait.RESERVE_CONTROLLER,
+        ],
+        cost: 650,
+    }],
 ]);
 
 export function run(room: Room, role: Role): void {
@@ -51,7 +47,7 @@ export function run(room: Room, role: Role): void {
     }
 
     const minCount = Config.scout.minCount.get(room.name) ?? 0;
-    room.memory.creepCensus.set(role, {current: creeps.length, required: minCount});
+    room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
     managePopulation(minCount, creeps.length, room, zoo, role);
     manageTraitDistribution(creeps, zoo, Config.scout.traitDistribution);

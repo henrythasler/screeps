@@ -25,7 +25,7 @@ export function execute(creep: Creep, maxHops: number): boolean {
         });
 
         if (filteredLocations.length) {
-            const res = creep.moveTo(new RoomPosition(25, 25, filteredLocations[0]!), { visualizePathStyle: { stroke: '#4040ff' } })
+            const res = creep.moveTo(new RoomPosition(25, 25, filteredLocations[creep.memory.percentile % filteredLocations.length]!), { visualizePathStyle: { stroke: '#4040ff' } })
             if(res == OK) {
                 creep.memory.task = Task.SWITCH_ROOM;
                 return true;    

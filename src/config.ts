@@ -27,7 +27,7 @@ class Worker {
 class Scout {
     static minCount = new Map<string, number>([
         ["sim", 0],
-        ["E37S37", 0],
+        ["E37S37", 1],
         ["E37S38", 0],
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
@@ -36,7 +36,7 @@ class Scout {
         [Trait.CHARGE_STORAGE, 0],
         [Trait.CHARGE_CONTAINER, 0],
         [Trait.CLAIM_CONTROLLER, 0],
-        [Trait.RESERVE_CONTROLLER, 0],
+        [Trait.RESERVE_CONTROLLER, 1],
         [Trait.SWITCH_ROOM, 1],
         [Trait.RECON_ROOM, 1],
         [Trait.SCOUT_ROOMS, 1],
@@ -48,15 +48,15 @@ class Collector {
     static minCount = new Map<string, number>([
         ["sim", 4],
         ["E37S37", 6],
-        ["E37S38", 0],
+        ["E37S38", 2],
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_AWAY, 1],
         [Trait.ACTION_OUTPOST, 0],
         [Trait.CHARGE_SOURCE, 1],
         [Trait.STORE_ENERGY, 1],
-        [Trait.STORE_CONTAINER, 1],
-        [Trait.STORE_STORAGE, 1],
+        [Trait.STORE_CONTAINER, 0],
+        [Trait.STORE_STORAGE, 0],
         [Trait.STORE_LINK, 1],
         [Trait.BUILD_STRUCTURE, 1],
         [Trait.RECHARGE_STRUCTURE, 0],
@@ -88,7 +88,7 @@ export class Config {
     static minControllerLevel = new Map<string, number>([
         ["sim", 7],
         ["E37S37", 7],
-        ["E37S38", 4],
+        ["E37S38", 5],
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -98,14 +98,14 @@ export class Config {
     static creepRenewMax = 1500 * 0.9; // 
     static spawnRenewMinEnergy = 0.8;  // min energy needed to be able to renew spawns
     static spawnDryRun = false; // enabled dry-run does not actually spawn a creep
-    static creepHealThreshold = 0.8; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
+    static creepHealThreshold = 1; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
 
     static rampartTowerRepairThresholdPeace = 0.01;
     static rampartTowerRepairThresholdThreat = 0.5;
 
-    static wallTowerRepairThresholdPeace = 0.0001;
+    static wallTowerRepairThresholdPeace = 0.001;
     static wallTowerRepairThresholdThreat = 0.05;
 
     static threatLevelStructureReinforcementThreshold = 50_000;   // triggers reinforcement of structures
@@ -124,7 +124,10 @@ export class Config {
 
     ];
 
-    static roomReconTimeout = 120;
+    static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
+
+    static scoutRoomReconCooldownNeutral = 120;
+    static scoutRoomReconCooldownHostile = 600;
     static roomReconVisuals = true;
 
     static worker = Worker;

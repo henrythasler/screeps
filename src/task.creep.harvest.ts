@@ -9,7 +9,7 @@ export function execute(creep: Creep): boolean {
     const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
     const sources: Source[] = creep.room.find(FIND_SOURCES, {
         filter: (source) => {
-            return !isNearHostile(source, hostiles) && (source.energy > 0 || source.ticksToRegeneration < 40);
+            return !isNearHostile(source, hostiles) && (source.energy > 0 || source.ticksToRegeneration < Config.harvestSourceRegenerationThreshold);
         }
     }) as Source[];
     if (creep.memory.occupation.includes(Trait.HARVEST_SOURCE) && sources.length && creep.store.getFreeCapacity() > 0) {

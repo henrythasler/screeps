@@ -5,6 +5,7 @@ import * as reserveController from "./task.controller.reserve";
 import * as recon from "./task.creep.recon";
 import * as scout from "./task.creep.scout";
 import * as renew from "./task.creep.renew";
+import * as returnHome from "./task.creep.home";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -15,6 +16,7 @@ export function run(creep: Creep) {
     if(!match) match = claimController.execute(creep);
     if(!match) match = reserveController.execute(creep);
     if(!match) match = scout.execute(creep);
+    if(!match) match = returnHome.execute(creep);
     if(!match) creep.memory.task = Task.IDLE;
 
     // tell about the new task
