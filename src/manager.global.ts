@@ -1,6 +1,6 @@
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
-import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./roominfo";
+import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./room.info";
 import { Task } from "./task";
 import { Trait } from "./trait";
 

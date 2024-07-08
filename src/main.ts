@@ -12,8 +12,10 @@ import * as roomManager from "./manager.room";
 import * as tower from "./tower";
 import * as link from "./structure.link";
 import { RequiredSpecies } from "./manager.spawn";
-import { SerializableRoomInfo, loadRoomInfoMap, saveRoomInfoMap } from "./roominfo";
+import { SerializableRoomInfo, loadRoomInfoMap, saveRoomInfoMap } from "./room.info";
 import { Config } from "./config";
+import { getHostileCreepInfo, roomThreatEvaluation } from "./room.defense";
+import { log } from "./debug";
 
 declare global {
     /*
@@ -78,20 +80,27 @@ export const loop = () => {
         const room = Game.rooms[roomId]!;
         initializeRoomObjects(room);
 
-        tower.run(room);
+        const hostileCreepInfo = getHostileCreepInfo(room);
+        roomThreatEvaluation(room, hostileCreepInfo);
+
+        tower.run(room, hostileCreepInfo);
         link.run(room);
 
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
+        room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
 
+        defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
         if((Game.time % Config.spawnManagerInterval) == 0) {
-            room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
             // order defines priority
             workerManager.run(room, Role.WORKER);  // manage worker population in that room
-            defenderManager.run(room, Role.DEFENDER);  // manage defender population in that room   
             harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
             collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
             scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
             showCreepCensus(room.name, room.memory.creepCensus);
+
+            if(room.memory.threatLevel > 0) {
+                log(`[${room.name}] threatLevel: ${room.memory.threatLevel}`)
+            }        
         }
 
         roomManager.run(room);  // execute creep action

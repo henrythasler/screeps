@@ -1,6 +1,6 @@
 import { Trait } from "./trait";
 import { log, Loglevel } from "./debug";
-import { RoomInfo, Direction, ExitDetail, roomInfoMap, serializeRoomInfo } from "./roominfo";
+import { RoomInfo, Direction, ExitDetail, roomInfoMap, serializeRoomInfo } from "./room.info";
 import { Config } from "./config";
 import { Task } from "./task";
 

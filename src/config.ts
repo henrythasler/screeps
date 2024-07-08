@@ -92,7 +92,7 @@ class Defender {
         ["sim", 0],
         ["E37S37", 0],
         ["E37S38", 0],
-        ["W14N19", 0],  // Newbie Land
+        ["W14N19", 1],  // Newbie Land
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
         [Trait.ACTION_HOME, 1],
@@ -106,7 +106,7 @@ export class Config {
         ["sim", 7],
         ["E37S37", 7],
         ["E37S38", 5],
-        ["W14N19", 4],  // Newbie Land
+        ["W14N19", 5],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -127,9 +127,10 @@ export class Config {
     static wallTowerRepairThresholdThreat = 0.05;
 
     static threatLevelStructureReinforcementThreshold = 50_000;   // triggers reinforcement of structures
-    static threatLevelDefenderThreshold = 100_000;   // triggers spawning of defender creeps
+    static threatLevelDefenderThreshold = 150_000;   // triggers spawning of defender creeps
+    static additionalDefender = 1;   // add that many defender per threatLevelDefenderThreshold
     static safeModeThreshold = 16_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
-    static threatLevelCooldown = 1_000;
+    static threatLevelCooldown = 4_000;
 
     static tombstoneGatherFactor = 0.08;   // max linear distance to travel for resource pickup
     static ruinMaxDistance = 10;   // max linear distance to travel for resource pickup

@@ -1,6 +1,6 @@
 import { Trait } from "./trait";
 import { Config } from "./config";
-import { Direction } from "./roominfo";
+import { Direction } from "./room.info";
 import { log } from "./debug";
 
 export function isNearHostile(entity: AnyStructure | Creep | Source | Ruin | Resource | Tombstone, hostiles: Creep[]): boolean {

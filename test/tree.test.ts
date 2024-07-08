@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "jest";
 import { getRoomNameByDirection } from "../src/helper";
-import { Direction } from "../src/roominfo";
+import { Direction } from "../src/room.info";
 
 describe("tree creation", function () {
     it("simple creation", function () {

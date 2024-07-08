@@ -3,7 +3,7 @@ import { Trait } from "./trait";
 import { log, Loglevel } from "./debug";
 import { filterMap, getRandomMapEntry, getRoomNameByDirection, isOnBorder } from "./helper";
 import { Config } from "./config";
-import { roomInfoMap } from "./roominfo";
+import { roomInfoMap } from "./room.info";
 
 export function execute(creep: Creep): boolean {
 

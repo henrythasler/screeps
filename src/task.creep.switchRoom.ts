@@ -1,6 +1,6 @@
 import { Loglevel, log } from "./debug";
 import { actionAllowed } from "./helper";
-import { roomInfoMap } from "./roominfo";
+import { roomInfoMap } from "./room.info";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
