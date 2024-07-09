@@ -62,8 +62,8 @@ export const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 
 export interface Species {
     parts: BodyPartConstant[],
-    traits: Trait[],
-    // traits: Map<Trait, Location[]>,
+    // traits: Trait[],
+    traits: Map<Location, Trait[]>,
     cost: number,
     name?: string,
 }
@@ -87,19 +87,19 @@ export function findMostExpensiveSpecies(capacity: number, available: number, ti
 
 export function applyTraitDistribution(creep: Creep, population: number, creepsPerTrait: Map<Trait, number>, expectedDistribution: Map<Trait, number>): Trait[] {
     const occupation: Trait[] = [];
-    expectedDistribution.forEach((probability, trait) => {
-        if (creepsPerTrait.has(trait)) {
-            const numCreeps = creepsPerTrait.get(trait)!;
-            if (creep.memory.traits.includes(trait) && (numCreeps < Math.ceil(probability * population))) {
-                occupation.push(trait);
-                creepsPerTrait.set(trait, numCreeps + 1);
-            }
-        }
-        else if (creep.memory.traits.includes(trait) && probability > 0) {
-            occupation.push(trait);
-            creepsPerTrait.set(trait, 1);
-        }
-    });
+    // expectedDistribution.forEach((probability, trait) => {
+    //     if (creepsPerTrait.has(trait)) {
+    //         const numCreeps = creepsPerTrait.get(trait)!;
+    //         if (creep.memory.traits.includes(trait) && (numCreeps < Math.ceil(probability * population))) {
+    //             occupation.push(trait);
+    //             creepsPerTrait.set(trait, numCreeps + 1);
+    //         }
+    //     }
+    //     else if (creep.memory.traits.includes(trait) && probability > 0) {
+    //         occupation.push(trait);
+    //         creepsPerTrait.set(trait, 1);
+    //     }
+    // });
     return occupation;
 }
 
@@ -132,16 +132,16 @@ export function managePopulation(required: number, current: number, room: Room, 
 }
 
 export function manageTraitDistribution(creeps: Creep[], zoo: Map<string, Species>, traitDistribution: Map<Trait, number>): void {
-    const currentDistribution: Map<Trait, number> = new Map();
-    for (const creep of creeps) {
-        // update traits from blueprint
-        const species = zoo.get(creep.memory.speciesName);
-        creep.memory.traits = species?.traits ?? [];
+    // const currentDistribution: Map<Trait, number> = new Map();
+    // for (const creep of creeps) {
+    //     // update traits from blueprint
+    //     const species = zoo.get(creep.memory.speciesName);
+    //     creep.memory.traits = species?.traits ?? [];
 
-        // assign occupation
-        creep.memory.occupation = applyTraitDistribution(creep, creeps.length, currentDistribution, traitDistribution);
-        log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`, Loglevel.DEBUG);
-    }
+    //     // assign occupation
+    //     creep.memory.occupation = applyTraitDistribution(creep, creeps.length, currentDistribution, traitDistribution);
+    //     log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`, Loglevel.DEBUG);
+    // }
 }
 
 export function creepMaintenance(): void {

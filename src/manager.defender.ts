@@ -3,6 +3,7 @@ import { Config } from "./config";
 import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";
 import { HostileCreepInfo } from "./room.defense";
+import { Location } from "./location";
 
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
@@ -18,24 +19,28 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 const zoo: Map<string, Species> = new Map([
     ["DEFENDER_BASIC", {
         parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK],
-        traits: [
-            Trait.ACTION_HOME,
-            Trait.ACTION_OUTPOST,
-            Trait.SWITCH_ROOM,
-            Trait.ATTACK_HOSTILE,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE, [
+                Trait.ACTION_HOME,
+                Trait.ACTION_OUTPOST,
+                Trait.SWITCH_ROOM,
+                Trait.ATTACK_HOSTILE,
+            ]]
+        ]),
         cost: 520,
     }],
     ["DEFENDER_BASIC_HEAVY", {
         parts: [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK],
-        traits: [
-            Trait.ACTION_HOME,
-            Trait.ACTION_OUTPOST,
-            Trait.SWITCH_ROOM,
-            Trait.ATTACK_HOSTILE,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE, [
+                Trait.ACTION_HOME,
+                Trait.ACTION_OUTPOST,
+                Trait.SWITCH_ROOM,
+                Trait.ATTACK_HOSTILE,
+            ]]
+        ]),
         cost: 860,
-    }],    
+    }],
 ]);
 
 export function run(room: Room, role: Role, hostileCreepInfo: HostileCreepInfo): void {
@@ -55,5 +60,5 @@ export function run(room: Room, role: Role, hostileCreepInfo: HostileCreepInfo):
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
     managePopulation(minCount, creeps.length, room, zoo, role);
-    manageTraitDistribution(creeps, zoo, Config.defender.traitDistribution);
+    // manageTraitDistribution(creeps, zoo, Config.defender.traitDistribution);
 }

@@ -2,6 +2,7 @@ import { log, Loglevel } from "./debug";
 import { Config } from "./config";
 import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";
+import { Location } from "./location";
 
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
@@ -17,22 +18,16 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 const zoo: Map<string, Species> = new Map([
     ["SCOUT_ENTRY", {
         parts: [MOVE],
-        traits: [
-            Trait.SWITCH_ROOM,
-            Trait.RECON_ROOM,
-            Trait.SCOUT_ROOMS,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM, Trait.RECON_ROOM, Trait.SCOUT_ROOMS]],
+        ]),
         cost: 50,
     }],
     ["SCOUT_BASIC", {
         parts: [CLAIM, MOVE],
-        traits: [
-            Trait.SWITCH_ROOM,
-            Trait.RECON_ROOM,
-            Trait.SCOUT_ROOMS,
-            Trait.CLAIM_CONTROLLER,
-            Trait.RESERVE_CONTROLLER,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM, Trait.RECON_ROOM, Trait.SCOUT_ROOMS, Trait.CLAIM_CONTROLLER, Trait.RESERVE_CONTROLLER]],
+        ]),
         cost: 650,
     }],
 ]);

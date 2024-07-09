@@ -3,6 +3,7 @@ import { Config } from "./config";
 import { EnergyLocation, Role, Species, applyTraitDistribution, findMostExpensiveSpecies, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
+import { Location } from "./location";
 
 const collectorZoo: Map<string, Species> = new Map([
     // ["COLLECTOR_TEST", {
@@ -17,33 +18,39 @@ const collectorZoo: Map<string, Species> = new Map([
     // }],
     ["COLLECTOR_BASIC", {
         parts: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
-        traits: [
-            Trait.ACTION_AWAY,
-            Trait.CHARGE_SOURCE,
-            Trait.STORE_ENERGY,
-            Trait.STORE_CONTAINER,
-            Trait.STORE_STORAGE,
-            Trait.SWITCH_ROOM,
-            Trait.RENEW_CREEP,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE,
+            [
+                Trait.ACTION_AWAY,
+                Trait.CHARGE_SOURCE,
+                Trait.STORE_ENERGY,
+                Trait.STORE_CONTAINER,
+                Trait.STORE_STORAGE,
+                Trait.SWITCH_ROOM,
+                Trait.RENEW_CREEP,
+            ]]
+        ]),
         cost: 750,
     }],
     ["COLLECTOR_INTERMEDIATE", {
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
-        traits: [
-            Trait.ACTION_AWAY,
-            Trait.ACTION_OUTPOST,
-            Trait.CHARGE_SOURCE,
-            Trait.BUILD_STRUCTURE,
-            Trait.RECHARGE_STRUCTURE,
-            Trait.REFRESH_CONTROLLER,
-            Trait.STORE_ENERGY,
-            Trait.STORE_CONTAINER,
-            Trait.STORE_STORAGE,
-            Trait.STORE_LINK,
-            Trait.SWITCH_ROOM,
-            Trait.RENEW_CREEP,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE,
+            [
+                Trait.ACTION_AWAY,
+                Trait.ACTION_OUTPOST,
+                Trait.CHARGE_SOURCE,
+                Trait.BUILD_STRUCTURE,
+                Trait.RECHARGE_STRUCTURE,
+                Trait.REFRESH_CONTROLLER,
+                Trait.STORE_ENERGY,
+                Trait.STORE_CONTAINER,
+                Trait.STORE_STORAGE,
+                Trait.STORE_LINK,
+                Trait.SWITCH_ROOM,
+                Trait.RENEW_CREEP]
+            ],
+        ]),
         cost: 1200,
     }],
 ]);
@@ -58,7 +65,7 @@ export function run(room: Room, role: Role): void {
     }
 
     const minCount = Config.collector.minCount.get(room.name) ?? 0;
-    room.memory.creepCensus.set(role, {current: creeps.length, required: minCount});
+    room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
     managePopulation(minCount, creeps.length, room, collectorZoo, role);
     manageTraitDistribution(creeps, collectorZoo, Config.collector.traitDistribution);

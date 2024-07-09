@@ -1,7 +1,9 @@
 export enum Location {
+    EVERYWHERE,
     HOMEBASE,   // where the creep was spawned
     OUTPOST,    // has a friendly spawn
     REMOTE,     // unoccupied room
+    OCCUPIED,   // non-hostil
     HOSTILE,    // includes hostile creeps or structures
 }
 

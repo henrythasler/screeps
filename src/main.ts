@@ -39,8 +39,8 @@ declare global {
         speciesName: string,
         role: Role,
         task: Task, // current action that the creep is doing
-        traits: Trait[], // potential actions that a creep can perform
-        occupation: Trait[],  // subset of traits that a creep is currently allowed to use 
+        // traits: Trait[], // potential actions that a creep can perform
+        // occupation: Trait[],  // subset of traits that a creep is currently allowed to use 
         percentile: number,
         lastChargeSource: EnergyLocation,
         lastEnergyDeposit: EnergyLocation,
