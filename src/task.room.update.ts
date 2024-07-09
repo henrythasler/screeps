@@ -1,4 +1,4 @@
-import { RoomInfo, Direction, ExitDetail, roomInfoMap, serializeRoomInfo } from "./roominfo";
+import { RoomInfo, Direction, ExitDetail, roomInfoMap, serializeRoomInfo } from "./room.info";
 
 export function execute(creep: Creep): boolean {
     const roomInfo = roomInfoMap.get(creep.room.name);

@@ -13,6 +13,7 @@ export interface RoomInfo {
     exits: Map<Direction, ExitDetail>;
     lastVisit: number;
     hostile: boolean;
+    reserved: boolean;
     availableSources: number;
 }
 
@@ -21,6 +22,7 @@ export interface SerializableRoomInfo {
     exits: { [key in Direction]?: ExitDetail };
     lastVisit: number;
     hostile: boolean;
+    reserved: boolean;
     availableSources: number;
 }
 
@@ -34,6 +36,7 @@ export function serializeRoomInfo(roomInfo: RoomInfo): SerializableRoomInfo {
         exits: serializedExits,
         lastVisit: roomInfo.lastVisit,
         hostile: roomInfo.hostile,
+        reserved: roomInfo.reserved,
         availableSources: roomInfo.availableSources,
     };
 }
@@ -44,6 +47,7 @@ function deserializeRoomInfo(serialized: SerializableRoomInfo): RoomInfo {
         exits: new Map(Object.entries(serialized.exits) as [Direction, ExitDetail][]),
         lastVisit: serialized.lastVisit,
         hostile: serialized.hostile,
+        reserved: serialized.reserved,
         availableSources: serialized.availableSources,
     };
 }
@@ -60,7 +64,7 @@ export function storeRoomInfoMap(roomInfoMap: Map<string, RoomInfo>) {
 // Retrieving the RoomInfo map from Memory
 export function getRoomInfoMap(): Map<string, RoomInfo> {
     const serialized = Memory.roomInfoMap;
-    if (!serialized) return new Map();
+    if (!serialized) return new Map<string, RoomInfo>();
 
     const result = new Map<string, RoomInfo>();
     for (const roomName in serialized) {

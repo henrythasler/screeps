@@ -1,6 +1,6 @@
 import { Loglevel, log } from "./debug";
 import { actionAllowed } from "./helper";
-import { roomInfoMap } from "./roominfo";
+import { roomInfoMap } from "./room.info";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -10,7 +10,7 @@ export function execute(creep: Creep, maxHops: number): boolean {
 
         const locations: string[] = [];
         roomInfoMap.forEach( (roomInfo, roomName) => {
-            if(roomInfo.availableSources && !roomInfo.hostile) {
+            if(roomInfo.availableSources && !roomInfo.hostile && !roomInfo.reserved) {
                 locations.push(roomName);
             }
         });

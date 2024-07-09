@@ -1,6 +1,7 @@
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
-import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./roominfo";
+import { Location } from "./location";
+import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./room.info";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
@@ -9,6 +10,7 @@ export enum Role {
     SCOUT,
     COLLECTOR,
     HARVESTER,
+    DEFENDER,
 }
 
 export enum Class {
@@ -34,6 +36,7 @@ export function roleToString(role: Role): string {
     if (role == Role.SCOUT) return "Scout";
     if (role == Role.COLLECTOR) return "Collector";
     if (role == Role.HARVESTER) return "Harvester";
+    if (role == Role.DEFENDER) return "Defender";
     return "unknown";
 }
 
@@ -60,23 +63,24 @@ export const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 export interface Species {
     parts: BodyPartConstant[],
     traits: Trait[],
+    // traits: Map<Trait, Location[]>,
     cost: number,
     name?: string,
 }
 
-export function findMostExpensiveSpecies(budget: number, ticksWithPendingSpawns: number, zoo: Map<string, Species>): Species | undefined {
+export function findMostExpensiveSpecies(capacity: number, available: number, ticksWithPendingSpawns: number, zoo: Map<string, Species>): Species | undefined {
     let speciesName: string = "null";
-    const actualBudget = budget - ticksWithPendingSpawns;
+    const actualBudget = Math.max(300, capacity - ticksWithPendingSpawns);
     zoo.forEach((value, key) => {
-        if ((value.cost <= actualBudget) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
-            speciesName = key;
+        if ((value.cost <= actualBudget || value.cost <= available) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
+        speciesName = key;
         }
     });
-
+    log(`actualBudget: ${actualBudget} ticksWithPendingSpawns: ${ticksWithPendingSpawns} speciesName: ${speciesName}`, Loglevel.DEBUG);
     const species = zoo.get(speciesName);
     if (species) {
         species.name = speciesName;
-        console.log(`selected species: ${speciesName} (${species.cost}), energyCapacityAvailable: ${budget}, budget: ${actualBudget}`);
+        console.log(`selected species: ${speciesName} (${species.cost}), capacity: ${capacity}, budget: ${actualBudget}`);
     }
     return species;
 }
@@ -105,7 +109,7 @@ export function managePopulation(required: number, current: number, room: Room, 
         return false;
     });
 
-    let spawning = 0;    
+    let spawning = 0;
     const availableSpawns = room.find(FIND_MY_SPAWNS);
     availableSpawns.forEach((spawn) => {
         if (spawn.spawning) {
@@ -118,7 +122,7 @@ export function managePopulation(required: number, current: number, room: Room, 
 
     let requested = 0;
     if (current + spawning < required && !alreadyQueued) {
-        const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.memory.ticksWithPendingSpawns, zoo);
+        const species = findMostExpensiveSpecies(room.energyCapacityAvailable, room.energyAvailable, room.memory.ticksWithPendingSpawns, zoo);
         if (species) {
             room.memory.buildQueue.push({ species: species, role: role });
             requested++;
@@ -151,19 +155,21 @@ export function creepMaintenance(): void {
     }
 }
 
-export function showCreepCensus(roomName: string, census: Map<Role, {current: number, required: number}>): void {
+export function showCreepCensus(roomName: string, census: Map<Role, { current: number, required: number }>): void {
     let text = `[${roomName}] `;
-    census.forEach( (details, role) => text+=`${roleToString(role)}: ${details.current}/${details.required}, `);
+    census.forEach((details, role) => text += `${roleToString(role)}: ${details.current}/${details.required}, `);
     log(text);
 }
 
-export function initializeObjects(): void {
-    createRoomInfoMap();
+export function initializeGlobalObjects(): void {
+}
 
-    // for (const roomId in Game.rooms) {
-    //     const room = Game.rooms[roomId]!;
-    //     room.memory.buildQueue = [];
-    //     room.memory.ticksWithPendingSpawns = 0;
-    //     room.memory.threatLevel = 0;
-    // }
+export function initializeRoomObjects(room: Room): void {
+    if (!room.memory.buildQueue) {
+        room.memory.buildQueue = [];
+    }
+
+    if (!room.memory.ticksWithPendingSpawns) {
+        room.memory.ticksWithPendingSpawns = 0;
+    }
 }

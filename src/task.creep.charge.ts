@@ -180,7 +180,7 @@ export function execute(creep: Creep): boolean {
 
         const sources: Source[] = creep.room.find(FIND_SOURCES, {
             filter: (source) => {
-                return !isNearHostile(source, hostiles) && (source.energy > 0 || source.ticksToRegeneration < 60);
+                return !isNearHostile(source, hostiles) && !creep.room.controller?.reservation && (source.energy > 0 || source.ticksToRegeneration < 60);
             }
         }) as Source[];
         if (sources.length && creep.memory.occupation.includes(Trait.CHARGE_SOURCE)) {

@@ -10,11 +10,7 @@ export interface RequiredSpecies {
 }
 
 function generateName(role: Role, room: Room): string {
-    if (role == Role.WORKER) return `worker_${room.name}_${Game.time}`;
-    if (role == Role.COLLECTOR) return `collector_${room.name}_${Game.time}`;
-    if (role == Role.SCOUT) return `scout_${room.name}_${Game.time}`;
-    if (role == Role.HARVESTER) return `harvester_${room.name}_${Game.time}`;
-    return `unknown_${room}_${Game.time}`;
+    return `${roleToString(role)}_${room.name}_${Game.time}`;
 }
 
 export function run(room: Room): void {
