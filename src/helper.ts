@@ -28,6 +28,10 @@ export function actionAllowed(creep: Creep, roomName: string): boolean {
         creep.memory.occupation.includes(Trait.ACTION_OUTPOST) && !isHome && isOutpost)
 }
 
+export function isInHomeBase(creep: Creep): boolean {
+    return creep.room.name == creep.memory.homeBase;
+}
+
 export function getRandomMapEntry<K, V>(map: Map<K, V>): [K, V] | undefined {
     const entries = Array.from(map.entries());
     if (entries.length == 0) {

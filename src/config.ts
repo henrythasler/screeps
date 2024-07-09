@@ -4,7 +4,7 @@ import { Trait } from "./trait";
 class Worker {
     static minCount = new Map<string, number>([
         ["sim", 8],
-        ["E37S37", 8],
+        ["E37S37", 6],
         ["E37S38", 6],
         ["W14N19", 8],  // Newbie Land
     ]);    
@@ -28,7 +28,7 @@ class Worker {
 class Scout {
     static minCount = new Map<string, number>([
         ["sim", 0],
-        ["E37S37", 1],
+        ["E37S37", 0],
         ["E37S38", 0],
         ["W14N19", 0],  // Newbie Land
     ]);
@@ -49,8 +49,8 @@ class Scout {
 class Collector {
     static minCount = new Map<string, number>([
         ["sim", 4],
-        ["E37S37", 6],
-        ["E37S38", 2],
+        ["E37S37", 0],
+        ["E37S38", 4],
         ["W14N19", 4],  // Newbie Land
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
@@ -104,7 +104,7 @@ export class Config {
     // Controller
     static minControllerLevel = new Map<string, number>([
         ["sim", 7],
-        ["E37S37", 7],
+        ["E37S37", 6],
         ["E37S38", 5],
         ["W14N19", 5],  // Newbie Land
     ]);
@@ -120,10 +120,10 @@ export class Config {
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
 
-    static rampartTowerRepairThresholdPeace = 0.01;
+    static rampartTowerRepairThresholdPeace = 0.1;
     static rampartTowerRepairThresholdThreat = 0.5;
 
-    static wallTowerRepairThresholdPeace = 0.001;
+    static wallTowerRepairThresholdPeace = 0.01;
     static wallTowerRepairThresholdThreat = 0.05;
 
     static threatLevelStructureReinforcementThreshold = 50_000;   // triggers reinforcement of structures

@@ -1,5 +1,6 @@
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
+import { Location } from "./location";
 import { RoomInfo, createRoomInfoMap, roomInfoMap } from "./room.info";
 import { Task } from "./task";
 import { Trait } from "./trait";
@@ -62,6 +63,7 @@ export const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 export interface Species {
     parts: BodyPartConstant[],
     traits: Trait[],
+    // traits: Map<Trait, Location[]>,
     cost: number,
     name?: string,
 }
