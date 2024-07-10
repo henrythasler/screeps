@@ -29,7 +29,7 @@ class Scout {
     static minCount = new Map<string, number>([
         ["sim", 0],
         ["E37S37", 0],
-        ["E37S38", 0],
+        ["E37S38", 1],
         ["W14N19", 0],  // Newbie Land
     ]);
     static traitDistribution: Map<Trait, number> = new Map([
