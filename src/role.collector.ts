@@ -38,7 +38,7 @@ export function run(creep: Creep) {
     if(!match) match = structureStore.execute(creep);
     if(!match) match = structureBuild.execute(creep);
     if(!match) match = returnHome.execute(creep);
-    if(!match) match = switchRoom.execute(creep, 2);
+    if(!match) match = switchRoom.execute(creep, 1);
     // if(!match) match = moveto.execute(creep, Game.rooms[creep.memory.homeBase].find(FIND_FLAGS)[0].pos);
     if(!match) creep.memory.task = Task.IDLE;
 
