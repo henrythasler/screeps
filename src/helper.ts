@@ -16,17 +16,17 @@ export function countRoomHops(path: RoomPosition[]): number {
     }, [] as string[]).length;
 }
 
-export function actionAllowed(creep: Creep, roomName: string): boolean {
-    let isOutpost = false;
-    Config.minControllerLevel.forEach( (_, baseRoomName) => {
-        isOutpost = isOutpost ? isOutpost : baseRoomName == roomName && baseRoomName != creep.memory.homeBase;
-    });
+// export function actionAllowed(creep: Creep, roomName: string): boolean {
+//     let isOutpost = false;
+//     Config.minControllerLevel.forEach((_, baseRoomName) => {
+//         isOutpost = isOutpost ? isOutpost : baseRoomName == roomName && baseRoomName != creep.memory.homeBase;
+//     });
 
-    const isHome = roomName == creep.memory.homeBase;
-    return (creep.memory.occupation.includes(Trait.ACTION_HOME) && isHome ||
-        creep.memory.occupation.includes(Trait.ACTION_AWAY) && !isHome && !isOutpost || 
-        creep.memory.occupation.includes(Trait.ACTION_OUTPOST) && !isHome && isOutpost)
-}
+//     const isHome = roomName == creep.memory.homeBase;
+//     return (creep.memory.occupation.includes(Trait.ACTION_HOME) && isHome ||
+//         creep.memory.occupation.includes(Trait.ACTION_AWAY) && !isHome && !isOutpost ||
+//         creep.memory.occupation.includes(Trait.ACTION_OUTPOST) && !isHome && isOutpost)
+// }
 
 export function isInHomeBase(creep: Creep): boolean {
     return creep.room.name == creep.memory.homeBase;
@@ -44,11 +44,11 @@ export function getRandomMapEntry<K, V>(map: Map<K, V>): [K, V] | undefined {
 export function filterMap<K, V>(
     map: Map<K, V>,
     predicate: (key: K, value: V) => boolean
-  ): Map<K, V> {
+): Map<K, V> {
     return new Map(
-      Array.from(map.entries()).filter(([key, value]) => predicate(key, value))
+        Array.from(map.entries()).filter(([key, value]) => predicate(key, value))
     );
-  }
+}
 
 function extractCoordinates(roomName: string): [number, number] | null {
     const match = roomName.match(/[EW](\d+)[NS](\d+)/);
@@ -77,7 +77,7 @@ export function getRoomNameByDirection(roomName: string, direction: Direction): 
                 case Direction.LEFT: newEW += isEast ? -1 : 1; break;
             }
             return `${ewDirection}${newEW}${nsDirection}${newNS}`;
-          });
+        });
     }
     return undefined;
 }
@@ -86,17 +86,32 @@ export function getDirectionFromRooms(firstRoom: string, secondRoom: string): Di
     const firstCoord = extractCoordinates(firstRoom);
     const secondCoord = extractCoordinates(secondRoom);
 
-    if(firstCoord && secondCoord) {
+    if (firstCoord && secondCoord) {
         const [x1, y1] = firstCoord;
         const [x2, y2] = secondCoord;
-        if(x1 == x2 && y1 < y2) return Direction.BOTTOM;
-        if(x1 == x2 && y1 > y2) return Direction.TOP;
-        if(x1 < x2 && y1 == y2) return Direction.RIGHT;
-        if(x1 > x2 && y1 == y2) return Direction.LEFT;
+        if (x1 == x2 && y1 < y2) return Direction.BOTTOM;
+        if (x1 == x2 && y1 > y2) return Direction.TOP;
+        if (x1 < x2 && y1 == y2) return Direction.RIGHT;
+        if (x1 > x2 && y1 == y2) return Direction.LEFT;
     }
     return null;
 }
 
 export function isOnBorder(creep: Creep): boolean {
     return creep.pos.x == 0 || creep.pos.x == 49 || creep.pos.y == 0 || creep.pos.y == 49;
+}
+
+export function mergeArrays<T>(arr1: T[] | undefined, arr2: T[] | undefined): T[] {
+    return [...(arr1 || []), ...(arr2 || [])];
+}
+
+export function removeEntries<T>(sourceArray: T[] | undefined, entriesToRemove: T[] | undefined): T[] {
+    // If sourceArray is undefined, return an empty array
+    if (!sourceArray) return [];
+
+    // If entriesToRemove is undefined, return a copy of the sourceArray
+    if (!entriesToRemove) return [...sourceArray];
+
+    // Perform the removal operation
+    return sourceArray.filter(item => !entriesToRemove.includes(item));
 }

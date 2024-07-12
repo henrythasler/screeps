@@ -20,6 +20,7 @@ import { Trait } from "./trait";
 const downgradeTicksPerLevel: number[] = [0, 20000, 10000, 20000, 40000, 80000, 120000, 150000, 200000];
 
 export function execute(creep: Creep): boolean {
+/*    
     const controller = creep.room.controller;
     const ratio = (creep.memory.task == Task.REFRESH_CONTROLLER) ? 1 : Config.minControllerRefreshTicksRatio;
     // log(`name: ${creep.name}, ratio: ${ratio}, task: ${creep.memory.task}`, Loglevel.DEBUG);
@@ -40,5 +41,6 @@ export function execute(creep: Creep): boolean {
         }
         return true;
     }
+*/        
     return false;
 }

@@ -1,9 +1,9 @@
 import { log } from "./debug";
-import { actionAllowed } from "./helper";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
+/*    
     if (creep.memory.occupation.includes(Trait.ATTACK_HOSTILE) && actionAllowed(creep, creep.room.name)) {
         const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
 
@@ -21,5 +21,6 @@ export function execute(creep: Creep): boolean {
             return true;
         }
     }
+*/        
     return false;
 }

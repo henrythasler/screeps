@@ -4,7 +4,9 @@ import { EnergyLocation, Role, Species, applyTraitDistribution, findMostExpensiv
 import { Task } from "./task";
 import { Trait } from "./trait";
 import { Location } from "./location";
+import { zoo } from "./zoo";
 
+/*
 const collectorZoo: Map<string, Species> = new Map([
     // ["COLLECTOR_TEST", {
     //     parts: [WORK, CARRY, MOVE, MOVE],
@@ -54,7 +56,7 @@ const collectorZoo: Map<string, Species> = new Map([
         cost: 1200,
     }],
 ]);
-
+*/
 export function run(room: Room, role: Role): void {
     // these creeps can be anywhere, so we just filter by their homebase
     const creeps: Creep[] = [];
@@ -64,9 +66,12 @@ export function run(room: Room, role: Role): void {
         }
     }
 
-    const minCount = Config.collector.minCount.get(room.name) ?? 0;
+    const minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
-    managePopulation(minCount, creeps.length, room, collectorZoo, role);
-    manageTraitDistribution(creeps, collectorZoo, Config.collector.traitDistribution);
+    const speciesZoo = zoo.get(role);
+    if(speciesZoo) {
+        managePopulation(minCount, creeps.length, room, speciesZoo, role);
+        // manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);   
+    }
 }

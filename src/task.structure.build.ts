@@ -1,10 +1,10 @@
-import { actionAllowed } from "./helper";
 import { log, Loglevel } from "./debug";
 import { EnergyLocation } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
+/*    
     const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
     if (constructionSites.length && creep.memory.occupation.includes(Trait.BUILD_STRUCTURE) && actionAllowed(creep, creep.room.name)) {
         creep.memory.task = Task.BUILD_STRUCTURE;
@@ -22,5 +22,6 @@ export function execute(creep: Creep): boolean {
         }
         return true;
     }
+*/        
     return false;
 }

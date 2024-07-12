@@ -3,6 +3,7 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
+/*    
     const controller = creep.room.controller;
     if (controller && !controller.my && Game.gcl.level > 1 &&
         creep.memory.occupation.includes(Trait.CLAIM_CONTROLLER)) {
@@ -17,5 +18,6 @@ export function execute(creep: Creep): boolean {
         }
         return true;
     }
+*/        
     return false;
 }

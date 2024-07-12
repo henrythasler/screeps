@@ -54,10 +54,12 @@ function evaluateRoomInfo(creep: Creep): RoomInfo {
 }
 
 export function execute(creep: Creep): boolean {
+/*    
     if (creep.memory.occupation.includes(Trait.RECON_ROOM) && !([Task.RESERVE_CONTROLLER, Task.CLAIM_CONTROLLER].includes(creep.memory.task))) {
         const sources: Source[] = creep.room.find(FIND_SOURCES) as Source[];
 
         roomInfoMap.set(creep.room.name, evaluateRoomInfo(creep));
     }
+*/        
     return false;
 }

@@ -11,10 +11,10 @@ import { log, Loglevel } from "./debug";
 
 const runnables: Map<Role, Function> = new Map([
     [Role.WORKER, worker.run],
-    [Role.SCOUT, scout.run],
-    [Role.COLLECTOR, collector.run],
+    // [Role.SCOUT, scout.run],
+    // [Role.COLLECTOR, collector.run],
     [Role.HARVESTER, harvester.run],
-    [Role.DEFENDER, defender.run],
+    // [Role.DEFENDER, defender.run],
 ]);
 
 export function run(room: Room): void {

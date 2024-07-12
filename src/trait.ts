@@ -16,7 +16,7 @@ export enum Trait {
     REPAIR_STRUCTURE,
 
     RECHARGE_STRUCTURE,     // transfer energy to a structure (Spawn, Tower, ...)
-    RECHARGE_CONTROLLER,    // transfer energy to a controller
+    UPGRADE_CONTROLLER,    // transfer energy to a controller
 
     BUILD_STRUCTURE,
 

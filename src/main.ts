@@ -87,15 +87,15 @@ export const loop = () => {
         link.run(room);
 
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
-        room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
 
-        defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
         if((Game.time % Config.spawnManagerInterval) == 0) {
+            room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
             // order defines priority
+            // defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
             harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
-            workerManager.run(room, Role.WORKER);  // manage worker population in that room
-            collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
-            scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
+            // workerManager.run(room, Role.WORKER);  // manage worker population in that room
+            // collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
+            // scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
             showCreepCensus(room.name, room.memory.creepCensus);
 
             if(room.memory.threatLevel > 0) {

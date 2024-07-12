@@ -3,7 +3,7 @@ export enum Task {
     CHARGE,
     MOVETO,
     CHARGE_STRUCTURE,
-    CHARGE_CONTROLLER,
+    UPGRADE_CONTROLLER,
     BUILD_STRUCTURE,
     STORE_ENERGY,
     REPAIR_STRUCTURE,
@@ -29,7 +29,7 @@ export function sayTask(creep: Creep): void {
         case Task.CHARGE: creep.say('🪫'); break;
         case Task.MOVETO: creep.say('👣'); break;
         case Task.CHARGE_STRUCTURE: creep.say('⚡'); break;
-        case Task.CHARGE_CONTROLLER: creep.say('⬆️'); break;
+        case Task.UPGRADE_CONTROLLER: creep.say('⬆️'); break;
         case Task.BUILD_STRUCTURE: creep.say('🔨'); break;
         case Task.STORE_ENERGY: creep.say('🔋'); break;
         case Task.REPAIR_STRUCTURE: creep.say('🔧'); break;

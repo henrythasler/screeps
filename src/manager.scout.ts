@@ -3,7 +3,9 @@ import { Config } from "./config";
 import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";
 import { Location } from "./location";
+import { zoo } from "./zoo";
 
+/*
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
     [WORK, 100],
@@ -31,6 +33,7 @@ const zoo: Map<string, Species> = new Map([
         cost: 650,
     }],
 ]);
+*/
 
 export function run(room: Room, role: Role): void {
     // these creeps can be anywhere, so we just filter by their homebase
@@ -41,9 +44,12 @@ export function run(room: Room, role: Role): void {
         }
     }
 
-    const minCount = Config.scout.minCount.get(room.name) ?? 0;
+    const minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
-    managePopulation(minCount, creeps.length, room, zoo, role);
-    manageTraitDistribution(creeps, zoo, Config.scout.traitDistribution);
+    const speciesZoo = zoo.get(role);
+    if(speciesZoo) {
+        managePopulation(minCount, creeps.length, room, speciesZoo, role);
+        // manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);   
+    }
 }

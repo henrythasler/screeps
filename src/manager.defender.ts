@@ -4,7 +4,9 @@ import { Role, Species, managePopulation, manageTraitDistribution } from "./mana
 import { Trait } from "./trait";
 import { HostileCreepInfo } from "./room.defense";
 import { Location } from "./location";
+import { zoo } from "./zoo";
 
+/*
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
     [WORK, 100],
@@ -42,7 +44,7 @@ const zoo: Map<string, Species> = new Map([
         cost: 860,
     }],
 ]);
-
+*/
 export function run(room: Room, role: Role, hostileCreepInfo: HostileCreepInfo): void {
     // these creeps can be anywhere, so we just filter by their homebase
     const creeps: Creep[] = [];
@@ -52,13 +54,16 @@ export function run(room: Room, role: Role, hostileCreepInfo: HostileCreepInfo):
         }
     }
 
-    let minCount = Config.defender.minCount.get(room.name) ?? 0;
+    let minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
 
     // add more defender the higher the threat-level is
     minCount += Math.floor(room.memory.threatLevel / Config.threatLevelDefenderThreshold) * Config.additionalDefender;
 
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
-    managePopulation(minCount, creeps.length, room, zoo, role);
-    // manageTraitDistribution(creeps, zoo, Config.defender.traitDistribution);
+    const speciesZoo = zoo.get(role);
+    if(speciesZoo) {
+        managePopulation(minCount, creeps.length, room, speciesZoo, role);
+        // manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);   
+    }
 }

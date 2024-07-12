@@ -6,7 +6,7 @@ import { Config } from "./config";
 import { roomInfoMap } from "./room.info";
 
 export function execute(creep: Creep): boolean {
-
+/*
     if (creep.memory.occupation.includes(Trait.SCOUT_ROOMS)) {
         if (!creep.memory.targetLocation || (creep.room.name == creep.memory.targetLocation && !isOnBorder(creep))) {
             const currentRoomInfo = roomInfoMap.get(creep.room.name);
@@ -49,5 +49,6 @@ export function execute(creep: Creep): boolean {
             }
         }
     }
+*/        
     return false;
 }

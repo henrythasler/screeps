@@ -1,7 +1,6 @@
 import { Loglevel, log } from "./debug";
 import { Task, sayTask } from "./task";
 import * as charge from "./task.creep.charge";
-import * as moveto from "./task.creep.moveto";
 import * as switchRoom from "./task.creep.switchRoom";
 import * as structureBuild from "./task.structure.build";
 import * as returnHome from "./task.creep.return";

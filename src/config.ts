@@ -1,6 +1,8 @@
+import { Role } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
+/*
 class Worker {
     static minCount = new Map<string, number>([
         ["sim", 8],
@@ -99,14 +101,39 @@ class Defender {
         [Trait.ATTACK_HOSTILE, 1],
     ]);
 }
+*/
+
+interface CreepConfig {
+    minCount: Map<string, number>,
+}
+
+const harvesterConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 2],
+        ["E37S37", 2],
+        ["E37S38", 2],
+        ["W14N19", 2],  // Newbie Land
+    ]),
+}
+
+const workerConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 8],
+        ["E37S37", 6],
+        ["E37S38", 6],
+        ["W14N19", 8],  // Newbie Land
+    ]),
+}
+
 
 export class Config {
+    static userName = "null-ptr";
     // Controller
     static minControllerLevel = new Map<string, number>([
         ["sim", 7],
         ["E37S37", 6],
         ["E37S38", 5],
-        ["W14N19", 5],  // Newbie Land
+        ["W14N19", 7],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -139,9 +166,14 @@ export class Config {
 
     static linkChargeMaxDistance = 10;
 
-    static visualizePathColor: string[] = [
-
-    ];
+    static visualizePathOpacity = 1;
+    static visualizePathStrokeWidth = 0.1;
+    static visualizePathStyle = new Map<Task, PolyStyle>([
+        [Task.HARVEST, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Yellow
+        [Task.STORE_ENERGY, { stroke: '#808080', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Grey
+        [Task.CHARGE, { stroke: '#808000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Dark Yellow
+        [Task.UPGRADE_CONTROLLER, { stroke: '#00ff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Green
+    ]);
 
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
 
@@ -149,9 +181,13 @@ export class Config {
     static scoutRoomReconCooldownHostile = 600;
     static roomReconVisuals = true;
 
-    static worker = Worker;
-    static scout = Scout;
-    static collector = Collector;
-    static harvester = Harvester;
-    static defender = Defender;
+    // static worker = Worker;
+    // static scout = Scout;
+    // static collector = Collector;
+    // static harvester = Harvester;
+    // static defender = Defender;
+    static creeps: Map<Role, CreepConfig> = new Map<Role, CreepConfig>([
+        [Role.HARVESTER, harvesterConfig],
+        [Role.WORKER, workerConfig],
+    ]);
 }

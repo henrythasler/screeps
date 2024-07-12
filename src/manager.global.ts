@@ -13,12 +13,6 @@ export enum Role {
     DEFENDER,
 }
 
-export enum Class {
-    NONE = 0,
-    WORKER_LOCAL = 1,
-    WORKER_REMOTE = 2,
-}
-
 export enum EnergyLocation {
     OTHER,
     SOURCE,
@@ -44,7 +38,7 @@ export function taskToString(task: Task): string {
     if (task == Task.IDLE) return "IDLE";
     if (task == Task.CHARGE) return "CHARGE";
     if (task == Task.CHARGE_STRUCTURE) return "CHARGE_STRUCTURE";
-    if (task == Task.CHARGE_CONTROLLER) return "UPGRADE_STRUCTURE";
+    if (task == Task.UPGRADE_CONTROLLER) return "UPGRADE_STRUCTURE";
     if (task == Task.BUILD_STRUCTURE) return "BUILD_STRUCTURE";
     return "unknown";
 }

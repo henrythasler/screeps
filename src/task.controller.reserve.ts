@@ -13,6 +13,7 @@ import { Trait } from "./trait";
 // }
 
 export function execute(creep: Creep): boolean {
+/*    
     const controller = creep.room.controller;
     if (controller && !controller.my && creep.memory.occupation.includes(Trait.RESERVE_CONTROLLER) && creep.room.find(FIND_MY_CREEPS).length > 1) {
         const res = creep.reserveController(controller);
@@ -26,5 +27,6 @@ export function execute(creep: Creep): boolean {
         creep.memory.task = Task.RESERVE_CONTROLLER;
         return true;
     }
+*/        
     return false;
 }

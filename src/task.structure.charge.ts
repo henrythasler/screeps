@@ -2,9 +2,9 @@ import { EnergyLocation } from "./manager.global";
 import { log, Loglevel } from "./debug";
 import { Task } from "./task";
 import { Trait } from "./trait";
-import { actionAllowed } from "./helper";
 
 export function execute(creep: Creep): boolean {
+/*    
     const structuresToCharge: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION ||
@@ -38,5 +38,6 @@ export function execute(creep: Creep): boolean {
         }
         return true;
     }
+*/        
     return false;
 }
