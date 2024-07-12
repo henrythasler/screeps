@@ -106,7 +106,7 @@ export class Config {
         ["sim", 7],
         ["E37S37", 6],
         ["E37S38", 5],
-        ["W14N19", 6],  // Newbie Land
+        ["W14N19", 7],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
