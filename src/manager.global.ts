@@ -25,6 +25,13 @@ export enum Alert {
     LOW_TTL,
 }
 
+export interface Requisition {
+    resource: ResourceConstant,
+    amount: number,
+    priority: number,   // higher is more important
+    position: RoomPosition,
+}
+
 export function roleToString(role: Role): string {
     if (role == Role.WORKER) return "Worker";
     if (role == Role.SCOUT) return "Scout";
@@ -67,7 +74,7 @@ export function findMostExpensiveSpecies(capacity: number, available: number, ti
     const actualBudget = Math.max(300, capacity - ticksWithPendingSpawns);
     zoo.forEach((value, key) => {
         if ((value.cost <= actualBudget || value.cost <= available) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
-        speciesName = key;
+            speciesName = key;
         }
     });
     log(`actualBudget: ${actualBudget} ticksWithPendingSpawns: ${ticksWithPendingSpawns} speciesName: ${speciesName}`, Loglevel.DEBUG);
@@ -156,6 +163,9 @@ export function showCreepCensus(roomName: string, census: Map<Role, { current: n
 }
 
 export function initializeGlobalObjects(): void {
+    if (!Memory.requisitions) {
+        Memory.requisitions = [];
+    }
 }
 
 export function initializeRoomObjects(room: Room): void {

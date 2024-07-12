@@ -1,4 +1,4 @@
-import { Alert, EnergyLocation, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
+import { Alert, EnergyLocation, Requisition, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import * as spawnManager from "./manager.spawn";
@@ -33,6 +33,7 @@ declare global {
         // knownSources: Array<Id<Source>>,  // stores the ID of all known sources
         // knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
         roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
+        requisitions: Requisition[];
     }
 
     interface CreepMemory {
@@ -93,7 +94,7 @@ export const loop = () => {
             // order defines priority
             // defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
             harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
-            // workerManager.run(room, Role.WORKER);  // manage worker population in that room
+            workerManager.run(room, Role.WORKER);  // manage worker population in that room
             // collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
             // scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
             showCreepCensus(room.name, room.memory.creepCensus);

@@ -15,11 +15,11 @@ export function run(creep: Creep) {
 
     // execute current tasks, order also defines priority where the first is the most important
     let match = charge.execute(creep);
-    // if(!match) match = controllerRefresh.execute(creep);
-    // if(!match) match = renew.execute(creep);
-    // if(!match) match = structureCharge.execute(creep);
-    // if(!match) match = structureRepair.execute(creep);
-    // if(!match) match = structureBuild.execute(creep);
+    if(!match) match = controllerRefresh.execute(creep);
+    if(!match) match = renew.execute(creep);
+    if(!match) match = structureCharge.execute(creep);
+    if(!match) match = structureRepair.execute(creep);
+    if(!match) match = structureBuild.execute(creep);
     if(!match) match = controllerUpgrade.execute(creep);
     if(!match) match = structureStore.execute(creep);
     if(!match) creep.memory.task = Task.IDLE;

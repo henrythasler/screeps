@@ -119,11 +119,12 @@ export function execute(creep: Creep): boolean {
             }
         }
 
-        // container
+        // container, storage
         if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && traits.includes(Trait.CHARGE_CONTAINER)) {
             const container = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_CONTAINER &&
+                    return !isNearHostile(structure, hostiles) && 
+                    (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
                         structure.store[RESOURCE_ENERGY] > 0;
                 }
             }) as StructureContainer[];
@@ -135,19 +136,19 @@ export function execute(creep: Creep): boolean {
         }
 
         // storage
-        if (creep.memory.lastEnergyDeposit != EnergyLocation.STORAGE && traits.includes(Trait.CHARGE_STORAGE)) {
-            const storage = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_STORAGE &&
-                        structure.store[RESOURCE_ENERGY] > 0;
-                }
-            }) as StructureStorage[];
+        // if (creep.memory.lastEnergyDeposit != EnergyLocation.STORAGE && traits.includes(Trait.CHARGE_STORAGE)) {
+        //     const storage = creep.room.find(FIND_STRUCTURES, {
+        //         filter: (structure) => {
+        //             return !isNearHostile(structure, hostiles) && structure.structureType == STRUCTURE_STORAGE &&
+        //                 structure.store[RESOURCE_ENERGY] > 0;
+        //         }
+        //     }) as StructureStorage[];
 
-            if (storage.length > 0 && withdrawEnergy(creep, storage, true, EnergyLocation.STORAGE)) {
-                creep.memory.task = Task.CHARGE;
-                return true;
-            }
-        }
+        //     if (storage.length > 0 && withdrawEnergy(creep, storage, true, EnergyLocation.STORAGE)) {
+        //         creep.memory.task = Task.CHARGE;
+        //         return true;
+        //     }
+        // }        
     }
     return false;
     /*    

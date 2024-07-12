@@ -5,6 +5,7 @@ import { isInHomeBase, mergeArrays, removeEntries } from "./helper";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 import { Config } from "./config";
+import { log, Loglevel } from "./debug";
 
 export function execute(creep: Creep): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
@@ -24,14 +25,14 @@ export function execute(creep: Creep): boolean {
         if (controller && controller.level < minControllerLevel && controller.progress < controller.progressTotal) {
 
             const res = creep.upgradeController(controller);
-            if (res == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller, { visualizePathStyle: Config.visualizePathStyle.get(Task.UPGRADE_CONTROLLER) });
-            }
-            else if (res == OK) {
+            if (res == OK) {
                 creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
             }
+            else if (res == ERR_NOT_IN_RANGE) {
+                creep.moveTo(controller, { visualizePathStyle: Config.visualizePathStyle.get(Task.UPGRADE_CONTROLLER) });
+            }
             else {
-                console.log(`upgradeController(${controller.room.name}) failed: ${res}`);
+                log(`upgradeController(${controller.room.name}) failed: ${res}`, Loglevel.ERROR);
                 return false;
             }
 

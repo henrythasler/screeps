@@ -167,12 +167,13 @@ export class Config {
     static linkChargeMaxDistance = 10;
 
     static visualizePathOpacity = 1;
-    static visualizePathStrokeWidth = 0.1;
+    static visualizePathStrokeWidth = 0.05;
     static visualizePathStyle = new Map<Task, PolyStyle>([
         [Task.HARVEST, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Yellow
         [Task.STORE_ENERGY, { stroke: '#808080', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Grey
         [Task.CHARGE, { stroke: '#808000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Dark Yellow
-        [Task.UPGRADE_CONTROLLER, { stroke: '#00ff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Green
+        [Task.UPGRADE_CONTROLLER, { stroke: '#008000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Dark Green
+        [Task.CHARGE_STRUCTURE, { stroke: '#00ff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],  // Green
     ]);
 
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
