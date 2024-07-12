@@ -104,7 +104,7 @@ export class Config {
     // Controller
     static minControllerLevel = new Map<string, number>([
         ["sim", 7],
-        ["E37S37", 6],
+        ["E37S37", 7],
         ["E37S38", 5],
         ["W14N19", 7],  // Newbie Land
     ]);
