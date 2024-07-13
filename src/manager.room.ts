@@ -1,5 +1,5 @@
 import { Config } from "./config";
-import { EnergyLocation, Role, Species, findMostExpensiveSpecies } from "./manager.global";
+import { EnergyLocation, Role, Species, findMostExpensiveSpecies, initializeCreepObjects } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import * as worker from "./role.worker";
@@ -8,6 +8,7 @@ import * as collector from "./role.collector";
 import * as harvester from "./role.harvester";
 import * as defender from "./role.defender";
 import { log, Loglevel } from "./debug";
+import { priorityQueue } from "./priorityqueue";
 
 const runnables: Map<Role, Function> = new Map([
     [Role.WORKER, worker.run],
@@ -27,10 +28,51 @@ export function run(room: Room): void {
     creeps.forEach((creep) => {
         const runnable = runnables.get(creep.memory.role);
         if (runnable) {
+            initializeCreepObjects(creep);
             runnable(creep);
         }
         else {
             log(`[ERROR] No runnable for ${creep.memory.role}`, Loglevel.ERROR);
         }
     });
+}
+
+export function updateRequisitions(room: Room): void {
+    const structuresToCharge: AnyOwnedStructure[] = room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_EXTENSION ||
+                structure.structureType == STRUCTURE_SPAWN) &&
+                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+        }
+    });
+
+    structuresToCharge.forEach((structure: AnyOwnedStructure) => {
+        if (structure.structureType == STRUCTURE_EXTENSION) {
+            Memory.pendingRequisitions.push({
+                amount: structure.store.getFreeCapacity(RESOURCE_ENERGY),
+                resource: RESOURCE_ENERGY,
+                position: structure.pos,
+                priority: 200,
+                requesterId: structure.id,
+            });
+        }
+        else if (structure.structureType == STRUCTURE_SPAWN) {
+            Memory.pendingRequisitions.push({
+                amount: structure.store.getFreeCapacity(RESOURCE_ENERGY),
+                resource: RESOURCE_ENERGY,
+                position: structure.pos,
+                priority: 200,
+                requesterId: structure.id,
+            });
+        }
+    });
+
+    // priorityQueue.enqueue({
+    //     amount: structure.store.getFreeCapacity(RESOURCE_ENERGY),
+    //     resource: RESOURCE_ENERGY,
+    //     position: structure.pos,
+    //     priority: 200,
+    // }, 200);
+
+    log(`[${room.name}] pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
 }

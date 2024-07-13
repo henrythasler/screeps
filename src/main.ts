@@ -33,7 +33,7 @@ declare global {
         // knownSources: Array<Id<Source>>,  // stores the ID of all known sources
         // knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
         roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
-        requisitions: Requisition[];
+        pendingRequisitions: Requisition[];
     }
 
     interface CreepMemory {
@@ -48,6 +48,7 @@ declare global {
         homeBase: string,
         alerts: Alert[],
         targetLocation: string | null,
+        activeRequisitions: Requisition[],
     }
 
     interface SpawnMemory {
@@ -104,6 +105,9 @@ export const loop = () => {
             }        
         }
 
+        // FIXME: reset in each tick for now
+        Memory.pendingRequisitions = [];
+        roomManager.updateRequisitions(room);
         roomManager.run(room);  // execute creep action
         spawnManager.run(room); // spawn/heal creeps
     }

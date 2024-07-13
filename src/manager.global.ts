@@ -26,6 +26,7 @@ export enum Alert {
 }
 
 export interface Requisition {
+    requesterId: Id<StructureExtension|StructureSpawn>,
     resource: ResourceConstant,
     amount: number,
     priority: number,   // higher is more important
@@ -163,8 +164,8 @@ export function showCreepCensus(roomName: string, census: Map<Role, { current: n
 }
 
 export function initializeGlobalObjects(): void {
-    if (!Memory.requisitions) {
-        Memory.requisitions = [];
+    if (!Memory.pendingRequisitions) {
+        Memory.pendingRequisitions = [];
     }
 }
 
@@ -175,5 +176,11 @@ export function initializeRoomObjects(room: Room): void {
 
     if (!room.memory.ticksWithPendingSpawns) {
         room.memory.ticksWithPendingSpawns = 0;
+    }
+}
+
+export function initializeCreepObjects(creep: Creep): void {
+    if (!creep.memory.activeRequisitions) {
+        creep.memory.activeRequisitions = [];
     }
 }
