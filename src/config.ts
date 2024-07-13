@@ -105,7 +105,7 @@ export class Config {
     static minControllerLevel = new Map<string, number>([
         ["sim", 7],
         ["E37S37", 7],
-        ["E37S38", 5],
+        ["E37S38", 6],
         ["W14N19", 7],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
