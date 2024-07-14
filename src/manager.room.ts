@@ -77,7 +77,7 @@ export function updateRequisitions(room: Room): void {
                 requesterId: structure.id,
             });
             Memory.requisitionOwner.push(structure.id);
-        }     
+        }
     });
 
     // priorityQueue.enqueue({
@@ -97,12 +97,22 @@ export function cleanUpRequisitions(room: Room): void {
         }
     });
 
-    Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
-        return creeps.some( (creep) => {
-            return creep.memory.activeRequisitions.some((requisition) => {
-                if(requester == requisition.requesterId) return true;
-                return false;
-            })
+    if (creeps.length) {
+        Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
+            return creeps.some((creep) => {
+                if (creep.memory.activeRequisitions.length) {
+                    return creep.memory.activeRequisitions.some((requisition) => {
+                        if (requester == requisition.requesterId) return true;
+                        return false;
+                    })
+                }
+                else {
+                    return false;
+                }
+            });
         });
-    });
+    }
+    else {
+        Memory.requisitionOwner = [];
+    }
 }

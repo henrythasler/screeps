@@ -60,7 +60,7 @@ export function execute(creep: Creep): boolean {
             else if (res == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: Config.visualizePathStyle.get(Task.HARVEST) });
             }
-            else {
+            else if (res != ERR_NOT_ENOUGH_RESOURCES) {
                 console.log(`[ERROR] harvest(${source}): ${res}`)
                 return false;
             }

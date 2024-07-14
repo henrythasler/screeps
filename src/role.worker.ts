@@ -29,7 +29,8 @@ export function run(creep: Creep) {
         sayTask(creep);
     }
 
-    // if(idleTasks.includes(creep.memory.task)) {
-    //     creep.memory.lastChargeSource = EnergyLocation.SOURCE;
-    // }
+    if(idleTasks.includes(creep.memory.task)) {
+        creep.memory.lastChargeSource = EnergyLocation.OTHER;
+        // creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
+    }
 }

@@ -104,6 +104,7 @@ export function execute(creep: Creep): boolean {
                 }
                 else {
                     creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
+                    creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
                     log(`[${creep.room.name}][${creep.name}] transfer(${currentStructure}) failed: ${res}`, Loglevel.ERROR);
                     return false;
                 }
