@@ -13,24 +13,34 @@ const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_CONTAINER, Trai
 // all types share the 'pos' property, so we can have that mixed type
 type energySource = (Tombstone | Ruin | StructureContainer | StructureStorage)[];
 
-function withdrawEnergy(creep: Creep, source: energySource, sortByDistance: boolean, lastChargeSource: EnergyLocation): boolean {
-    source.sort((a, b): number => {
+function getLastChargeSource(source: (StructureContainer | StructureStorage)): EnergyLocation {
+    switch(source.structureType) {
+        case STRUCTURE_CONTAINER: return EnergyLocation.CONTAINER;
+        case STRUCTURE_STORAGE: return EnergyLocation.STORAGE;
+    }
+}
+
+function withdrawEnergy(creep: Creep, sources: (StructureContainer | StructureStorage)[], sortByDistance: boolean): boolean {
+    sources.sort((a, b): number => {
         return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
     });
     // get stuff or move towards source
-    // typeof(source) == "Resource"
-    const res = creep.withdraw(source[0], RESOURCE_ENERGY);
-    if (res == ERR_NOT_IN_RANGE) {
-        creep.moveTo(source[0], { visualizePathStyle: Config.visualizePathStyle.get(Task.CHARGE) });
+    const source = sources[0];
+    if (source) {
+        const res = creep.withdraw(source, RESOURCE_ENERGY);
+        if (res == ERR_NOT_IN_RANGE) {
+            creep.moveTo(source, { visualizePathStyle: Config.visualizePathStyle.get(Task.CHARGE) });
+        }
+        else if (res == OK) {
+            creep.memory.lastChargeSource = getLastChargeSource(source);
+        }
+        else {
+            log(`[${creep.room.name}][${creep.name}] withdraw(${sources[0]}) failed: ${res}`, Loglevel.ERROR);
+            return false;
+        }
+        return true;
     }
-    else if (res == OK) {
-        creep.memory.lastChargeSource = lastChargeSource;
-    }
-    else {
-        log(`[${creep.room.name}][${creep.name}] withdraw(${source[0]}) failed: ${res}`, Loglevel.ERROR);
-        return false;
-    }
-    return true;
+    return false;
 }
 
 // function pickupItem(creep: Creep, item: Resource[], sortByDistance: boolean, lastChargeSource: EnergyLocation): Task {
@@ -113,7 +123,7 @@ export function execute(creep: Creep): boolean {
                 }
             }) as StructureContainer[];
 
-            if (container.length > 0 && withdrawEnergy(creep, container, true, EnergyLocation.LINK)) {
+            if (container.length > 0 && withdrawEnergy(creep, container, true)) {
                 creep.memory.task = Task.CHARGE;
                 return true;
             }
@@ -123,13 +133,13 @@ export function execute(creep: Creep): boolean {
         if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && traits.includes(Trait.CHARGE_CONTAINER)) {
             const container = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return !isNearHostile(structure, hostiles) && 
-                    (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
+                    return !isNearHostile(structure, hostiles) &&
+                        (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
                         structure.store[RESOURCE_ENERGY] > 0;
                 }
-            }) as StructureContainer[];
+            }) as (StructureContainer | StructureStorage)[];
 
-            if (container.length > 0 && withdrawEnergy(creep, container, true, EnergyLocation.CONTAINER)) {
+            if (container.length > 0 && withdrawEnergy(creep, container, true)) {
                 creep.memory.task = Task.CHARGE;
                 return true;
             }

@@ -41,8 +41,9 @@ export function updateRequisitions(room: Room): void {
     const structuresToCharge: AnyOwnedStructure[] = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION ||
-                structure.structureType == STRUCTURE_SPAWN) &&
-                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                structure.structureType == STRUCTURE_SPAWN ||
+                structure.structureType == STRUCTURE_TOWER) &&
+                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && !Memory.requisitionOwner.includes(structure.id);
         }
     });
 
@@ -55,6 +56,7 @@ export function updateRequisitions(room: Room): void {
                 priority: 200,
                 requesterId: structure.id,
             });
+            Memory.requisitionOwner.push(structure.id);
         }
         else if (structure.structureType == STRUCTURE_SPAWN) {
             Memory.pendingRequisitions.push({
@@ -64,7 +66,18 @@ export function updateRequisitions(room: Room): void {
                 priority: 200,
                 requesterId: structure.id,
             });
+            Memory.requisitionOwner.push(structure.id);
         }
+        else if (structure.structureType == STRUCTURE_TOWER) {
+            Memory.pendingRequisitions.push({
+                amount: structure.store.getFreeCapacity(RESOURCE_ENERGY),
+                resource: RESOURCE_ENERGY,
+                position: structure.pos,
+                priority: 150,
+                requesterId: structure.id,
+            });
+            Memory.requisitionOwner.push(structure.id);
+        }     
     });
 
     // priorityQueue.enqueue({
@@ -74,5 +87,22 @@ export function updateRequisitions(room: Room): void {
     //     priority: 200,
     // }, 200);
 
-    log(`[${room.name}] pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
+    log(`[${room.name}] requisitionOwner: ${JSON.stringify(Memory.requisitionOwner)}, pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
+}
+
+export function cleanUpRequisitions(room: Room): void {
+    const creeps: Creep[] = room.find(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return !creep.spawning;
+        }
+    });
+
+    Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
+        return creeps.some( (creep) => {
+            return creep.memory.activeRequisitions.some((requisition) => {
+                if(requester == requisition.requesterId) return true;
+                return false;
+            })
+        });
+    });
 }

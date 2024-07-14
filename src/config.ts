@@ -109,7 +109,7 @@ interface CreepConfig {
 
 const harvesterConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 2],
+        ["sim", 1],
         ["E37S37", 2],
         ["E37S38", 2],
         ["W14N19", 2],  // Newbie Land
@@ -118,7 +118,7 @@ const harvesterConfig: CreepConfig = {
 
 const workerConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 8],
+        ["sim", 2],
         ["E37S37", 6],
         ["E37S38", 6],
         ["W14N19", 8],  // Newbie Land
@@ -130,10 +130,10 @@ export class Config {
     static userName = "null-ptr";
     // Controller
     static minControllerLevel = new Map<string, number>([
-        ["sim", 7],
+        ["sim", 6],
         ["E37S37", 6],
         ["E37S38", 5],
-        ["W14N19", 7],  // Newbie Land
+        ["W14N19", 6],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 

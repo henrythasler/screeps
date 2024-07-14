@@ -25,8 +25,10 @@ export enum Alert {
     LOW_TTL,
 }
 
+export type RequesterIdTypes = StructureExtension | StructureSpawn | StructureTower;
+
 export interface Requisition {
-    requesterId: Id<StructureExtension|StructureSpawn>,
+    requesterId: Id<RequesterIdTypes>,
     resource: ResourceConstant,
     amount: number,
     priority: number,   // higher is more important
@@ -166,6 +168,9 @@ export function showCreepCensus(roomName: string, census: Map<Role, { current: n
 export function initializeGlobalObjects(): void {
     if (!Memory.pendingRequisitions) {
         Memory.pendingRequisitions = [];
+    }
+    if (!Memory.requisitionOwner) {
+        Memory.requisitionOwner = [];
     }
 }
 

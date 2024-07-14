@@ -34,6 +34,7 @@ declare global {
         // knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
         roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
         pendingRequisitions: Requisition[];
+        requisitionOwner: string[],
     }
 
     interface CreepMemory {
@@ -62,7 +63,7 @@ declare global {
         ticksWithPendingSpawns: number;
         harvesterPerSource: Map<Id<Source>, number>;
         threatLevel: number;
-        creepCensus: Map<Role, {current: number, required: number}>;
+        creepCensus: Map<Role, { current: number, required: number }>;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -90,8 +91,8 @@ export const loop = () => {
 
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
 
-        if((Game.time % Config.spawnManagerInterval) == 0) {
-            room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
+        if ((Game.time % Config.spawnManagerInterval) == 0) {
+            room.memory.creepCensus = new Map<Role, { current: number, required: number }>();
             // order defines priority
             // defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
             harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
@@ -100,13 +101,14 @@ export const loop = () => {
             // scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
             showCreepCensus(room.name, room.memory.creepCensus);
 
-            if(room.memory.threatLevel > 0) {
+            if (room.memory.threatLevel > 0) {
                 log(`[${room.name}] threatLevel: ${room.memory.threatLevel}`)
-            }        
+            }
+            roomManager.cleanUpRequisitions(room);
         }
 
         // FIXME: reset in each tick for now
-        Memory.pendingRequisitions = [];
+        // Memory.pendingRequisitions = [];
         roomManager.updateRequisitions(room);
         roomManager.run(room);  // execute creep action
         spawnManager.run(room); // spawn/heal creeps

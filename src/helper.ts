@@ -115,3 +115,7 @@ export function removeEntries<T>(sourceArray: T[] | undefined, entriesToRemove: 
     // Perform the removal operation
     return sourceArray.filter(item => !entriesToRemove.includes(item));
 }
+
+export function deepCopy<T>(obj: T): T {
+    return JSON.parse(JSON.stringify(obj));
+  }
