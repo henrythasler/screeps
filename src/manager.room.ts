@@ -79,15 +79,7 @@ export function updateRequisitions(room: Room): void {
             Memory.requisitionOwner.push(structure.id);
         }
     });
-
-    // priorityQueue.enqueue({
-    //     amount: structure.store.getFreeCapacity(RESOURCE_ENERGY),
-    //     resource: RESOURCE_ENERGY,
-    //     position: structure.pos,
-    //     priority: 200,
-    // }, 200);
-
-    log(`[${room.name}] requisitionOwner: ${JSON.stringify(Memory.requisitionOwner)}, pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
+    // log(`[${room.name}] requisitionOwner: ${JSON.stringify(Memory.requisitionOwner)}, pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
 }
 
 export function cleanUpRequisitions(room: Room): void {

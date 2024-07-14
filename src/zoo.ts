@@ -31,6 +31,7 @@ const workerDefaultTraits = [
     Trait.CHARGE_STORAGE,
     Trait.CHARGE_CONTAINER,
     Trait.CHARGE_LINK,
+    Trait.GATHER_RESOURCE,
     Trait.STORE_ENERGY,
     Trait.STORE_CONTAINER,
     Trait.STORE_STORAGE,
@@ -44,42 +45,42 @@ const worker: Map<string, Species> = new Map([
     ["WORKER_ENTRY", {
         parts: [WORK, CARRY, CARRY, MOVE, MOVE],
         traits: new Map([
-            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.CHARGE_SOURCE]]],
+            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
         ]),
         cost: 300,
     }],
     ["WORKER_ENTRY_HEAVY", {
         parts: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
         traits: new Map([
-            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.CHARGE_SOURCE]]],
+            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
         ]),
         cost: 400,
     }],
     ["WORKER_BASIC_SLOW", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE],
         traits: new Map([
-            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.CHARGE_SOURCE]]],
+            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
             ]),
         cost: 550,
     }],
     ["WORKER_BASIC", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: new Map([
-            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.CHARGE_SOURCE]]],
+            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
             ]),
         cost: 600,
     }],
     ["WORKER_BASIC_FAST", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: new Map([
-            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.CHARGE_SOURCE]]],
+            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
             ]),
         cost: 700,
     }],
     ["WORKER_BASIC_HEAVY", {
         parts: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: new Map([
-            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.CHARGE_SOURCE]]],
+            [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
             ]),
         cost: 800,
     }],

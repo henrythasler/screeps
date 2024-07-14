@@ -1,11 +1,10 @@
 export enum Trait {
-    ACTION_HOME,
-    ACTION_OUTPOST,
-    ACTION_AWAY,
+    // ACTION_HOME,
+    // ACTION_OUTPOST,
+    // ACTION_AWAY,
 
     CHARGE_STORAGE,
     CHARGE_CONTAINER,
-    CHARGE_SOURCE,
     CHARGE_LINK,    
 
     STORE_ENERGY,
@@ -36,5 +35,6 @@ export enum Trait {
 
     HARVEST_SOURCE,
     ATTACK_HOSTILE,
+    GATHER_RESOURCE,
     // LOCATE_SOURCE,
 }

@@ -1,4 +1,4 @@
-import { Task } from "./task";
+import { idleTasks, Task } from "./task";
 import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
@@ -15,7 +15,7 @@ export function execute(creep: Creep): boolean {
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.HARVEST_SOURCE)) {
+        if (!traits.includes(Trait.HARVEST_SOURCE) || creep.store.getFreeCapacity() == 0) {
             return false;
         }
 
@@ -26,7 +26,7 @@ export function execute(creep: Creep): boolean {
             }
         }) as Source[];
 
-        if (sources.length && creep.store.getFreeCapacity() > 0) {
+        if (sources.length && (creep.memory.task == Task.HARVEST || creep.store[RESOURCE_ENERGY] == 0 || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0))) {
             let sourceId = 0;
             // distribute evenly over available sources beginning with the closest
             sources.sort((a: Source, b: Source): number => {
@@ -55,6 +55,7 @@ export function execute(creep: Creep): boolean {
             // harvest or move towards source
             const res = creep.harvest(source);
             if (res == OK) {
+                creep.memory.task = Task.HARVEST;
                 creep.memory.lastChargeSource = EnergyLocation.SOURCE;
             }
             else if (res == ERR_NOT_IN_RANGE) {
@@ -64,8 +65,6 @@ export function execute(creep: Creep): boolean {
                 console.log(`[ERROR] harvest(${source}): ${res}`)
                 return false;
             }
-
-            creep.memory.task = Task.HARVEST;
             return true;
         }
     }

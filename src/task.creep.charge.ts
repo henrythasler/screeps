@@ -8,17 +8,10 @@ import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 
 const containerTypes: StructureConstant[] = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK];
-const chargeTraits: Trait[] = [Trait.CHARGE_SOURCE, Trait.CHARGE_CONTAINER, Trait.CHARGE_STORAGE, Trait.CHARGE_LINK];
+const chargeTraits: Trait[] = [Trait.CHARGE_CONTAINER, Trait.CHARGE_STORAGE, Trait.CHARGE_LINK];
 
 // all types share the 'pos' property, so we can have that mixed type
 type energySource = (Tombstone | Ruin | StructureContainer | StructureStorage)[];
-
-function getLastChargeSource(source: (StructureContainer | StructureStorage)): EnergyLocation {
-    switch (source.structureType) {
-        case STRUCTURE_CONTAINER: return EnergyLocation.CONTAINER;
-        case STRUCTURE_STORAGE: return EnergyLocation.STORAGE;
-    }
-}
 
 function withdrawEnergy(creep: Creep, sources: (StructureContainer | StructureStorage)[], sortByDistance: boolean, energyLocation: EnergyLocation): boolean {
     sources.sort((a, b): number => {

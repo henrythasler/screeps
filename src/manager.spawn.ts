@@ -57,6 +57,7 @@ export function run(room: Room): void {
                         alerts: [],
                         targetLocation: null,
                         activeRequisitions: [],
+                        idleTicks: 0,
                     },
                 });
             if (res == OK) {

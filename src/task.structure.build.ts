@@ -19,7 +19,12 @@ export function execute(creep: Creep): boolean {
             return false;
         }
 
-        const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
+        const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
+        const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
+            filter: (site) => {
+                return !isNearHostile(site, hostiles);
+            }
+        });
         if (constructionSites.length) {
             // build by creation order (do not sort)
             const res = creep.build(constructionSites[0]!);
@@ -37,25 +42,5 @@ export function execute(creep: Creep): boolean {
             return true;
         }
     }
-    return false;
-    /*    
-        const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-        if (constructionSites.length && creep.memory.occupation.includes(Trait.BUILD_STRUCTURE) && actionAllowed(creep, creep.room.name)) {
-            creep.memory.task = Task.BUILD_STRUCTURE;
-    
-            // build by creation order (do not sort)
-            const res = creep.build(constructionSites[0]!);
-            if (res == OK) {
-                creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
-            }
-            else if (res == ERR_NOT_IN_RANGE) {
-                creep.moveTo(constructionSites[0]!, { visualizePathStyle: { stroke: '#ffff00' } });
-            }
-            else if (res != ERR_NOT_ENOUGH_ENERGY){
-                log(`[${creep.room.name}][${creep.name}] build(${constructionSites[0]}) failed: ${res}`, Loglevel.ERROR);
-            }
-            return true;
-        }
-    */
     return false;
 }

@@ -109,7 +109,7 @@ interface CreepConfig {
 
 const harvesterConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 1],
+        ["sim", 3],
         ["E37S37", 2],
         ["E37S38", 2],
         ["W14N19", 2],  // Newbie Land
@@ -133,7 +133,7 @@ export class Config {
         ["sim", 6],
         ["E37S37", 6],
         ["E37S38", 5],
-        ["W14N19", 6],  // Newbie Land
+        ["W14N19", 7],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -146,6 +146,7 @@ export class Config {
     static creepHealThreshold = 1; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
+    static idleTickThreshold = 10;
 
     static rampartTowerRepairThresholdPeace = 0.1;
     static rampartTowerRepairThresholdThreat = 0.5;
@@ -175,6 +176,7 @@ export class Config {
         [Task.UPGRADE_CONTROLLER, { stroke: '#008000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.CHARGE_STRUCTURE, { stroke: '#00ff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.BUILD_STRUCTURE, { stroke: '#00ffff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.GATHER, { stroke: '#ff00ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
     ]);
 
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen

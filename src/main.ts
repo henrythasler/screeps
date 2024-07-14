@@ -50,6 +50,7 @@ declare global {
         alerts: Alert[],
         targetLocation: string | null,
         activeRequisitions: Requisition[],
+        idleTicks: number,
     }
 
     interface SpawnMemory {
