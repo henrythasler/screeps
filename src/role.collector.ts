@@ -9,6 +9,8 @@ import * as structureStore from "./task.structure.store";
 import * as renew from "./task.creep.renew";
 import * as controllerRefresh from "./task.controller.refresh";
 import * as structureCharge from "./task.structure.charge";
+import * as harvest from "./task.creep.harvest";
+import * as prospect from "./task.creep.prospect";
 import { Trait } from "./trait";
 
 export function run(creep: Creep) {
@@ -17,13 +19,13 @@ export function run(creep: Creep) {
     // always update roomInfo
     updateRoom.execute(creep);
 
-    let match = charge.execute(creep);
-    if(!match) match = controllerRefresh.execute(creep);
-    if(!match) match = structureCharge.execute(creep);
+    let match = harvest.execute(creep);
+    // if(!match) match = controllerRefresh.execute(creep);
+    // if(!match) match = structureCharge.execute(creep);
     if(!match) match = structureStore.execute(creep);
-    if(!match) match = structureBuild.execute(creep);
+    // if(!match) match = structureBuild.execute(creep);
     if(!match) match = returnHome.execute(creep);
-    if(!match) match = switchRoom.execute(creep, 2);
+    if(!match) match = prospect.execute(creep, 1);
     if(!match) creep.memory.task = Task.IDLE;
 
     // tell about the new task

@@ -60,35 +60,82 @@ const worker: Map<string, Species> = new Map([
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE],
         traits: new Map([
             [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
-            ]),
+        ]),
         cost: 550,
     }],
     ["WORKER_BASIC", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: new Map([
             [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
-            ]),
+        ]),
         cost: 600,
     }],
     ["WORKER_BASIC_FAST", {
         parts: [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: new Map([
             [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
-            ]),
+        ]),
         cost: 700,
     }],
     ["WORKER_BASIC_HEAVY", {
         parts: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         traits: new Map([
             [Location.EVERYWHERE, [...workerDefaultTraits, ...[Trait.HARVEST_SOURCE]]],
-            ]),
+        ]),
         cost: 800,
     }],
     ["WORKER_INTERMEDIATE", {
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: new Map([
             [Location.EVERYWHERE, workerDefaultTraits],
-            ]),
+        ]),
+        cost: 1200,
+    }],
+]);
+
+const scoutDefaultTraits = [Trait.RECON_ROOM, Trait.SWITCH_ROOM];
+const scout: Map<string, Species> = new Map([
+    ["SCOUT_ENTRY", {
+        parts: [MOVE],
+        traits: new Map([
+            [Location.EVERYWHERE, scoutDefaultTraits],
+        ]),
+        cost: 50,
+    }],
+    // ["SCOUT_BASIC", {
+    //     parts: [CLAIM, MOVE],
+    //     traits: new Map([
+    //         [Location.EVERYWHERE, scoutDefaultTraits],
+    //         [Location.REMOTE, [Trait.CLAIM_CONTROLLER, Trait.RESERVE_CONTROLLER]],
+    //     ]),
+    //     cost: 650,
+    // }],
+]);
+
+
+const collector: Map<string, Species> = new Map([
+    // ["COLLECTOR_BASIC", {
+    //     parts: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+    //     traits: new Map([
+    //         [Location.EVERYWHERE,
+    //         [
+    //             Trait.HARVEST_SOURCE,
+    //             Trait.STORE_ENERGY,
+    //             Trait.STORE_CONTAINER,
+    //             Trait.STORE_STORAGE,
+    //             Trait.SWITCH_ROOM,
+    //             Trait.RENEW_CREEP,
+    //         ]]
+    //     ]),
+    //     cost: 750,
+    // }],
+    ["COLLECTOR_INTERMEDIATE", {
+        parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        traits: new Map([
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM]],
+            [Location.HOMEBASE, [Trait.STORE_ENERGY, Trait.STORE_LINK, Trait.STORE_CONTAINER, Trait.STORE_STORAGE]],
+            [Location.REMOTE, [Trait.HARVEST_SOURCE]],
+        ]),
         cost: 1200,
     }],
 ]);
@@ -96,4 +143,6 @@ const worker: Map<string, Species> = new Map([
 export const zoo: Map<Role, Map<string, Species>> = new Map([
     [Role.HARVESTER, harvester],
     [Role.WORKER, worker],
+    [Role.SCOUT, scout],
+    [Role.COLLECTOR, collector],
 ]);

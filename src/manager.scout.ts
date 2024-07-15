@@ -50,6 +50,5 @@ export function run(room: Room, role: Role): void {
     const speciesZoo = zoo.get(role);
     if(speciesZoo) {
         managePopulation(minCount, creeps.length, room, speciesZoo, role);
-        // manageTraitDistribution(creeps, zoo, Config.harvester.traitDistribution);   
     }
 }

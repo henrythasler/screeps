@@ -125,6 +125,23 @@ const workerConfig: CreepConfig = {
     ]),
 }
 
+const scoutConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["W14N19", 1],  // Newbie Land
+    ]),
+}
+
+const collectorConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["W14N19", 4],  // Newbie Land
+    ]),
+}
 
 export class Config {
     static userName = "null-ptr";
@@ -177,6 +194,7 @@ export class Config {
         [Task.CHARGE_STRUCTURE, { stroke: '#00ff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.BUILD_STRUCTURE, { stroke: '#00ffff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.GATHER, { stroke: '#ff00ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.SWITCH_ROOM, { stroke: '#ff8000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
     ]);
 
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
@@ -185,13 +203,10 @@ export class Config {
     static scoutRoomReconCooldownHostile = 600;
     static roomReconVisuals = true;
 
-    // static worker = Worker;
-    // static scout = Scout;
-    // static collector = Collector;
-    // static harvester = Harvester;
-    // static defender = Defender;
     static creeps: Map<Role, CreepConfig> = new Map<Role, CreepConfig>([
         [Role.HARVESTER, harvesterConfig],
         [Role.WORKER, workerConfig],
+        [Role.SCOUT, scoutConfig],
+        [Role.COLLECTOR, collectorConfig],
     ]);
 }

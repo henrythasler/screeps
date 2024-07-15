@@ -10,30 +10,14 @@ import { log, Loglevel } from "./debug";
 export function execute(creep: Creep): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
     if (species) {
-        const location = categorizeCreepLocation(creep);
+        const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
 
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.RECHARGE_STRUCTURE) || creep.memory.task == Task.HARVEST || creep.store[RESOURCE_ENERGY] == 0) {
+        if (!traits.includes(Trait.RECHARGE_STRUCTURE) || creep.store[RESOURCE_ENERGY] == 0) {
             return false;
         }
-
-        // const structuresToCharge: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
-        //     filter: (structure) => {
-        //         return (structure.structureType == STRUCTURE_EXTENSION ||
-        //             structure.structureType == STRUCTURE_SPAWN ||
-        //             structure.structureType == STRUCTURE_TOWER) &&
-        //             structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-        //     }
-        // });
-
-        // const structuresToCharge = creep
-
-        // if(creep.memory.activeRequisitions.length) {
-        //     const structuresToCharge = 
-        // }
-
 
         let availableEnergy = creep.store[RESOURCE_ENERGY];
         while (availableEnergy > 0 && Memory.pendingRequisitions.length) {
@@ -79,7 +63,7 @@ export function execute(creep: Creep): boolean {
 
         const currentStructure = structuresToCharge[0];
         if (currentStructure) {
-            log(`[${creep.name}] activeRequisitions: ${JSON.stringify(creep.memory.activeRequisitions)}`)
+            log(`[${creep.name}] activeRequisitions: ${JSON.stringify(creep.memory.activeRequisitions)}`, Loglevel.DEBUG);
 
             const energyAmount = creep.store[RESOURCE_ENERGY];
             const res = creep.transfer(currentStructure, RESOURCE_ENERGY);

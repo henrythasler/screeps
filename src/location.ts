@@ -12,12 +12,12 @@ export enum Location {
     NOWHERE,    // opposite of everywhere; a block-list
 }
 
-export function categorizeCreepLocation(creep: Creep): Location {
-    if (creep.room.name == creep.memory.homeBase) {
+export function categorizeCreepLocation(room: Room, homeBase: string): Location {
+    if (room.name == homeBase) {
         return Location.HOMEBASE;
     }
 
-    const controller = creep.room.controller;
+    const controller = room.controller;
     if (controller && controller.my) {
         return Location.OUTPOST;
     }
@@ -30,7 +30,7 @@ export function categorizeCreepLocation(creep: Creep): Location {
         return Location.OCCUPIED;
     }
 
-    const roomInfo = roomInfoMap.get(creep.room.name);
+    const roomInfo = roomInfoMap.get(room.name);
     if (roomInfo && roomInfo.hostile) {
         return Location.HOSTILE;
     }
