@@ -31,7 +31,7 @@ export function execute(creep: Creep): boolean {
                         const hostile = roomInfoMap.get(newRoom)?.hostile;
                         // revisit neutral rooms mmore often than hostile
                         const due = lastVisit ? (Game.time - lastVisit) > (hostile ? Config.scoutRoomReconCooldownHostile : Config.scoutRoomReconCooldownNeutral) : true;
-                        return !details.blocked && due && !hostile;
+                        return !details.blocked && due;
                     }
                     return false;
                 });
