@@ -104,7 +104,8 @@ class Defender {
 */
 
 interface CreepConfig {
-    minCount: Map<string, number>,
+    minCount: Map<string, number>;
+    [key: string]: any;
 }
 
 const harvesterConfig: CreepConfig = {
@@ -139,8 +140,9 @@ const collectorConfig: CreepConfig = {
         ["sim", 0],
         ["E37S37", 0],
         ["E37S38", 0],
-        ["W14N19", 4],  // Newbie Land
+        ["W14N19", 6],  // Newbie Land
     ]),
+    maxHops: 1,
 }
 
 export class Config {
@@ -151,6 +153,7 @@ export class Config {
         ["E37S37", 7],
         ["E37S38", 6],
         ["W14N19", 7],  // Newbie Land
+        ["W14N18", 1],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -164,6 +167,7 @@ export class Config {
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
     static idleTickThreshold = 10;
+    static minStorageEnergy = 10000; // how much energy is at least conserved in local storages before structures will be upgraded or reinforced
 
     static rampartTowerRepairThresholdPeace = 0.1;
     static rampartTowerRepairThresholdThreat = 0.5;
@@ -195,6 +199,8 @@ export class Config {
         [Task.BUILD_STRUCTURE, { stroke: '#00ffff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.GATHER, { stroke: '#ff00ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.SWITCH_ROOM, { stroke: '#ff8000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.RESERVE_CONTROLLER, { stroke: '#ffffff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.CLAIM_CONTROLLER, { stroke: '#ff0000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
     ]);
 
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen

@@ -14,6 +14,7 @@ export interface RoomInfo {
     lastVisit: number;
     hostile: boolean;
     reserved: boolean;
+    occupied: boolean;
     availableSources: number;
 }
 
@@ -22,7 +23,8 @@ export interface SerializableRoomInfo {
     exits: { [key in Direction]?: ExitDetail };
     lastVisit: number;
     hostile: boolean;
-    reserved: boolean;
+    reserved: boolean;  // reserved by self
+    occupied: boolean;  // reserved by other player
     availableSources: number;
 }
 
@@ -37,6 +39,7 @@ export function serializeRoomInfo(roomInfo: RoomInfo): SerializableRoomInfo {
         lastVisit: roomInfo.lastVisit,
         hostile: roomInfo.hostile,
         reserved: roomInfo.reserved,
+        occupied: roomInfo.occupied,
         availableSources: roomInfo.availableSources,
     };
 }
@@ -48,6 +51,7 @@ function deserializeRoomInfo(serialized: SerializableRoomInfo): RoomInfo {
         lastVisit: serialized.lastVisit,
         hostile: serialized.hostile,
         reserved: serialized.reserved,
+        occupied: serialized.occupied,
         availableSources: serialized.availableSources,
     };
 }

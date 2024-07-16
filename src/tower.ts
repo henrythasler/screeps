@@ -1,4 +1,5 @@
 import { Config } from "./config";
+import { getTotalStorageVolume } from "./helper";
 import { HostileCreepInfo } from "./room.defense";
 
 function defendRoom(towers: StructureTower[], hostileCreepInfo: HostileCreepInfo): void {
@@ -56,6 +57,10 @@ function repairStructure(room: Room, towers: StructureTower[]): boolean {
 type ReinforcableStructures = STRUCTURE_RAMPART | STRUCTURE_WALL;
 
 function reinforceStructure(room: Room, towers: StructureTower[], structureToReinforce: ReinforcableStructures, minHits: number): void {
+    if (getTotalStorageVolume(room, RESOURCE_ENERGY) < Config.minStorageEnergy) {
+        return;
+    }
+
     const toReinforce = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == structureToReinforce)

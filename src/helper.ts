@@ -119,3 +119,14 @@ export function removeEntries<T>(sourceArray: T[] | undefined, entriesToRemove: 
 export function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }
+
+export function getTotalStorageVolume(room: Room, resource: ResourceConstant): number {
+    const storage = room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return structure.structureType == STRUCTURE_STORAGE;
+        }
+    }) as StructureStorage[];
+    return storage.reduce((sum: number, value: StructureStorage) => {
+        return sum + value.store[resource]
+    }, 0);
+}

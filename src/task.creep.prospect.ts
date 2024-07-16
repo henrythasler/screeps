@@ -7,7 +7,7 @@ import { zoo } from "./zoo";
 import { mergeArrays, removeEntries } from "./helper";
 import { Config } from "./config";
 
-export function execute(creep: Creep, maxHops: number): boolean {
+export function execute(creep: Creep, maxHops: number = 1): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
     if (species) {
         const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
@@ -21,20 +21,17 @@ export function execute(creep: Creep, maxHops: number): boolean {
 
         const locations: string[] = [];
         roomInfoMap.forEach((roomInfo, roomName) => {
-            if (roomInfo.availableSources && !roomInfo.hostile && !roomInfo.reserved && roomName != creep.memory.homeBase) {
+            if (roomInfo.availableSources && !roomInfo.hostile && !roomInfo.occupied && roomName != creep.memory.homeBase && creep.room.name != roomName) {
                 locations.push(roomName);
             }
         });
 
         const filteredLocations = locations.filter((roomName) => {
-            // const path: PathFinderPath = PathFinder.search(creep.pos, target.pos);
-            // const hops = countRoomHops(path.path);
-            // const hops = countLinearHops(creep.memory.homeBase, target.room.name);
-
-            const route = Game.map.findRoute(creep.room.name, roomName);
+            const route = Game.map.findRoute(creep.memory.homeBase, roomName);
             if (route == ERR_NO_PATH) return false;
             return route.length <= maxHops;
         });
+
 
         if (filteredLocations.length) {
             const pos = new RoomPosition(25, 25, filteredLocations[creep.memory.percentile % filteredLocations.length]!);

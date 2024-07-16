@@ -24,7 +24,7 @@ export function run(creep: Creep) {
     if (!match) match = structureCharge.execute(creep);
     if (!match) match = structureRepair.execute(creep);
     if (!match) match = structureBuild.execute(creep);
-    if (!match) match = controllerUpgrade.execute(creep);
+    if (!match) match = controllerUpgrade.execute(creep, Config.minStorageEnergy);
     if (!match) match = structureStore.execute(creep);
     if (!match) creep.memory.task = Task.IDLE;
 

@@ -6,7 +6,7 @@ export function execute(creep: Creep): boolean {
         roomInfo.hostile = creep.room.find(FIND_HOSTILE_CREEPS).length > 0;
         roomInfo.availableSources = creep.room.find(FIND_SOURCES).length;
         roomInfo.reserved = creep.room.controller?.reservation != undefined;
-        // do not update timestamp
+        // do not update timestamp to allow scouts to re-visit the room
     }
     return false;
 }

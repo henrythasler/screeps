@@ -1,13 +1,13 @@
 import { Task } from "./task";
 import { EnergyLocation } from "./manager.global";
 import { Trait } from "./trait";
-import { isInHomeBase, mergeArrays, removeEntries } from "./helper";
+import { getTotalStorageVolume, isInHomeBase, mergeArrays, removeEntries } from "./helper";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
 
-export function execute(creep: Creep): boolean {
+export function execute(creep: Creep, minStorageEnergy?: number): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
     if (species) {
         const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
@@ -23,6 +23,10 @@ export function execute(creep: Creep): boolean {
         const minControllerLevel = Config.minControllerLevel.get(creep.room.name) ?? 0;
 
         if (controller && controller.level < minControllerLevel && controller.progress < controller.progressTotal) {
+
+            if (minStorageEnergy && getTotalStorageVolume(creep.room, RESOURCE_ENERGY) < minStorageEnergy) {
+                return false;
+            }
 
             const res = creep.upgradeController(controller);
             if (res == OK) {

@@ -92,7 +92,7 @@ export const loop = () => {
 
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
 
-        if ((Game.time % Config.spawnManagerInterval) == 0) {
+        if ((Game.time % Config.spawnManagerInterval) == 0 && room.find(FIND_MY_SPAWNS).length) {
             room.memory.creepCensus = new Map<Role, { current: number, required: number }>();
             // order defines priority
             // defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   

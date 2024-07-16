@@ -13,14 +13,14 @@ const harvester: Map<string, Species> = new Map([
     ["HARVESTER_ENTRY", {
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: new Map([
-            [Location.HOMEBASE, harvesterDefaultTraits]
+            [Location.HOME, harvesterDefaultTraits]
         ]),
         cost: 800,
     }],
     ["HARVESTER_BASIC", {
         parts: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
         traits: new Map([
-            [Location.HOMEBASE, harvesterDefaultTraits]
+            [Location.HOME, harvesterDefaultTraits]
         ]),
         cost: 900,
     }],
@@ -102,14 +102,15 @@ const scout: Map<string, Species> = new Map([
         ]),
         cost: 50,
     }],
-    // ["SCOUT_BASIC", {
-    //     parts: [CLAIM, MOVE],
-    //     traits: new Map([
-    //         [Location.EVERYWHERE, scoutDefaultTraits],
-    //         [Location.REMOTE, [Trait.CLAIM_CONTROLLER, Trait.RESERVE_CONTROLLER]],
-    //     ]),
-    //     cost: 650,
-    // }],
+    ["SCOUT_BASIC", {
+        parts: [CLAIM, MOVE],
+        traits: new Map([
+            [Location.EVERYWHERE, scoutDefaultTraits],
+            [Location.REMOTE, [Trait.CLAIM_CONTROLLER, Trait.RESERVE_CONTROLLER]],
+            [Location.RESERVED, [Trait.CLAIM_CONTROLLER, Trait.RESERVE_CONTROLLER]],
+        ]),
+        cost: 650,
+    }],
 ]);
 
 
@@ -133,8 +134,10 @@ const collector: Map<string, Species> = new Map([
         parts: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         traits: new Map([
             [Location.EVERYWHERE, [Trait.SWITCH_ROOM]],
-            [Location.HOMEBASE, [Trait.STORE_ENERGY, Trait.STORE_LINK, Trait.STORE_CONTAINER, Trait.STORE_STORAGE]],
-            [Location.REMOTE, [Trait.HARVEST_SOURCE]],
+            [Location.HOME, [Trait.STORE_ENERGY, Trait.STORE_LINK, Trait.STORE_CONTAINER, Trait.STORE_STORAGE]],
+            [Location.REMOTE, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE]],
+            [Location.RESERVED, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE]],
+            [Location.OUTPOST, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE, Trait.REFRESH_CONTROLLER]],
         ]),
         cost: 1200,
     }],

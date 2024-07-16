@@ -21,9 +21,10 @@ export function getHostileCreepInfo(room: Room): HostileCreepInfo {
 export function roomThreatEvaluation(room: Room, hostileCreepInfo: HostileCreepInfo): void {
     if (hostileCreepInfo.count > 0) {
         room.memory.threatLevel += hostileCreepInfo.hits;
-        if (hostileCreepInfo.hits > Config.safeModeThreshold) {
+        const controller = room.controller;
+        if (hostileCreepInfo.hits > Config.safeModeThreshold && controller && controller.my) {
             console.log(`[ALERT] ${hostileCreepInfo.count} hostiles (${hostileCreepInfo.hits} hits) in ${room} exceeds limit (${Config.safeModeThreshold}). Triggering Safe Mode!`);
-            const res = room.controller?.activateSafeMode();
+            const res = controller.activateSafeMode();
             if (res != OK) {
                 console.log(`[ERROR] in ${room.name}.activateSafeMode(): ${res}`)
             }
