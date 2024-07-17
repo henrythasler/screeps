@@ -15,7 +15,7 @@ const runnables: Map<Role, Function> = new Map([
     [Role.SCOUT, scout.run],
     [Role.COLLECTOR, collector.run],
     [Role.HARVESTER, harvester.run],
-    // [Role.DEFENDER, defender.run],
+    [Role.DEFENDER, defender.run],
 ]);
 
 export function run(room: Room): void {
@@ -79,7 +79,6 @@ export function updateRequisitions(room: Room): void {
             Memory.requisitionOwner.push(structure.id);
         }
     });
-    // log(`[${room.name}] requisitionOwner: ${JSON.stringify(Memory.requisitionOwner)}, pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
 }
 
 export function cleanUpRequisitions(room: Room): void {
@@ -89,7 +88,7 @@ export function cleanUpRequisitions(room: Room): void {
         }
     });
 
-    if (creeps.length) {
+    if (creeps.length && Memory.requisitionOwner && Memory.requisitionOwner.length) {
         Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
             return creeps.some((creep) => {
                 if (creep.memory.activeRequisitions.length) {

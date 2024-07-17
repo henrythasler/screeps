@@ -19,7 +19,7 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 ]);
 
 const zoo: Map<string, Species> = new Map([
-    ["DEFENDER_BASIC", {
+    ["DEFENDER_ENTRY", {
         parts: [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK],
         traits: new Map([
             [Location.EVERYWHERE, [

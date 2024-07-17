@@ -114,6 +114,7 @@ const harvesterConfig: CreepConfig = {
         ["E37S37", 2],
         ["E37S38", 2],
         ["W14N19", 2],  // Newbie Land
+        ["W14N18", 2],  // Newbie Land
     ]),
 }
 
@@ -123,6 +124,7 @@ const workerConfig: CreepConfig = {
         ["E37S37", 6],
         ["E37S38", 6],
         ["W14N19", 8],  // Newbie Land
+        ["W14N18", 4],  // Newbie Land
     ]),
 }
 
@@ -130,7 +132,7 @@ const scoutConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 0],
         ["E37S37", 0],
-        ["E37S38", 0],
+        ["E37S38", 1],
         ["W14N19", 1],  // Newbie Land
     ]),
 }
@@ -139,10 +141,21 @@ const collectorConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 0],
         ["E37S37", 0],
-        ["E37S38", 0],
-        ["W14N19", 6],  // Newbie Land
+        ["E37S38", 1],
+        ["W14N19", 8],  // Newbie Land
+        ["W14N18", 4],  // Newbie Land
     ]),
     maxHops: 1,
+}
+
+const defenderConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["W14N19", 0],  // Newbie Land
+        ["W14N18", 1],  // Newbie Land
+    ]),
 }
 
 export class Config {
@@ -153,7 +166,7 @@ export class Config {
         ["E37S37", 7],
         ["E37S38", 6],
         ["W14N19", 7],  // Newbie Land
-        ["W14N18", 1],  // Newbie Land
+        ["W14N18", 3],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -200,7 +213,8 @@ export class Config {
         [Task.GATHER, { stroke: '#ff00ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.SWITCH_ROOM, { stroke: '#ff8000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.RESERVE_CONTROLLER, { stroke: '#ffffff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
-        [Task.CLAIM_CONTROLLER, { stroke: '#ff0000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.CLAIM_CONTROLLER, { stroke: '#800080', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.ATTACK_HOSTILE, { stroke: '#ff0000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
     ]);
 
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
@@ -214,5 +228,6 @@ export class Config {
         [Role.WORKER, workerConfig],
         [Role.SCOUT, scoutConfig],
         [Role.COLLECTOR, collectorConfig],
+        [Role.DEFENDER, defenderConfig],
     ]);
 }

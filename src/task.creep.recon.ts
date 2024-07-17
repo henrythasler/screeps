@@ -50,6 +50,7 @@ function evaluateRoomInfo(creep: Creep): RoomInfo {
         hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
         reserved: creep.room.controller?.reservation != undefined && creep.room.controller.reservation.username == Config.userName,
         occupied: creep.room.controller?.reservation != undefined && creep.room.controller.reservation.username != Config.userName,
+        base: creep.room.find(FIND_MY_SPAWNS).length > 0,
         availableSources: creep.room.find(FIND_SOURCES).length,
     };
 

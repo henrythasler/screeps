@@ -22,9 +22,10 @@ export function execute(creep: Creep, minStorageEnergy?: number): boolean {
         const controller = creep.room.controller;
         const minControllerLevel = Config.minControllerLevel.get(creep.room.name) ?? 0;
 
-        if (controller && controller.level < minControllerLevel && controller.progress < controller.progressTotal) {
+        if (controller && controller.level < minControllerLevel /*&& controller.progress < controller.progressTotal*/) {
 
-            if (minStorageEnergy && getTotalStorageVolume(creep.room, RESOURCE_ENERGY) < minStorageEnergy) {
+            const [storages, volume] = getTotalStorageVolume(creep.room, RESOURCE_ENERGY);
+            if (minStorageEnergy && storages && volume < minStorageEnergy) {
                 return false;
             }
 

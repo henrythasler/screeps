@@ -57,7 +57,8 @@ function repairStructure(room: Room, towers: StructureTower[]): boolean {
 type ReinforcableStructures = STRUCTURE_RAMPART | STRUCTURE_WALL;
 
 function reinforceStructure(room: Room, towers: StructureTower[], structureToReinforce: ReinforcableStructures, minHits: number): void {
-    if (getTotalStorageVolume(room, RESOURCE_ENERGY) < Config.minStorageEnergy) {
+    const [storages, volume] = getTotalStorageVolume(room, RESOURCE_ENERGY);
+    if (storages && volume < Config.minStorageEnergy) {
         return;
     }
 

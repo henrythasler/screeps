@@ -20,9 +20,14 @@ export function execute(creep: Creep): boolean {
         }
 
         let availableEnergy = creep.store[RESOURCE_ENERGY];
-        while (availableEnergy > 0 && Memory.pendingRequisitions.length) {
-            const requisition = Memory.pendingRequisitions[0];
-            if (requisition) {
+        for(let i=0; i<Memory.pendingRequisitions.length; i++) {
+            if(availableEnergy <= 0 || Memory.pendingRequisitions.length == 0) {
+                break;
+            }
+        // while (availableEnergy > 0 && Memory.pendingRequisitions.length) {
+            const requisition = Memory.pendingRequisitions[i];
+            // FIXME: check room name with Trait definition
+            if (requisition && requisition.position.roomName == creep.memory.homeBase) {
                 const requisitionCopy: Requisition = deepCopy(requisition);
                 const requisitionAmount = requisition.amount;
                 requisitionCopy.amount = Math.min(requisitionAmount, availableEnergy);

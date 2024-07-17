@@ -95,7 +95,7 @@ export const loop = () => {
         if ((Game.time % Config.spawnManagerInterval) == 0 && room.find(FIND_MY_SPAWNS).length) {
             room.memory.creepCensus = new Map<Role, { current: number, required: number }>();
             // order defines priority
-            // defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
+            defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
             harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
             workerManager.run(room, Role.WORKER);  // manage worker population in that room
             collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
@@ -108,8 +108,6 @@ export const loop = () => {
             roomManager.cleanUpRequisitions(room);
         }
 
-        // FIXME: reset in each tick for now
-        // Memory.pendingRequisitions = [];
         roomManager.updateRequisitions(room);
         roomManager.run(room);  // execute creep action
         spawnManager.run(room); // spawn/heal creeps
