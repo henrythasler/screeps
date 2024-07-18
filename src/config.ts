@@ -154,7 +154,7 @@ const defenderConfig: CreepConfig = {
         ["E37S37", 0],
         ["E37S38", 0],
         ["W14N19", 0],  // Newbie Land
-        ["W14N18", 1],  // Newbie Land
+        ["W14N18", 0],  // Newbie Land
     ]),
 }
 
@@ -166,7 +166,7 @@ export class Config {
         ["E37S37", 7],
         ["E37S38", 6],
         ["W14N19", 7],  // Newbie Land
-        ["W14N18", 3],  // Newbie Land
+        ["W14N18", 4],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 

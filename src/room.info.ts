@@ -1,4 +1,4 @@
-import { log } from "./debug";
+import { log, Loglevel } from "./debug";
 
 export enum Direction {
     TOP = 'TOP',
@@ -95,7 +95,7 @@ export function loadRoomInfoMap(): void {
 }
 
 export function saveRoomInfoMap(): void {
-    log(`requisitionOwner: ${Memory.requisitionOwner.length}, pendingRequisitions: ${Memory.pendingRequisitions.reduce((sum: string, req) => { return sum + req.position.roomName + ", " }, "")}`)
+    log(`requisitionOwner: ${Memory.requisitionOwner.length}, pendingRequisitions: ${Memory.pendingRequisitions.reduce((sum: string, req) => { return sum + req.position.roomName + ", " }, "")}`, Loglevel.DEBUG);
     storeRoomInfoMap(roomInfoMap);
 }
 
