@@ -3,6 +3,9 @@ import { log, Loglevel } from "./debug";
 import { RoomInfo, Direction, ExitDetail, roomInfoMap, serializeRoomInfo } from "./room.info";
 import { Config } from "./config";
 import { Task } from "./task";
+import { categorizeCreepLocation, Location } from "./location";
+import { zoo } from "./zoo";
+import { mergeArrays, removeEntries } from "./helper";
 
 function evaluateExitProperties(exitTo: string, direction: Direction, creep: Creep, visuals: boolean): ExitDetail {
     let blocked = true;
@@ -43,21 +46,41 @@ function evaluateRoomInfo(creep: Creep): RoomInfo {
 
     const roominfo: RoomInfo = {
         exits: exits,
-        hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
-        reserved: creep.room.controller?.reservation != undefined,
         lastVisit: Game.time,
+        hostile: creep.room.find(FIND_HOSTILE_CREEPS).length > 0,
+        reserved: creep.room.controller?.reservation != undefined && creep.room.controller.reservation.username == Config.userName,
+        occupied: creep.room.controller?.reservation != undefined && creep.room.controller.reservation.username != Config.userName,
+        base: creep.room.find(FIND_MY_SPAWNS).length > 0,
         availableSources: creep.room.find(FIND_SOURCES).length,
     };
 
-    log(`[${creep.room.name}] ${JSON.stringify(serializeRoomInfo(roominfo))}`, Loglevel.DEBUG);
+    // log(`[${creep.room.name}] ${JSON.stringify(serializeRoomInfo(roominfo))}`, Loglevel.DEBUG);
     return roominfo;
 }
 
 export function execute(creep: Creep): boolean {
-    if (creep.memory.occupation.includes(Trait.RECON_ROOM) && !([Task.RESERVE_CONTROLLER, Task.CLAIM_CONTROLLER].includes(creep.memory.task))) {
-        const sources: Source[] = creep.room.find(FIND_SOURCES) as Source[];
+    const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
+    if (species) {
+        const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
 
-        roomInfoMap.set(creep.room.name, evaluateRoomInfo(creep));
+        // derive available traits for the current room and general traits
+        const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
+      
+        if (!traits.includes(Trait.RECON_ROOM)) {
+            return false;            
+        }
+
+        const roomInfo = roomInfoMap.get(creep.room.name);
+        if(roomInfo) {
+            const due = roomInfo.lastVisit ? (Game.time - roomInfo.lastVisit) > (roomInfo.hostile ? Config.scoutRoomReconCooldownHostile : Config.scoutRoomReconCooldownNeutral) : true;
+            if(!due) {
+                return false;
+            }
+        }   
+
+        if (!([Task.RESERVE_CONTROLLER, Task.CLAIM_CONTROLLER].includes(creep.memory.task))) {
+            roomInfoMap.set(creep.room.name, evaluateRoomInfo(creep));
+        }
     }
     return false;
 }

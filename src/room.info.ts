@@ -1,3 +1,5 @@
+import { log, Loglevel } from "./debug";
+
 export enum Direction {
     TOP = 'TOP',
     RIGHT = 'RIGHT',
@@ -14,6 +16,8 @@ export interface RoomInfo {
     lastVisit: number;
     hostile: boolean;
     reserved: boolean;
+    occupied: boolean;
+    base: boolean;
     availableSources: number;
 }
 
@@ -22,7 +26,9 @@ export interface SerializableRoomInfo {
     exits: { [key in Direction]?: ExitDetail };
     lastVisit: number;
     hostile: boolean;
-    reserved: boolean;
+    reserved: boolean;  // reserved by self
+    occupied: boolean;  // reserved by other player
+    base: boolean;
     availableSources: number;
 }
 
@@ -37,6 +43,8 @@ export function serializeRoomInfo(roomInfo: RoomInfo): SerializableRoomInfo {
         lastVisit: roomInfo.lastVisit,
         hostile: roomInfo.hostile,
         reserved: roomInfo.reserved,
+        occupied: roomInfo.occupied,
+        base: roomInfo.base,
         availableSources: roomInfo.availableSources,
     };
 }
@@ -48,6 +56,8 @@ function deserializeRoomInfo(serialized: SerializableRoomInfo): RoomInfo {
         lastVisit: serialized.lastVisit,
         hostile: serialized.hostile,
         reserved: serialized.reserved,
+        occupied: serialized.occupied,
+        base: serialized.base,
         availableSources: serialized.availableSources,
     };
 }
@@ -85,6 +95,7 @@ export function loadRoomInfoMap(): void {
 }
 
 export function saveRoomInfoMap(): void {
+    log(`requisitionOwner: ${Memory.requisitionOwner.length}, pendingRequisitions: ${Memory.pendingRequisitions.reduce((sum: string, req) => { return sum + req.position.roomName + ", " }, "")}`, Loglevel.DEBUG);
     storeRoomInfoMap(roomInfoMap);
 }
 

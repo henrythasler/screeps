@@ -3,6 +3,7 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 
 export function execute(creep: Creep): boolean {
+/*    
     const threshold = (creep.memory.task == Task.RENEW) ? Config.creepRenewMax : Config.creepRenewThreshold;
     if (creep.memory.occupation.includes(Trait.RENEW_CREEP) && !creep.spawning && creep.ticksToLive! < threshold) {
 
@@ -32,5 +33,6 @@ export function execute(creep: Creep): boolean {
             }
         }
     }
+*/        
     return false;
 }

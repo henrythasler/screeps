@@ -8,8 +8,7 @@ export function run(creep: Creep) {
     const previousTask = creep.memory.task;
 
     let match = harvest.execute(creep);
-    if(!match) match = renew.execute(creep);
-    if(!match) match = structureStore.execute(creep, 6);
+    if(!match) match = structureStore.execute(creep, 6, true);
     if(!match) creep.memory.task = Task.IDLE;
 
     // tell about the new task
