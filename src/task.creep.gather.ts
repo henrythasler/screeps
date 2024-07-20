@@ -61,7 +61,7 @@ export function execute(creep: Creep): boolean {
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.GATHER_RESOURCE) || creep.store.getFreeCapacity() == 0) {
+        if (!traits.includes(Trait.GATHER_RESOURCE) || creep.store[RESOURCE_ENERGY] > 0) {
             return false;
         }
 

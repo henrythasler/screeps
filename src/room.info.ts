@@ -95,7 +95,9 @@ export function loadRoomInfoMap(): void {
 }
 
 export function saveRoomInfoMap(): void {
-    log(`requisitionOwner: ${Memory.requisitionOwner.length}, pendingRequisitions: ${Memory.pendingRequisitions.reduce((sum: string, req) => { return sum + req.position.roomName + ", " }, "")}`, Loglevel.DEBUG);
+    const reqOwnerStr = Memory.assignedRequisitions.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
+    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { return `${sum} [${req.position.roomName}, ${req.requesterId}]`}, "");
+    log(`requisitionOwner: ${reqOwnerStr}, pendingRequisitions: ${pending}`, Loglevel.INFO);
     storeRoomInfoMap(roomInfoMap);
 }
 

@@ -16,18 +16,6 @@ export function countRoomHops(path: RoomPosition[]): number {
     }, [] as string[]).length;
 }
 
-// export function actionAllowed(creep: Creep, roomName: string): boolean {
-//     let isOutpost = false;
-//     Config.minControllerLevel.forEach((_, baseRoomName) => {
-//         isOutpost = isOutpost ? isOutpost : baseRoomName == roomName && baseRoomName != creep.memory.homeBase;
-//     });
-
-//     const isHome = roomName == creep.memory.homeBase;
-//     return (creep.memory.occupation.includes(Trait.ACTION_HOME) && isHome ||
-//         creep.memory.occupation.includes(Trait.ACTION_AWAY) && !isHome && !isOutpost ||
-//         creep.memory.occupation.includes(Trait.ACTION_OUTPOST) && !isHome && isOutpost)
-// }
-
 export function isInHomeBase(creep: Creep): boolean {
     return creep.room.name == creep.memory.homeBase;
 }
