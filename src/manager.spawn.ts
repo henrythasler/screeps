@@ -66,7 +66,6 @@ export function run(room: Room): void {
                 room.memory.ticksWithPendingSpawns = 0;
             }
             else {
-                // console.log(`[ERROR][${room.name}][spawn] spawnCreep(${requiredCreep.species.parts}) returned ${res}`);
                 room.memory.ticksWithPendingSpawns += Config.spawnManagerInterval;
 
                 // remove item prom the queue after a while

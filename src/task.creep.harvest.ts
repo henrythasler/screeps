@@ -61,7 +61,7 @@ export function execute(creep: Creep): boolean {
                 creep.moveTo(source, { visualizePathStyle: Config.visualizePathStyle.get(Task.HARVEST) });
             }
             else if (res != ERR_NOT_ENOUGH_RESOURCES) {
-                console.log(`[ERROR] harvest(${source}): ${res}`)
+                log(`[ERROR] harvest(${source}): ${res}`)
                 return false;
             }
             creep.memory.task = Task.HARVEST;

@@ -95,12 +95,24 @@ export function loadRoomInfoMap(): void {
 }
 
 export function saveRoomInfoMap(): void {
-    const reqOwnerStr = Memory.assignedRequisitions.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
-    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { return `${sum} [${req.position.roomName}, ${req.requesterId}]`}, "");
-    log(`requisitionOwner: ${reqOwnerStr}, pendingRequisitions: ${pending}`, Loglevel.INFO);
     storeRoomInfoMap(roomInfoMap);
 }
 
 export function createRoomInfoMap(): void {
     roomInfoMap = new Map<string, RoomInfo>();
+}
+
+export function logRoomInfoMap(): void {
+    const reqOwnerStr = Memory.requisitionOwner.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
+    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { return `${sum} [${req.position.roomName}, ${req.requesterId}, ${req.amount}]`}, "");
+    const creepReqs: string[] = [];
+
+    for(const creepId in Game.creeps) {
+        const creep = Game.creeps[creepId];
+        if(creep && creep.memory.activeRequisitions.length) {
+            creepReqs.push(`${creep.name} ${creep.memory.activeRequisitions.reduce((sum: string, req) => {return `${sum} [${req.amount}]`}, "")}`)
+        }
+    }
+
+    log(`creeps: ${creepReqs.join(", ")}, requisitionOwner: ${reqOwnerStr}, pendingRequisitions: ${pending}`, Loglevel.INFO);
 }

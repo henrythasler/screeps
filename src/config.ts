@@ -110,9 +110,10 @@ interface CreepConfig {
 
 const harvesterConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 3],
+        ["sim", 0],
         ["E37S37", 2],
         ["E37S38", 2],
+        ["E36S38", 2],
         ["W14N19", 2],  // Newbie Land
         ["W14N18", 2],  // Newbie Land
     ]),
@@ -123,6 +124,7 @@ const workerConfig: CreepConfig = {
         ["sim", 2],
         ["E37S37", 6],
         ["E37S38", 6],
+        ["E36S38", 6],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 4],  // Newbie Land
     ]),
@@ -141,7 +143,8 @@ const collectorConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 0],
         ["E37S37", 0],
-        ["E37S38", 4],
+        ["E37S38", 2],
+        ["E36S38", 2],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 6],  // Newbie Land
     ]),
@@ -162,7 +165,7 @@ export class Config {
     static userName = "null-ptr";
     // Controller
     static minControllerLevel = new Map<string, number>([
-        ["sim", 6],
+        ["sim", 4],
         ["E37S37", 7],
         ["E37S38", 6],
         ["E36S38", 3],

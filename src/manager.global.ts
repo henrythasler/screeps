@@ -84,7 +84,7 @@ export function findMostExpensiveSpecies(capacity: number, available: number, ti
     const species = zoo.get(speciesName);
     if (species) {
         species.name = speciesName;
-        console.log(`selected species: ${speciesName} (${species.cost}), capacity: ${capacity}, budget: ${actualBudget}`);
+        log(`selected species: ${speciesName} (${species.cost}), capacity: ${capacity}, budget: ${actualBudget}`);
     }
     return species;
 }
@@ -169,8 +169,8 @@ export function initializeGlobalObjects(): void {
     if (!Memory.pendingRequisitions) {
         Memory.pendingRequisitions = [];
     }
-    if (!Memory.assignedRequisitions) {
-        Memory.assignedRequisitions = [];
+    if (!Memory.requisitionOwner) {
+        Memory.requisitionOwner = [];
     }
 }
 
