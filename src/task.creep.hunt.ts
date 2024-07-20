@@ -15,14 +15,13 @@ export function execute(creep: Creep, maxHops: number = 1): boolean {
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.SWITCH_ROOM) || creep.store.getFreeCapacity() == 0) {
+        if (!traits.includes(Trait.SWITCH_ROOM)) {
             return false;
         }
 
         const locations: string[] = [];
         roomInfoMap.forEach((roomInfo, roomName) => {
-            if (roomInfo.availableSources && !roomInfo.hostile && !roomInfo.occupied && !roomInfo.base && 
-                roomName != creep.memory.homeBase && creep.room.name != roomName ) {
+            if (roomInfo.hostile && creep.room.name != roomName ) {
                 locations.push(roomName);
             }
         });
@@ -35,7 +34,7 @@ export function execute(creep: Creep, maxHops: number = 1): boolean {
 
 
         if (filteredLocations.length) {
-            const pos = new RoomPosition(25, 25, filteredLocations[creep.memory.percentile % filteredLocations.length]!);
+            const pos = new RoomPosition(25, 25, filteredLocations[0]!);
             const res = creep.moveTo(pos, { visualizePathStyle: Config.visualizePathStyle.get(Task.SWITCH_ROOM) });
             if (res == OK || res == ERR_TIRED) {
                 creep.memory.task = Task.SWITCH_ROOM;

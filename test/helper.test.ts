@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import "jest";
-import { actionAllowed } from "../src/helper";
 
 describe("tree creation", function () {
     it("simple creation", function () {

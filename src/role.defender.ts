@@ -1,5 +1,5 @@
 import { Task, sayTask } from "./task";
-import * as defend from "./task.creep.defend";
+import * as defend from "./task.creep.attack";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;

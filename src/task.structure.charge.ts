@@ -30,7 +30,6 @@ export function execute(creep: Creep): boolean {
                 const requisitionCopy: Requisition = deepCopy(requisition);
                 const requisitionAmount = requisition.amount;
                 if (availableEnergy < requisitionAmount) {
-                    log(``)
                     requisitionCopy.amount = availableEnergy;
                     requisition.amount -= availableEnergy;
                     Memory.pendingRequisitions.unshift(requisition);

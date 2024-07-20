@@ -7,6 +7,7 @@ import * as scout from "./role.scout";
 import * as collector from "./role.collector";
 import * as harvester from "./role.harvester";
 import * as defender from "./role.defender";
+import * as hunter from "./role.hunter";
 import { log, Loglevel } from "./debug";
 import { priorityQueue } from "./priorityqueue";
 import { logRoomInfoMap } from "./room.info";
@@ -17,6 +18,7 @@ const runnables: Map<Role, Function> = new Map([
     [Role.COLLECTOR, collector.run],
     [Role.HARVESTER, harvester.run],
     [Role.DEFENDER, defender.run],
+    [Role.HUNTER, hunter.run],
 ]);
 
 export function run(room: Room): void {

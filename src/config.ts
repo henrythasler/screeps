@@ -161,6 +161,18 @@ const defenderConfig: CreepConfig = {
     ]),
 }
 
+const hunterConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["E36S38", 0],
+        ["W14N19", 0],  // Newbie Land
+        ["W14N18", 4],  // Newbie Land
+    ]),
+    maxHops: 1,
+}
+
 export class Config {
     static userName = "null-ptr";
     // Controller
@@ -233,5 +245,6 @@ export class Config {
         [Role.SCOUT, scoutConfig],
         [Role.COLLECTOR, collectorConfig],
         [Role.DEFENDER, defenderConfig],
+        [Role.HUNTER, hunterConfig],
     ]);
 }
