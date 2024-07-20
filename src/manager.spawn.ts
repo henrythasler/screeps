@@ -48,14 +48,16 @@ export function run(room: Room): void {
                         speciesName: requiredCreep.species.name ?? "undefined",
                         role: requiredCreep.role,
                         task: Task.IDLE,
-                        traits: requiredCreep.species.traits,
-                        occupation: requiredCreep.species.traits,
+                        // traits: requiredCreep.species.traits,
+                        // occupation: requiredCreep.species.traits,
                         percentile: -1,
                         lastChargeSource: EnergyLocation.OTHER,
                         lastEnergyDeposit: EnergyLocation.OTHER,
                         homeBase: room.name,
                         alerts: [],
                         targetLocation: null,
+                        activeRequisitions: [],
+                        idleTicks: 0,
                     },
                 });
             if (res == OK) {
@@ -64,7 +66,6 @@ export function run(room: Room): void {
                 room.memory.ticksWithPendingSpawns = 0;
             }
             else {
-                // console.log(`[ERROR][${room.name}][spawn] spawnCreep(${requiredCreep.species.parts}) returned ${res}`);
                 room.memory.ticksWithPendingSpawns += Config.spawnManagerInterval;
 
                 // remove item prom the queue after a while

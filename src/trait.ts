@@ -1,11 +1,10 @@
 export enum Trait {
-    ACTION_HOME,
-    ACTION_OUTPOST,
-    ACTION_AWAY,
+    // ACTION_HOME,
+    // ACTION_OUTPOST,
+    // ACTION_AWAY,
 
     CHARGE_STORAGE,
     CHARGE_CONTAINER,
-    CHARGE_SOURCE,
     CHARGE_LINK,    
 
     STORE_ENERGY,
@@ -16,7 +15,7 @@ export enum Trait {
     REPAIR_STRUCTURE,
 
     RECHARGE_STRUCTURE,     // transfer energy to a structure (Spawn, Tower, ...)
-    RECHARGE_CONTROLLER,    // transfer energy to a controller
+    UPGRADE_CONTROLLER,    // transfer energy to a controller
 
     BUILD_STRUCTURE,
 
@@ -36,5 +35,6 @@ export enum Trait {
 
     HARVEST_SOURCE,
     ATTACK_HOSTILE,
+    GATHER_RESOURCE,
     // LOCATE_SOURCE,
 }

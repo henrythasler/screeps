@@ -1,3 +1,5 @@
+import { log, Loglevel } from "./debug";
+
 export enum Direction {
     TOP = 'TOP',
     RIGHT = 'RIGHT',
@@ -14,6 +16,8 @@ export interface RoomInfo {
     lastVisit: number;
     hostile: boolean;
     reserved: boolean;
+    occupied: boolean;
+    base: boolean;
     availableSources: number;
 }
 
@@ -22,7 +26,9 @@ export interface SerializableRoomInfo {
     exits: { [key in Direction]?: ExitDetail };
     lastVisit: number;
     hostile: boolean;
-    reserved: boolean;
+    reserved: boolean;  // reserved by self
+    occupied: boolean;  // reserved by other player
+    base: boolean;
     availableSources: number;
 }
 
@@ -37,6 +43,8 @@ export function serializeRoomInfo(roomInfo: RoomInfo): SerializableRoomInfo {
         lastVisit: roomInfo.lastVisit,
         hostile: roomInfo.hostile,
         reserved: roomInfo.reserved,
+        occupied: roomInfo.occupied,
+        base: roomInfo.base,
         availableSources: roomInfo.availableSources,
     };
 }
@@ -48,6 +56,8 @@ function deserializeRoomInfo(serialized: SerializableRoomInfo): RoomInfo {
         lastVisit: serialized.lastVisit,
         hostile: serialized.hostile,
         reserved: serialized.reserved,
+        occupied: serialized.occupied,
+        base: serialized.base,
         availableSources: serialized.availableSources,
     };
 }
@@ -90,4 +100,19 @@ export function saveRoomInfoMap(): void {
 
 export function createRoomInfoMap(): void {
     roomInfoMap = new Map<string, RoomInfo>();
+}
+
+export function logRoomInfoMap(): void {
+    const reqOwnerStr = Memory.requisitionOwner.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
+    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { return `${sum} [${req.position.roomName}, ${req.requesterId}, ${req.amount}]`}, "");
+    const creepReqs: string[] = [];
+
+    for(const creepId in Game.creeps) {
+        const creep = Game.creeps[creepId];
+        if(creep && creep.memory.activeRequisitions.length) {
+            creepReqs.push(`${creep.name} ${creep.memory.activeRequisitions.reduce((sum: string, req) => {return `${sum} [${req.amount}]`}, "")}`)
+        }
+    }
+
+    log(`creeps: ${creepReqs.join(", ")}, requisitionOwner: ${reqOwnerStr}, pendingRequisitions: ${pending}`, Loglevel.INFO);
 }

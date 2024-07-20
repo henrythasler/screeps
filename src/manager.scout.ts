@@ -2,7 +2,10 @@ import { log, Loglevel } from "./debug";
 import { Config } from "./config";
 import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Trait } from "./trait";
+import { Location } from "./location";
+import { zoo } from "./zoo";
 
+/*
 const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
     [MOVE, 50],
     [WORK, 100],
@@ -17,25 +20,20 @@ const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 const zoo: Map<string, Species> = new Map([
     ["SCOUT_ENTRY", {
         parts: [MOVE],
-        traits: [
-            Trait.SWITCH_ROOM,
-            Trait.RECON_ROOM,
-            Trait.SCOUT_ROOMS,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM, Trait.RECON_ROOM, Trait.SCOUT_ROOMS]],
+        ]),
         cost: 50,
     }],
     ["SCOUT_BASIC", {
         parts: [CLAIM, MOVE],
-        traits: [
-            Trait.SWITCH_ROOM,
-            Trait.RECON_ROOM,
-            Trait.SCOUT_ROOMS,
-            Trait.CLAIM_CONTROLLER,
-            Trait.RESERVE_CONTROLLER,
-        ],
+        traits: new Map([
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM, Trait.RECON_ROOM, Trait.SCOUT_ROOMS, Trait.CLAIM_CONTROLLER, Trait.RESERVE_CONTROLLER]],
+        ]),
         cost: 650,
     }],
 ]);
+*/
 
 export function run(room: Room, role: Role): void {
     // these creeps can be anywhere, so we just filter by their homebase
@@ -46,9 +44,11 @@ export function run(room: Room, role: Role): void {
         }
     }
 
-    const minCount = Config.scout.minCount.get(room.name) ?? 0;
+    const minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
-    managePopulation(minCount, creeps.length, room, zoo, role);
-    manageTraitDistribution(creeps, zoo, Config.scout.traitDistribution);
+    const speciesZoo = zoo.get(role);
+    if(speciesZoo) {
+        managePopulation(minCount, creeps.length, room, speciesZoo, role);
+    }
 }

@@ -1,4 +1,4 @@
-import { Alert, EnergyLocation, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
+import { Alert, EnergyLocation, RequesterIdTypes, Requisition, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import * as spawnManager from "./manager.spawn";
@@ -12,7 +12,7 @@ import * as roomManager from "./manager.room";
 import * as tower from "./tower";
 import * as link from "./structure.link";
 import { RequiredSpecies } from "./manager.spawn";
-import { SerializableRoomInfo, loadRoomInfoMap, saveRoomInfoMap } from "./room.info";
+import { SerializableRoomInfo, loadRoomInfoMap, logRoomInfoMap, saveRoomInfoMap } from "./room.info";
 import { Config } from "./config";
 import { getHostileCreepInfo, roomThreatEvaluation } from "./room.defense";
 import { log } from "./debug";
@@ -33,20 +33,24 @@ declare global {
         // knownSources: Array<Id<Source>>,  // stores the ID of all known sources
         // knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
         roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
+        pendingRequisitions: Requisition[];
+        requisitionOwner: Id<RequesterIdTypes>[],
     }
 
     interface CreepMemory {
         speciesName: string,
         role: Role,
         task: Task, // current action that the creep is doing
-        traits: Trait[], // potential actions that a creep can perform
-        occupation: Trait[],  // subset of traits that a creep is currently allowed to use 
+        // traits: Trait[], // potential actions that a creep can perform
+        // occupation: Trait[],  // subset of traits that a creep is currently allowed to use 
         percentile: number,
         lastChargeSource: EnergyLocation,
         lastEnergyDeposit: EnergyLocation,
         homeBase: string,
         alerts: Alert[],
         targetLocation: string | null,
+        activeRequisitions: Requisition[],
+        idleTicks: number,
     }
 
     interface SpawnMemory {
@@ -60,7 +64,7 @@ declare global {
         ticksWithPendingSpawns: number;
         harvesterPerSource: Map<Id<Source>, number>;
         threatLevel: number;
-        creepCensus: Map<Role, {current: number, required: number}>;
+        creepCensus: Map<Role, { current: number, required: number }>;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -87,23 +91,28 @@ export const loop = () => {
         link.run(room);
 
         room.memory.harvesterPerSource = new Map<Id<Source>, number>();
-        room.memory.creepCensus = new Map<Role, {current: number, required: number}>();
 
-        defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
-        if((Game.time % Config.spawnManagerInterval) == 0) {
-            // order defines priority
-            harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
-            workerManager.run(room, Role.WORKER);  // manage worker population in that room
-            collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
-            scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
-            showCreepCensus(room.name, room.memory.creepCensus);
-
-            if(room.memory.threatLevel > 0) {
+        if ((Game.time % Config.spawnManagerInterval) == 0) {
+            if (room.find(FIND_MY_SPAWNS).length) {
+                room.memory.creepCensus = new Map<Role, { current: number, required: number }>();
+                // order defines priority
+                defenderManager.run(room, Role.DEFENDER, hostileCreepInfo);  // manage defender population in that room   
+                harvesterManager.run(room, Role.HARVESTER);  // manage harvester population in that room
+                workerManager.run(room, Role.WORKER);  // manage worker population in that room
+                collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
+                scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
+                showCreepCensus(room.name, room.memory.creepCensus);
+            }
+            if (room.memory.threatLevel > 0) {
                 log(`[${room.name}] threatLevel: ${room.memory.threatLevel}`)
-            }        
+            }
+            roomManager.cleanUpRequisitions(room);
         }
 
+        roomManager.updateRequisitions(room);
+        // logRoomInfoMap();
         roomManager.run(room);  // execute creep action
+        // logRoomInfoMap();
         spawnManager.run(room); // spawn/heal creeps
     }
 

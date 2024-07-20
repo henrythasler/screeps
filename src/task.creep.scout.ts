@@ -1,13 +1,26 @@
 import { Task } from "./task";
+import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
-import { log, Loglevel } from "./debug";
-import { filterMap, getRandomMapEntry, getRoomNameByDirection, isOnBorder } from "./helper";
 import { Config } from "./config";
+import { Loglevel, log } from "./debug";
+import { filterMap, getRandomMapEntry, getRoomNameByDirection, isNearHostile, isOnBorder, mergeArrays, removeEntries } from "./helper";
+import { zoo } from "./zoo";
+import { categorizeCreepLocation, Location } from "./location";
 import { roomInfoMap } from "./room.info";
 
 export function execute(creep: Creep): boolean {
+    const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
+    if (species) {
+        const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
 
-    if (creep.memory.occupation.includes(Trait.SCOUT_ROOMS)) {
+        // derive available traits for the current room and general traits
+        const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
+
+
+        if (!traits.includes(Trait.SWITCH_ROOM)) {
+            return false;
+        }
+
         if (!creep.memory.targetLocation || (creep.room.name == creep.memory.targetLocation && !isOnBorder(creep))) {
             const currentRoomInfo = roomInfoMap.get(creep.room.name);
             if (currentRoomInfo) {
@@ -18,7 +31,7 @@ export function execute(creep: Creep): boolean {
                         const hostile = roomInfoMap.get(newRoom)?.hostile;
                         // revisit neutral rooms mmore often than hostile
                         const due = lastVisit ? (Game.time - lastVisit) > (hostile ? Config.scoutRoomReconCooldownHostile : Config.scoutRoomReconCooldownNeutral) : true;
-                        return !details.blocked && due && !hostile;
+                        return !details.blocked && due && Game.map.getRoomStatus(newRoom).status != "closed";
                     }
                     return false;
                 });
@@ -38,7 +51,8 @@ export function execute(creep: Creep): boolean {
 
         if (creep.memory.targetLocation) {
             creep.say(`${creep.memory.targetLocation}`);
-            const res = creep.moveTo(new RoomPosition(25, 25, creep.memory.targetLocation), { visualizePathStyle: { stroke: '#a00', opacity: 1, strokeWidth: 0.1 } });
+            const pos = new RoomPosition(25, 25, creep.memory.targetLocation);
+            const res = creep.moveTo(pos, { visualizePathStyle: Config.visualizePathStyle.get(Task.SWITCH_ROOM) });
             if (res == OK || res == ERR_TIRED) {
                 creep.memory.task = Task.SWITCH_ROOM;
                 return true;
@@ -48,6 +62,7 @@ export function execute(creep: Creep): boolean {
                 creep.memory.targetLocation = null;
             }
         }
+
     }
     return false;
 }

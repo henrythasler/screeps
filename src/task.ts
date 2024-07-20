@@ -3,7 +3,7 @@ export enum Task {
     CHARGE,
     MOVETO,
     CHARGE_STRUCTURE,
-    CHARGE_CONTROLLER,
+    UPGRADE_CONTROLLER,
     BUILD_STRUCTURE,
     STORE_ENERGY,
     REPAIR_STRUCTURE,
@@ -15,6 +15,7 @@ export enum Task {
     RENEW, // increase ticksToLive at spawn
     HARVEST, // harvest energy from source
     ATTACK_HOSTILE, // attack hostile creep
+    GATHER,
     // LOCATE_SOURCE,  // move to a knownSource in another room for charging/harvesting
 }
 
@@ -29,7 +30,7 @@ export function sayTask(creep: Creep): void {
         case Task.CHARGE: creep.say('🪫'); break;
         case Task.MOVETO: creep.say('👣'); break;
         case Task.CHARGE_STRUCTURE: creep.say('⚡'); break;
-        case Task.CHARGE_CONTROLLER: creep.say('⬆️'); break;
+        case Task.UPGRADE_CONTROLLER: creep.say('⬆️'); break;
         case Task.BUILD_STRUCTURE: creep.say('🔨'); break;
         case Task.STORE_ENERGY: creep.say('🔋'); break;
         case Task.REPAIR_STRUCTURE: creep.say('🔧'); break;
@@ -41,6 +42,7 @@ export function sayTask(creep: Creep): void {
         case Task.RENEW: creep.say('🏥'); break;
         case Task.HARVEST: creep.say('🚜'); break;
         case Task.ATTACK_HOSTILE: creep.say('⚔️'); break;
+        case Task.GATHER: creep.say('🧺'); break;
         default: creep.say('💤');
     }
 }

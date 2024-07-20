@@ -1,11 +1,11 @@
 import { Loglevel, log } from "./debug";
-import { actionAllowed } from "./helper";
 import { roomInfoMap } from "./room.info";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
 
 export function execute(creep: Creep, maxHops: number): boolean {
+/*    
     if (creep.memory.occupation.includes(Trait.SWITCH_ROOM) && creep.store.getFreeCapacity() > 0) {
 
         const locations: string[] = [];
@@ -32,5 +32,6 @@ export function execute(creep: Creep, maxHops: number): boolean {
             }
         }
     }
+*/        
     return false;
 }

@@ -12,6 +12,7 @@ const repairFilter: StructureConstant[] = [
 
 // FIXME: add hysteresis
 export function execute(creep: Creep): boolean {
+/*    
     const structuresToRepair = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return repairFilter.includes(structure.structureType) &&
@@ -32,5 +33,6 @@ export function execute(creep: Creep): boolean {
         }
         return true;
     }
+*/
     return false;
 }
