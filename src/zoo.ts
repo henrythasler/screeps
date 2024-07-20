@@ -137,7 +137,7 @@ const collector: Map<string, Species> = new Map([
             [Location.HOME, [Trait.STORE_ENERGY, Trait.STORE_LINK, Trait.STORE_CONTAINER, Trait.STORE_STORAGE]],
             [Location.REMOTE, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE]],
             [Location.RESERVED, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE]],
-            [Location.OUTPOST, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE, Trait.REFRESH_CONTROLLER, Trait.UPGRADE_CONTROLLER]],
+            [Location.OUTPOST, [Trait.HARVEST_SOURCE, Trait.GATHER_RESOURCE, Trait.BUILD_STRUCTURE, Trait.REFRESH_CONTROLLER, Trait.UPGRADE_CONTROLLER, Trait.RECHARGE_STRUCTURE]],
         ]),
         cost: 1200,
     }],

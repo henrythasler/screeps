@@ -12,6 +12,7 @@ import * as structureRepair from "./task.structure.repair";
 import * as renew from "./task.creep.renew";
 import * as harvest from "./task.creep.harvest";
 import { Config } from "./config";
+import { logRoomInfoMap } from "./room.info";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
@@ -19,7 +20,7 @@ export function run(creep: Creep) {
     // execute current tasks, order also defines priority where the first is the most important
     let match = gather.execute(creep);
     if (!match) match = charge.execute(creep);
-    if (!match) match = harvest.execute(creep);    
+    if (!match) match = harvest.execute(creep);
     if (!match) match = controllerRefresh.execute(creep);
     if (!match) match = structureCharge.execute(creep);
     if (!match) match = structureRepair.execute(creep);
@@ -36,7 +37,7 @@ export function run(creep: Creep) {
     if (idleTasks.includes(creep.memory.task)) {
         creep.memory.idleTicks++;
         if (creep.memory.idleTicks > Config.idleTickThreshold) {
-            creep.memory.lastChargeSource = EnergyLocation.OTHER;
+            // creep.memory.lastChargeSource = EnergyLocation.OTHER;
             creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
         }
     }

@@ -54,27 +54,4 @@ export function execute(creep: Creep): boolean {
         }
     }    
     return false;
-
-/*    
-    const controller = creep.room.controller;
-    const ratio = (creep.memory.task == Task.REFRESH_CONTROLLER) ? 1 : Config.minControllerRefreshTicksRatio;
-    // log(`name: ${creep.name}, ratio: ${ratio}, task: ${creep.memory.task}`, Loglevel.DEBUG);
-    if (controller && creep.memory.occupation.includes(Trait.REFRESH_CONTROLLER) &&
-        controller.ticksToDowngrade < (downgradeTicksPerLevel[controller.level] * ratio) &&
-        creep.store[RESOURCE_ENERGY] > 0) {
-        creep.memory.task = Task.REFRESH_CONTROLLER;
-
-        const res = creep.upgradeController(controller);
-        if (res == OK) {
-            creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
-        }
-        else if (res == ERR_NOT_IN_RANGE) {
-            creep.moveTo(controller, { visualizePathStyle: { stroke: '#00ff00' } });
-        }
-        else {
-            console.log(`upgradeController(${controller.room.name}) failed: ${res}`);
-        }
-        return true;
-    }
-*/        
 }

@@ -19,33 +19,27 @@ export function execute(creep: Creep): boolean {
             return false;
         }
 
-        let availableEnergy = creep.store[RESOURCE_ENERGY];
-        for(let i=0; i<Memory.pendingRequisitions.length; i++) {
-            if(availableEnergy <= 0 || Memory.pendingRequisitions.length == 0) {
+        let availableEnergy = creep.store[RESOURCE_ENERGY] - creep.memory.activeRequisitions.reduce( (total, req) => {return total + ((req.resource == RESOURCE_ENERGY) ? req.amount : 0)}, 0);
+        log(`[${creep.name}] availableEnergy: ${availableEnergy}`, Loglevel.DEBUG);
+        for (let i = 0; i < Memory.pendingRequisitions.length; i++) {
+            if (availableEnergy <= 0 || Memory.pendingRequisitions.length == 0) {
                 break;
             }
-        // while (availableEnergy > 0 && Memory.pendingRequisitions.length) {
-            const requisition = Memory.pendingRequisitions[i];
-            // FIXME: check room name with Trait definition
-            if (requisition && requisition.position.roomName == creep.memory.homeBase) {
+            const requisition = Memory.pendingRequisitions.shift();
+            if (requisition && requisition.resource == RESOURCE_ENERGY && requisition.position.roomName == creep.memory.homeBase) {
                 const requisitionCopy: Requisition = deepCopy(requisition);
                 const requisitionAmount = requisition.amount;
-                requisitionCopy.amount = Math.min(requisitionAmount, availableEnergy);
-                // enough energy to fulfil the requisition
-                if (availableEnergy >= requisitionAmount) {
-                    availableEnergy -= requisitionAmount;
-                    log(`removing`)
-                    Memory.pendingRequisitions.shift();
-                }
-                // requisition can only be fulfilled partially
-                else {
+                if (availableEnergy < requisitionAmount) {
+                    log(``)
+                    requisitionCopy.amount = availableEnergy;
                     requisition.amount -= availableEnergy;
-                    availableEnergy -= requisitionAmount;
-                    // log(`reducing [${creep.room.name}] pendingRequisitions: ${JSON.stringify(Memory.pendingRequisitions)}`)
+                    Memory.pendingRequisitions.unshift(requisition);
                 }
+                availableEnergy -= requisitionAmount;
                 creep.memory.activeRequisitions.push(requisitionCopy);
             }
         }
+
         const structuresToCharge: (StructureExtension | StructureSpawn | StructureTower)[] = [];
         creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((requisition) => {
             const gameObject = Game.getObjectById(requisition.requesterId);
@@ -75,7 +69,7 @@ export function execute(creep: Creep): boolean {
             if (res == OK) {
                 creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
                 if (currentStructure?.store.getFreeCapacity(RESOURCE_ENERGY) - energyAmount <= 0) {
-                    Memory.assignedRequisitions = Memory.assignedRequisitions.filter((req) => req != currentStructure.id);
+                    Memory.requisitionOwner = Memory.requisitionOwner.filter((req) => req != currentStructure.id);
                 }
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
             }
@@ -84,7 +78,7 @@ export function execute(creep: Creep): boolean {
             }
             else if (res == ERR_FULL) {
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
-                Memory.assignedRequisitions = Memory.assignedRequisitions.filter((req) => req != currentStructure.id);
+                Memory.requisitionOwner = Memory.requisitionOwner.filter((req) => req != currentStructure.id);
             }
             else {
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);

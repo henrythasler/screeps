@@ -23,10 +23,10 @@ export function roomThreatEvaluation(room: Room, hostileCreepInfo: HostileCreepI
         room.memory.threatLevel += hostileCreepInfo.hits;
         const controller = room.controller;
         if (hostileCreepInfo.hits > Config.safeModeThreshold && controller && controller.my) {
-            console.log(`[ALERT] ${hostileCreepInfo.count} hostiles (${hostileCreepInfo.hits} hits) in ${room} exceeds limit (${Config.safeModeThreshold}). Triggering Safe Mode!`);
+            log(`[ALERT] ${hostileCreepInfo.count} hostiles (${hostileCreepInfo.hits} hits) in ${room} exceeds limit (${Config.safeModeThreshold}). Triggering Safe Mode!`);
             const res = controller.activateSafeMode();
             if (res != OK) {
-                console.log(`[ERROR] in ${room.name}.activateSafeMode(): ${res}`)
+                log(`[ERROR] in ${room.name}.activateSafeMode(): ${res}`)
             }
         }
     }

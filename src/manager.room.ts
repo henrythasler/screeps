@@ -9,6 +9,7 @@ import * as harvester from "./role.harvester";
 import * as defender from "./role.defender";
 import { log, Loglevel } from "./debug";
 import { priorityQueue } from "./priorityqueue";
+import { logRoomInfoMap } from "./room.info";
 
 const runnables: Map<Role, Function> = new Map([
     [Role.WORKER, worker.run],
@@ -45,7 +46,7 @@ export function updateRequisitions(room: Room): void {
             return (structure.structureType == STRUCTURE_EXTENSION ||
                 structure.structureType == STRUCTURE_SPAWN ||
                 structure.structureType == STRUCTURE_TOWER) &&
-                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && !Memory.assignedRequisitions.includes(structure.id) && !pendingRequester.includes(structure.id);
+                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && !Memory.requisitionOwner.includes(structure.id) && !pendingRequester.includes(structure.id);
         }
     });
 
@@ -58,7 +59,7 @@ export function updateRequisitions(room: Room): void {
                 priority: 200,
                 requesterId: structure.id,
             });
-            Memory.assignedRequisitions.push(structure.id);
+            Memory.requisitionOwner.push(structure.id);
         }
         else if (structure.structureType == STRUCTURE_SPAWN) {
             Memory.pendingRequisitions.push({
@@ -68,7 +69,7 @@ export function updateRequisitions(room: Room): void {
                 priority: 200,
                 requesterId: structure.id,
             });
-            Memory.assignedRequisitions.push(structure.id);
+            Memory.requisitionOwner.push(structure.id);
         }
         else if (structure.structureType == STRUCTURE_TOWER) {
             Memory.pendingRequisitions.push({
@@ -78,7 +79,7 @@ export function updateRequisitions(room: Room): void {
                 priority: 150,
                 requesterId: structure.id,
             });
-            Memory.assignedRequisitions.push(structure.id);
+            Memory.requisitionOwner.push(structure.id);
         }
     });
 }
@@ -90,8 +91,8 @@ export function cleanUpRequisitions(room: Room): void {
         }
     });
 
-    if (creeps.length && Memory.assignedRequisitions && Memory.assignedRequisitions.length) {
-        Memory.assignedRequisitions = Memory.assignedRequisitions.filter((requester) => {
+    if (creeps.length && Memory.requisitionOwner.length) {
+        Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
             return creeps.some((creep) => {
                 if (creep.memory.activeRequisitions.length) {
                     return creep.memory.activeRequisitions.some((requisition) => {
@@ -106,6 +107,6 @@ export function cleanUpRequisitions(room: Room): void {
         });
     }
     else {
-        Memory.assignedRequisitions = [];
+        Memory.requisitionOwner = [];
     }
 }

@@ -32,6 +32,7 @@ export function run(creep: Creep) {
     if (!match) match = controllerUpgrade.execute(creep);
     if (!match) match = returnHome.execute(creep);
     if (!match) match = prospect.execute(creep, Config.creeps.get(Role.COLLECTOR)?.maxHops);
+    if (!match) match = returnHome.execute(creep, true);
     if (!match) creep.memory.task = Task.IDLE;
 
     // tell about the new task
