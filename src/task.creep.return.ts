@@ -4,7 +4,7 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
-import { mergeArrays, removeEntries } from "./helper";
+import { isInHomeBase, isOnBorder, mergeArrays, removeEntries } from "./helper";
 import { Config } from "./config";
 
 
@@ -16,7 +16,7 @@ export function execute(creep: Creep, ignoreCapacity: boolean = false): boolean 
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.SWITCH_ROOM) || creep.room.name == creep.memory.homeBase) {
+        if (!traits.includes(Trait.SWITCH_ROOM) || (isInHomeBase(creep) && !isOnBorder(creep))) {
             return false;
         }
 

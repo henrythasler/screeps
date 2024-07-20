@@ -7,6 +7,7 @@ import * as scoutManager from "./manager.scout";
 import * as collectorManager from "./manager.collector";
 import * as harvesterManager from "./manager.harvester";
 import * as defenderManager from "./manager.defender";
+import * as hunterManager from "./manager.hunter";
 
 import * as roomManager from "./manager.room";
 import * as tower from "./tower";
@@ -101,6 +102,7 @@ export const loop = () => {
                 workerManager.run(room, Role.WORKER);  // manage worker population in that room
                 collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
                 scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
+                hunterManager.run(room, Role.HUNTER);  // manage scout population in that room   
                 showCreepCensus(room.name, room.memory.creepCensus);
             }
             if (room.memory.threatLevel > 0) {

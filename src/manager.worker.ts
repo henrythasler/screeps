@@ -1,6 +1,6 @@
 import { Loglevel, log } from "./debug";
 import { Config } from "./config";
-import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, applyTraitDistribution, managePopulation, manageTraitDistribution } from "./manager.global";
+import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies, managePopulation, manageTraitDistribution } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import { Location } from "./location";

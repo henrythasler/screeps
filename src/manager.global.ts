@@ -11,6 +11,7 @@ export enum Role {
     COLLECTOR,
     HARVESTER,
     DEFENDER,
+    HUNTER,
 }
 
 export enum EnergyLocation {
@@ -41,6 +42,7 @@ export function roleToString(role: Role): string {
     if (role == Role.COLLECTOR) return "Collector";
     if (role == Role.HARVESTER) return "Harvester";
     if (role == Role.DEFENDER) return "Defender";
+    if (role == Role.HUNTER) return "Hunter";
     return "unknown";
 }
 
@@ -66,7 +68,6 @@ export const bodyPartCosts: Map<BodyPartConstant, number> = new Map([
 
 export interface Species {
     parts: BodyPartConstant[],
-    // traits: Trait[],
     traits: Map<Location, Trait[]>,
     cost: number,
     name?: string,
@@ -87,24 +88,6 @@ export function findMostExpensiveSpecies(capacity: number, available: number, ti
         log(`selected species: ${speciesName} (${species.cost}), capacity: ${capacity}, budget: ${actualBudget}`);
     }
     return species;
-}
-
-export function applyTraitDistribution(creep: Creep, population: number, creepsPerTrait: Map<Trait, number>, expectedDistribution: Map<Trait, number>): Trait[] {
-    const occupation: Trait[] = [];
-    // expectedDistribution.forEach((probability, trait) => {
-    //     if (creepsPerTrait.has(trait)) {
-    //         const numCreeps = creepsPerTrait.get(trait)!;
-    //         if (creep.memory.traits.includes(trait) && (numCreeps < Math.ceil(probability * population))) {
-    //             occupation.push(trait);
-    //             creepsPerTrait.set(trait, numCreeps + 1);
-    //         }
-    //     }
-    //     else if (creep.memory.traits.includes(trait) && probability > 0) {
-    //         occupation.push(trait);
-    //         creepsPerTrait.set(trait, 1);
-    //     }
-    // });
-    return occupation;
 }
 
 export function managePopulation(required: number, current: number, room: Room, zoo: Map<string, Species>, role: Role): number {

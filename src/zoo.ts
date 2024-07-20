@@ -156,10 +156,24 @@ const defender: Map<string, Species> = new Map([
     }],
 ]);
 
+const hunter: Map<string, Species> = new Map([
+    ["HUNTER_ENTRY", {
+        parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK],
+        traits: new Map([
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM]],
+            [Location.OCCUPIED, [
+                Trait.ATTACK_HOSTILE,
+            ]]
+        ]),
+        cost: 1200,
+    }],
+]);
+
 export const zoo: Map<Role, Map<string, Species>> = new Map([
     [Role.HARVESTER, harvester],
     [Role.WORKER, worker],
     [Role.SCOUT, scout],
     [Role.COLLECTOR, collector],
     [Role.DEFENDER, defender],
+    [Role.HUNTER, hunter],
 ]);
