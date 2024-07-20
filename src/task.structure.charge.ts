@@ -34,7 +34,7 @@ export function execute(creep: Creep): boolean {
                 // enough energy to fulfil the requisition
                 if (availableEnergy >= requisitionAmount) {
                     availableEnergy -= requisitionAmount;
-                    // log(`removing`)
+                    log(`removing`)
                     Memory.pendingRequisitions.shift();
                 }
                 // requisition can only be fulfilled partially
@@ -75,7 +75,7 @@ export function execute(creep: Creep): boolean {
             if (res == OK) {
                 creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
                 if (currentStructure?.store.getFreeCapacity(RESOURCE_ENERGY) - energyAmount <= 0) {
-                    Memory.requisitionOwner = Memory.requisitionOwner.filter((req) => req != currentStructure.id);
+                    Memory.assignedRequisitions = Memory.assignedRequisitions.filter((req) => req != currentStructure.id);
                 }
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
             }
@@ -84,7 +84,7 @@ export function execute(creep: Creep): boolean {
             }
             else if (res == ERR_FULL) {
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
-                Memory.requisitionOwner = Memory.requisitionOwner.filter((req) => req != currentStructure.id);
+                Memory.assignedRequisitions = Memory.assignedRequisitions.filter((req) => req != currentStructure.id);
             }
             else {
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);

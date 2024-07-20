@@ -1,4 +1,4 @@
-import { Alert, EnergyLocation, Requisition, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
+import { Alert, EnergyLocation, RequesterIdTypes, Requisition, Role, creepMaintenance, initializeGlobalObjects, initializeRoomObjects, showCreepCensus } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 import * as spawnManager from "./manager.spawn";
@@ -34,7 +34,7 @@ declare global {
         // knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
         roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
         pendingRequisitions: Requisition[];
-        requisitionOwner: string[],
+        assignedRequisitions: Id<RequesterIdTypes>[],
     }
 
     interface CreepMemory {

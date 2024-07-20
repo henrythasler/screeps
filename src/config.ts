@@ -141,9 +141,9 @@ const collectorConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 0],
         ["E37S37", 0],
-        ["E37S38", 1],
+        ["E37S38", 4],
         ["W14N19", 8],  // Newbie Land
-        ["W14N18", 4],  // Newbie Land
+        ["W14N18", 6],  // Newbie Land
     ]),
     maxHops: 1,
 }
@@ -165,8 +165,9 @@ export class Config {
         ["sim", 6],
         ["E37S37", 7],
         ["E37S38", 6],
-        ["W14N19", 7],  // Newbie Land
-        ["W14N18", 4],  // Newbie Land
+        ["E36S38", 3],
+        ["W14N19", 8],  // Newbie Land
+        ["W14N18", 6],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 

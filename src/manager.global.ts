@@ -169,8 +169,8 @@ export function initializeGlobalObjects(): void {
     if (!Memory.pendingRequisitions) {
         Memory.pendingRequisitions = [];
     }
-    if (!Memory.requisitionOwner) {
-        Memory.requisitionOwner = [];
+    if (!Memory.assignedRequisitions) {
+        Memory.assignedRequisitions = [];
     }
 }
 
