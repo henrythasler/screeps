@@ -98,11 +98,11 @@ const worker: Map<string, Species> = new Map([
         cost: 1200,
     }],
     ["WORKER_INTERMEDIATE_HEAVY", {
-        parts: [MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],
+        parts: [MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
         traits: new Map([
             [Location.HOME, workerDefaultTraits],
         ]),
-        cost: 1750,
+        cost: 2000,
     }],
 ]);
 
