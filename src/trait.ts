@@ -36,5 +36,7 @@ export enum Trait {
     HARVEST_SOURCE,
     ATTACK_HOSTILE,
     GATHER_RESOURCE,
+    
+    STORE_OTHER,
     // LOCATE_SOURCE,
 }

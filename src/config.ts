@@ -2,107 +2,6 @@ import { Role } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
 
-/*
-class Worker {
-    static minCount = new Map<string, number>([
-        ["sim", 8],
-        ["E37S37", 6],
-        ["E37S38", 6],
-        ["W14N19", 8],  // Newbie Land
-    ]);    
-    static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.ACTION_HOME, 1],
-        [Trait.CHARGE_SOURCE, 1],
-        [Trait.CHARGE_CONTAINER, 1],
-        [Trait.CHARGE_STORAGE, 1],
-        [Trait.CHARGE_LINK, 1],
-        [Trait.RECHARGE_STRUCTURE, 0.75],
-        [Trait.RECHARGE_CONTROLLER, 1],
-        [Trait.BUILD_STRUCTURE, 1],
-        [Trait.STORE_ENERGY, 1],
-        [Trait.STORE_STORAGE, 1],
-        [Trait.REPAIR_STRUCTURE, 0.5],
-        [Trait.REFRESH_CONTROLLER, 0.2],
-        [Trait.RENEW_CREEP, 0],
-    ]);
-}
-
-class Scout {
-    static minCount = new Map<string, number>([
-        ["sim", 0],
-        ["E37S37", 0],
-        ["E37S38", 0],
-        ["W14N19", 0],  // Newbie Land
-    ]);
-    static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.CHARGE_SOURCE, 0],
-        [Trait.ACTION_AWAY, 0],
-        [Trait.CHARGE_STORAGE, 0],
-        [Trait.CHARGE_CONTAINER, 0],
-        [Trait.CLAIM_CONTROLLER, 0],
-        [Trait.RESERVE_CONTROLLER, 1],
-        [Trait.SWITCH_ROOM, 1],
-        [Trait.RECON_ROOM, 1],
-        [Trait.SCOUT_ROOMS, 1],
-        [Trait.RENEW_CREEP, 0],
-    ]);
-}
-
-class Collector {
-    static minCount = new Map<string, number>([
-        ["sim", 4],
-        ["E37S37", 0],
-        ["E37S38", 4],
-        ["W14N19", 4],  // Newbie Land
-    ]);
-    static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.ACTION_AWAY, 1],
-        [Trait.ACTION_OUTPOST, 0],
-        [Trait.CHARGE_SOURCE, 1],
-        [Trait.STORE_ENERGY, 1],
-        [Trait.STORE_CONTAINER, 1],
-        [Trait.STORE_STORAGE, 0],
-        [Trait.STORE_LINK, 1],
-        [Trait.BUILD_STRUCTURE, 1],
-        [Trait.RECHARGE_STRUCTURE, 0],
-        [Trait.REFRESH_CONTROLLER, 0],
-        [Trait.SWITCH_ROOM, 1],
-        [Trait.RENEW_CREEP, 0],
-    ]);
-}
-
-class Harvester {
-    static minCount = new Map<string, number>([
-        ["sim", 2],
-        ["E37S37", 2],
-        ["E37S38", 2],
-        ["W14N19", 2],  // Newbie Land
-    ]);
-    static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.ACTION_HOME, 1],
-        [Trait.HARVEST_SOURCE, 1],
-        [Trait.STORE_ENERGY, 1],
-        [Trait.STORE_CONTAINER, 1],
-        [Trait.STORE_STORAGE, 1],
-        [Trait.STORE_LINK, 1],
-        [Trait.RENEW_CREEP, 0],
-    ]);
-}
-
-class Defender {
-    static minCount = new Map<string, number>([
-        ["sim", 0],
-        ["E37S37", 0],
-        ["E37S38", 0],
-        ["W14N19", 1],  // Newbie Land
-    ]);
-    static traitDistribution: Map<Trait, number> = new Map([
-        [Trait.ACTION_HOME, 1],
-        [Trait.ATTACK_HOSTILE, 1],
-    ]);
-}
-*/
-
 interface CreepConfig {
     minCount: Map<string, number>;
     [key: string]: any;
@@ -122,7 +21,7 @@ const harvesterConfig: CreepConfig = {
 const workerConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 2],
-        ["E37S37", 6],
+        ["E37S37", 4],
         ["E37S38", 6],
         ["E36S38", 6],
         ["W14N19", 8],  // Newbie Land
@@ -178,9 +77,9 @@ export class Config {
     // Controller
     static minControllerLevel = new Map<string, number>([
         ["sim", 4],
-        ["E37S37", 7],
-        ["E37S38", 6],
-        ["E36S38", 3],
+        ["E37S37", 8],
+        ["E37S38", 7],
+        ["E36S38", 4],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 6],  // Newbie Land
     ]);
@@ -222,6 +121,7 @@ export class Config {
     static visualizePathStyle = new Map<Task, PolyStyle>([
         [Task.HARVEST, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.STORE_ENERGY, { stroke: '#808080', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.STORE_OTHER, { stroke: '#0000ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.CHARGE, { stroke: '#808000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.UPGRADE_CONTROLLER, { stroke: '#008000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.CHARGE_STRUCTURE, { stroke: '#00ff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],

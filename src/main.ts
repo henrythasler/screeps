@@ -103,7 +103,7 @@ export const loop = () => {
                 collectorManager.run(room, Role.COLLECTOR);  // manage worker population in that room
                 scoutManager.run(room, Role.SCOUT);  // manage scout population in that room   
                 hunterManager.run(room, Role.HUNTER);  // manage scout population in that room   
-                showCreepCensus(room.name, room.memory.creepCensus);
+                showCreepCensus(room, room.memory.creepCensus);
             }
             if (room.memory.threatLevel > 0) {
                 log(`[${room.name}] threatLevel: ${room.memory.threatLevel}`)

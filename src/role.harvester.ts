@@ -1,7 +1,7 @@
 import { Loglevel, log } from "./debug";
 import { Task, sayTask } from "./task";
 import * as harvest from "./task.creep.harvest";
-import * as structureStore from "./task.structure.store";
+import * as structureStore from "./task.structure.store.energy";
 import * as renew from "./task.creep.renew";
 
 export function run(creep: Creep) {

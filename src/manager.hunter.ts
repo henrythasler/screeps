@@ -15,6 +15,7 @@ export function run(room: Room, role: Role): void {
     }
 
     const minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
+    
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 
     const speciesZoo = zoo.get(role);

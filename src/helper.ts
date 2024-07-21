@@ -38,6 +38,11 @@ export function filterMap<K, V>(
     );
 }
 
+/**
+ * Extract coordinates numbers from a given room name
+ * @param roomName 
+ * @returns a pair of numbers representing the room coordinate offsets
+ */
 function extractCoordinates(roomName: string): [number, number] | null {
     const match = roomName.match(/[EW](\d+)[NS](\d+)/);
     if (match && match.length >= 3) {
@@ -46,6 +51,12 @@ function extractCoordinates(roomName: string): [number, number] | null {
     return null;
 }
 
+/**
+ * calculate the resulting room name from a given room and a direction
+ * @param roomName initial room to calculate the new room from
+ * @param direction direction relative to the initial room
+ * @returns the resulting room name
+ */
 export function getRoomNameByDirection(roomName: string, direction: Direction): string | undefined {
     const coordinates = extractCoordinates(roomName);
     if (coordinates) {
@@ -70,6 +81,12 @@ export function getRoomNameByDirection(roomName: string, direction: Direction): 
     return undefined;
 }
 
+/**
+ * returns the direction one must move from the first room to reach the second room
+ * @param firstRoom 
+ * @param secondRoom 
+ * @returns 
+ */
 export function getDirectionFromRooms(firstRoom: string, secondRoom: string): Direction | null {
     const firstCoord = extractCoordinates(firstRoom);
     const secondCoord = extractCoordinates(secondRoom);
@@ -85,14 +102,32 @@ export function getDirectionFromRooms(firstRoom: string, secondRoom: string): Di
     return null;
 }
 
+/**
+ * determines if a creep is located directly on the outer border of a room
+ * @param creep 
+ * @returns 
+ */
 export function isOnBorder(creep: Creep): boolean {
     return creep.pos.x == 0 || creep.pos.x == 49 || creep.pos.y == 0 || creep.pos.y == 49;
 }
 
+/**
+ * merges two array and returns the result
+ * @param arr1 
+ * @param arr2 
+ * @returns 
+ */
 export function mergeArrays<T>(arr1: T[] | undefined, arr2: T[] | undefined): T[] {
     return [...(arr1 || []), ...(arr2 || [])];
 }
 
+/**
+ * removes a set of items from a given array and returns the resulting array
+ * Works only for array containing primitive types
+ * @param sourceArray array that may include surplus entries
+ * @param entriesToRemove entries that should be removed
+ * @returns 
+ */
 export function removeEntries<T>(sourceArray: T[] | undefined, entriesToRemove: T[] | undefined): T[] {
     // If sourceArray is undefined, return an empty array
     if (!sourceArray) return [];
@@ -104,10 +139,21 @@ export function removeEntries<T>(sourceArray: T[] | undefined, entriesToRemove: 
     return sourceArray.filter(item => !entriesToRemove.includes(item));
 }
 
+/**
+ * creates a copy of any object
+ * @param obj object to create the copy from
+ * @returns a copy of the object
+ */
 export function deepCopy<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }
 
+/**
+ * Calculates the sum of a given resource-type over all storage-structures in a given room
+ * @param room 
+ * @param resource 
+ * @returns overall quantity
+ */
 export function getTotalStorageVolume(room: Room, resource: ResourceConstant): [number, number] {
     const storage = room.find(FIND_STRUCTURES, {
         filter: (structure) => {
