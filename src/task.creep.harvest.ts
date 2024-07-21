@@ -26,7 +26,7 @@ export function execute(creep: Creep): boolean {
             }
         }) as Source[];
 
-        if (sources.length && (creep.memory.task == Task.HARVEST || creep.store[RESOURCE_ENERGY] == 0 || (idleTasks.includes(creep.memory.task) && creep.store.getFreeCapacity() > 0))) {
+        if (sources.length && (creep.memory.task == Task.HARVEST || creep.store[RESOURCE_ENERGY] == 0 || ([Task.IDLE, Task.MOVETO, Task.SWITCH_ROOM].includes(creep.memory.task) && creep.store.getFreeCapacity() > 0))) {
             let sourceId = 0;
             // distribute evenly over available sources beginning with the closest
             sources.sort((a: Source, b: Source): number => {
