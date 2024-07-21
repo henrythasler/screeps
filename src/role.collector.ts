@@ -5,7 +5,7 @@ import * as switchRoom from "./task.creep.switchRoom";
 import * as structureBuild from "./task.structure.build";
 import * as returnHome from "./task.creep.return";
 import * as updateRoom from "./task.room.update";
-import * as structureStore from "./task.structure.store";
+import * as structureStore from "./task.structure.store.energy";
 import * as renew from "./task.creep.renew";
 import * as controllerRefresh from "./task.controller.refresh";
 import * as structureCharge from "./task.structure.charge";

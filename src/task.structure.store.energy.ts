@@ -34,8 +34,9 @@ export function execute(creep: Creep, maxDistance?: number, ignoreLastDeposit: b
                     return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
                 });
 
-                if (creep.transfer(links[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(links[0], { visualizePathStyle: Config.visualizePathStyle.get(Task.STORE_ENERGY) });
+                const link = links[0]!;
+                if (creep.transfer(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(link, { visualizePathStyle: Config.visualizePathStyle.get(Task.STORE_ENERGY) });
                 }
                 else {
                     creep.memory.lastEnergyDeposit = EnergyLocation.LINK;

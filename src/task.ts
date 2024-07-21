@@ -16,6 +16,7 @@ export enum Task {
     HARVEST, // harvest energy from source
     ATTACK_HOSTILE, // attack hostile creep
     GATHER,
+    STORE_OTHER,
     // LOCATE_SOURCE,  // move to a knownSource in another room for charging/harvesting
 }
 
@@ -33,6 +34,7 @@ export function sayTask(creep: Creep): void {
         case Task.UPGRADE_CONTROLLER: creep.say('⬆️'); break;
         case Task.BUILD_STRUCTURE: creep.say('🔨'); break;
         case Task.STORE_ENERGY: creep.say('🔋'); break;
+        case Task.STORE_OTHER: creep.say('📦'); break;
         case Task.REPAIR_STRUCTURE: creep.say('🔧'); break;
         case Task.REFRESH_CONTROLLER: creep.say('🚿'); break;
         case Task.CLAIM_CONTROLLER: creep.say('🚩'); break;

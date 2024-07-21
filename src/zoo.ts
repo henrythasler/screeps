@@ -2,6 +2,11 @@ import { Location } from "./location";
 import { Role, Species } from "./manager.global";
 import { Trait } from "./trait";
 
+/**
+ * Naming convention
+ * ENTRY: Controller Level 1, 
+ */
+
 const harvesterDefaultTraits = [
     Trait.HARVEST_SOURCE,
     Trait.STORE_ENERGY,
@@ -40,6 +45,7 @@ const workerDefaultTraits = [
     Trait.UPGRADE_CONTROLLER,
     Trait.BUILD_STRUCTURE,
     Trait.REFRESH_CONTROLLER,
+    Trait.STORE_OTHER,
 ]
 const worker: Map<string, Species> = new Map([
     ["WORKER_ENTRY", {
@@ -90,6 +96,13 @@ const worker: Map<string, Species> = new Map([
             [Location.HOME, workerDefaultTraits],
         ]),
         cost: 1200,
+    }],
+    ["WORKER_INTERMEDIATE_HEAVY", {
+        parts: [MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],
+        traits: new Map([
+            [Location.HOME, workerDefaultTraits],
+        ]),
+        cost: 1750,
     }],
 ]);
 

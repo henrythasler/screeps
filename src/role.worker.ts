@@ -7,7 +7,8 @@ import * as structureCharge from "./task.structure.charge";
 import * as structureBuild from "./task.structure.build";
 import * as controllerUpgrade from "./task.controller.upgrade";
 import * as controllerRefresh from "./task.controller.refresh";
-import * as structureStore from "./task.structure.store";
+import * as structureStore from "./task.structure.store.energy";
+import * as deposit from "./task.structure.store.other";
 import * as structureRepair from "./task.structure.repair";
 import * as renew from "./task.creep.renew";
 import * as harvest from "./task.creep.harvest";
@@ -19,6 +20,7 @@ export function run(creep: Creep) {
 
     // execute current tasks, order also defines priority where the first is the most important
     let match = gather.execute(creep);
+    if (!match) match = deposit.execute(creep);
     if (!match) match = charge.execute(creep);
     if (!match) match = harvest.execute(creep);
     if (!match) match = controllerRefresh.execute(creep);

@@ -7,14 +7,17 @@ import { isNearHostile, mergeArrays, removeEntries } from "./helper";
 import { zoo } from "./zoo";
 import { categorizeCreepLocation, Location } from "./location";
 
-function gatherEnergy(creep: Creep, sources: (Tombstone)[]): boolean {
+function gatherEnergy(creep: Creep, sources: Tombstone[]): boolean {
     sources.sort((a, b): number => {
         return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
     });
     // get stuff or move towards source
     const source = sources[0];
     if (source) {
-        const res = creep.withdraw(source, RESOURCE_ENERGY);
+        // const isEnergy = source.store[RESOURCE_ENERGY] > 0;    
+        // source.pos.getRangeTo(creep.pos) < (source.store[RESOURCE_ENERGY] * Config.tombstoneGatherFactor)
+
+        const res = creep.withdraw(source, Object.keys(source.store)[0] as ResourceConstant);
         if (res == ERR_NOT_IN_RANGE) {
             creep.moveTo(source, { visualizePathStyle: Config.visualizePathStyle.get(Task.GATHER) });
         }
@@ -61,7 +64,7 @@ export function execute(creep: Creep): boolean {
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.GATHER_RESOURCE) || creep.store[RESOURCE_ENERGY] > 0) {
+        if (!traits.includes(Trait.GATHER_RESOURCE) || creep.store.getFreeCapacity() == 0) {
             return false;
         }
 
@@ -70,7 +73,8 @@ export function execute(creep: Creep): boolean {
         // Tombstones with energy
         const tombstones: Tombstone[] = creep.room.find(FIND_TOMBSTONES, {
             filter: (structure) => {
-                return !isNearHostile(structure, hostiles) && structure.store[RESOURCE_ENERGY] > 0 && structure.pos.getRangeTo(creep.pos) < (structure.store[RESOURCE_ENERGY] * Config.tombstoneGatherFactor);
+                const storedItems = Object.keys(structure.store).length;
+                return !isNearHostile(structure, hostiles) && storedItems > 0;
             }
         });
         if (tombstones.length) {
@@ -80,10 +84,10 @@ export function execute(creep: Creep): boolean {
             }
         }
 
-        // dropped energy resources
+        // dropped resources
         const resource: Resource[] = creep.room.find(FIND_DROPPED_RESOURCES, {
             filter: (resource) => {
-                return !isNearHostile(resource, hostiles) && resource.amount > 10 && resource.pos.getRangeTo(creep.pos) < Config.resourcePickupMaxDistance;
+                return !isNearHostile(resource, hostiles) && resource.amount > 10 && resource.pos.getRangeTo(creep.pos) < (resource.resourceType == RESOURCE_ENERGY ? Config.resourcePickupMaxDistance : 50);
             }
         });
         if (resource.length) {
