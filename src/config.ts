@@ -79,7 +79,7 @@ export class Config {
         ["sim", 4],
         ["E37S37", 8],
         ["E37S38", 6],
-        ["E36S38", 3],
+        ["E36S38", 4],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 6],  // Newbie Land
     ]);
