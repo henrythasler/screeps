@@ -4,6 +4,7 @@ import { Role, Species, managePopulation, manageTraitDistribution } from "./mana
 import { Trait } from "./trait";
 import { Location } from "./location";
 import { zoo } from "./zoo";
+import { getAdjacentHostileRooms } from "./helper";
 
 export function run(room: Room, role: Role): void {
     // these creeps can be anywhere, so we just filter by their homebase
@@ -14,7 +15,9 @@ export function run(room: Room, role: Role): void {
         }
     }
 
-    const minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
+    // only spawn if there is a threat nearby
+    // log(`[${room.name}] ${getAdjacentHostileRooms(room).join(", ")}`);
+    const minCount = getAdjacentHostileRooms(room).length ? (Config.creeps.get(role)?.minCount.get(room.name) ?? 0) : 0;
     
     room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
 

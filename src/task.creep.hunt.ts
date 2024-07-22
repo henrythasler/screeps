@@ -4,10 +4,18 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
-import { mergeArrays, removeEntries } from "./helper";
+import { getCreepsByRole, mergeArrays, removeEntries } from "./helper";
 import { Config } from "./config";
+import { Role } from "./manager.global";
 
-export function execute(creep: Creep, maxHops: number = 1): boolean {
+/**
+ * 
+ * @param creep 
+ * @param maxHops
+ * @param squadSize number of similar creeps that are required before the task is executed
+ * @returns 
+ */
+export function execute(creep: Creep, maxHops: number = 1, squadSize: number = 2): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
     if (species) {
         const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
@@ -15,7 +23,9 @@ export function execute(creep: Creep, maxHops: number = 1): boolean {
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.SWITCH_ROOM)) {
+        const availableHunters = getCreepsByRole(creep.room, creep.memory.role).length;
+
+        if (!traits.includes(Trait.SWITCH_ROOM) || availableHunters < squadSize) {
             return false;
         }
 

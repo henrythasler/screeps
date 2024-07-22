@@ -66,10 +66,12 @@ const hunterConfig: CreepConfig = {
         ["E37S37", 0],
         ["E37S38", 0],
         ["E36S38", 0],
-        ["W14N19", 0],  // Newbie Land
-        ["W14N18", 4],  // Newbie Land
+        ["W14N19", 2],  // Newbie Land
+        ["W14N18", 2],  // Newbie Land
+        ["W13N19", 0],  // Newbie Land
     ]),
     maxHops: 1,
+    squadSize: 2,
 }
 
 export class Config {
@@ -137,7 +139,7 @@ export class Config {
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
 
     static scoutRoomReconCooldownNeutral = 120;
-    static scoutRoomReconCooldownHostile = 600;
+    static scoutRoomReconCooldownHostile = 300;
     static roomReconVisuals = true;
 
     static creeps: Map<Role, CreepConfig> = new Map<Role, CreepConfig>([

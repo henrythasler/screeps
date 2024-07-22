@@ -112,9 +112,9 @@ export const loop = () => {
         }
 
         roomManager.updateRequisitions(room);
-        // logRoomInfoMap();
+        logRoomInfoMap();
         roomManager.run(room);  // execute creep action
-        // logRoomInfoMap();
+        logRoomInfoMap();
         spawnManager.run(room); // spawn/heal creeps
     }
 

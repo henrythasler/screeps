@@ -1,7 +1,8 @@
 import { Trait } from "./trait";
 import { Config } from "./config";
-import { Direction } from "./room.info";
+import { Direction, roomInfoMap, serializeRoomInfo } from "./room.info";
 import { log } from "./debug";
+import { Role } from "./manager.global";
 
 export function isNearHostile(entity: ConstructionSite | AnyStructure | Creep | Source | Ruin | Resource | Tombstone, hostiles: Creep[]): boolean {
     return hostiles.some((hostile) => { return entity.pos.getRangeTo(hostile.pos) < Config.minHostileDistance });
@@ -166,4 +167,35 @@ export function getTotalStorageVolume(room: Room, resource: ResourceConstant): [
             return sum + value.store[resource]
         }, 0)
     ];
+}
+
+export function getAdjacentRooms(room: Room,): string[] {
+    const adjacentRooms: string[] = [];
+    const currentRoomInfo = roomInfoMap.get(room.name);
+    if (currentRoomInfo) {
+        currentRoomInfo.exits.forEach((detail, direction) => {
+            if (!detail.blocked) {
+                const newName = getRoomNameByDirection(room.name, direction);
+                if (newName) {
+                    adjacentRooms.push(newName);
+                }
+            }
+        });
+    }
+    return adjacentRooms;
+}
+
+export function getAdjacentHostileRooms(room: Room,): string[] {
+    const adjacentRooms: string[] = getAdjacentRooms(room);
+    return adjacentRooms.filter((roomName) => {
+        return roomInfoMap.get(roomName)?.hostile;
+    });
+}
+
+export function getCreepsByRole(room: Room, role: Role): Creep[] {
+    return room.find(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return creep.memory.role == role;
+        }
+    });
 }

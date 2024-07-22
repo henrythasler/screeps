@@ -92,23 +92,28 @@ export function cleanUpRequisitions(room: Room): void {
             return !creep.spawning;
         }
     });
+    log(`cleanUpRequisitions(): ${Memory.pendingRequisitions.length} pendingRequisitions, ${Memory.requisitionOwner.length} requisitionOwner`)
 
-    if (creeps.length && Memory.requisitionOwner.length) {
-        Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
-            return creeps.some((creep) => {
-                if (creep.memory.activeRequisitions.length) {
-                    return creep.memory.activeRequisitions.some((requisition) => {
-                        if (requester == requisition.requesterId) return true;
-                        return false;
-                    })
-                }
-                else {
-                    return false;
-                }
-            });
-        });
-    }
-    else {
-        Memory.requisitionOwner = [];
-    }
+    
+    // Memory.requisitionOwner = [];
+    // Memory.pendingRequisitions = [];
+
+    // if (creeps.length && Memory.requisitionOwner.length) {
+    //     Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
+    //         return creeps.some((creep) => {
+    //             if (creep.memory.activeRequisitions.length) {
+    //                 return creep.memory.activeRequisitions.some((requisition) => {
+    //                     if (requester == requisition.requesterId) return true;
+    //                     return false;
+    //                 })
+    //             }
+    //             else {
+    //                 return false;
+    //             }
+    //         });
+    //     });
+    // }
+    // else {
+    //     Memory.requisitionOwner = [];
+    // }
 }

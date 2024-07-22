@@ -173,10 +173,7 @@ const hunter: Map<string, Species> = new Map([
     ["HUNTER_ENTRY", {
         parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK],
         traits: new Map([
-            [Location.EVERYWHERE, [Trait.SWITCH_ROOM]],
-            [Location.OCCUPIED, [
-                Trait.ATTACK_HOSTILE,
-            ]]
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM, Trait.ATTACK_HOSTILE]],
         ]),
         cost: 1200,
     }],
