@@ -48,7 +48,7 @@ export function updateRequisitions(room: Room): void {
             return (structure.structureType == STRUCTURE_EXTENSION ||
                 structure.structureType == STRUCTURE_SPAWN ||
                 structure.structureType == STRUCTURE_TOWER) &&
-                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && !Memory.requisitionOwner.includes(structure.id) && !pendingRequester.includes(structure.id);
+                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && !pendingRequester.includes(structure.id);
         }
     });
 
@@ -61,7 +61,6 @@ export function updateRequisitions(room: Room): void {
                 priority: 200,
                 requesterId: structure.id,
             });
-            Memory.requisitionOwner.push(structure.id);
         }
         else if (structure.structureType == STRUCTURE_SPAWN) {
             Memory.pendingRequisitions.push({
@@ -71,7 +70,6 @@ export function updateRequisitions(room: Room): void {
                 priority: 200,
                 requesterId: structure.id,
             });
-            Memory.requisitionOwner.push(structure.id);
         }
         else if (structure.structureType == STRUCTURE_TOWER) {
             Memory.pendingRequisitions.push({
@@ -81,7 +79,6 @@ export function updateRequisitions(room: Room): void {
                 priority: 150,
                 requesterId: structure.id,
             });
-            Memory.requisitionOwner.push(structure.id);
         }
     });
 }
@@ -92,27 +89,27 @@ export function cleanUpRequisitions(room: Room): void {
             return !creep.spawning;
         }
     });
-    log(`cleanUpRequisitions(): ${Memory.pendingRequisitions.length} pendingRequisitions, ${Memory.requisitionOwner.length} requisitionOwner`)
 
-    
     // Memory.requisitionOwner = [];
     // Memory.pendingRequisitions = [];
+    let remove = 0;
 
-    // if (creeps.length && Memory.requisitionOwner.length) {
-    //     Memory.requisitionOwner = Memory.requisitionOwner.filter((requester) => {
-    //         return creeps.some((creep) => {
-    //             if (creep.memory.activeRequisitions.length) {
-    //                 return creep.memory.activeRequisitions.some((requisition) => {
-    //                     if (requester == requisition.requesterId) return true;
-    //                     return false;
-    //                 })
-    //             }
-    //             else {
-    //                 return false;
-    //             }
-    //         });
-    //     });
-    // }
+    if (creeps.length && Memory.pendingRequisitions.length) {
+        Memory.pendingRequisitions = Memory.pendingRequisitions.filter((requisition) => {
+            return requisition.amount > 0 || creeps.some((creep) => {
+                if (creep.memory.activeRequisitions.length) {
+                    return creep.memory.activeRequisitions.some((activeRequisition) => {
+                        if (requisition.requesterId == activeRequisition.requesterId) return true;
+                        return false;
+                    })
+                }
+                else {
+                    return false;
+                }
+            });
+        });
+    }
+    // log(`cleanUpRequisitions(): ${Memory.pendingRequisitions.length} pendingRequisitions`)
     // else {
     //     Memory.requisitionOwner = [];
     // }

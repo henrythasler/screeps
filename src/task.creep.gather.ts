@@ -7,14 +7,13 @@ import { isNearHostile, mergeArrays, removeEntries } from "./helper";
 import { zoo } from "./zoo";
 import { categorizeCreepLocation, Location } from "./location";
 
-function gatherEnergy(creep: Creep, sources: Tombstone[]): boolean {
+function gatherEnergy(creep: Creep, sources: (Tombstone | Ruin)[]): boolean {
     sources.sort((a, b): number => {
         return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
     });
     // get stuff or move towards source
     const source = sources[0];
     if (source) {
-        // const isEnergy = source.store[RESOURCE_ENERGY] > 0;    
         // source.pos.getRangeTo(creep.pos) < (source.store[RESOURCE_ENERGY] * Config.tombstoneGatherFactor)
 
         const res = creep.withdraw(source, Object.keys(source.store)[0] as ResourceConstant);
@@ -64,13 +63,13 @@ export function execute(creep: Creep): boolean {
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        if (!traits.includes(Trait.GATHER_RESOURCE) || creep.store.getFreeCapacity() == 0) {
+        if (!traits.includes(Trait.GATHER_RESOURCE) || creep.store.getFreeCapacity() == 0 || (creep.store.getUsedCapacity() > 0 && creep.memory.task != Task.GATHER)) {
             return false;
         }
 
         const hostiles = creep.room.find(FIND_HOSTILE_CREEPS);
 
-        // Tombstones with energy
+        // Tombstones resources
         const tombstones: Tombstone[] = creep.room.find(FIND_TOMBSTONES, {
             filter: (structure) => {
                 const storedItems = Object.keys(structure.store).length;
@@ -83,6 +82,20 @@ export function execute(creep: Creep): boolean {
                 return true;
             }
         }
+
+        // Ruins with resources
+        const ruins: Ruin[] = creep.room.find(FIND_RUINS, {
+            filter: (structure) => {
+                const storedItems = Object.keys(structure.store).length;
+                return !isNearHostile(structure, hostiles) && storedItems > 0;
+            }
+        });
+        if (ruins.length) {
+            if (gatherEnergy(creep, ruins)) {
+                creep.memory.task = Task.GATHER;
+                return true;
+            }
+        }        
 
         // dropped resources
         const resource: Resource[] = creep.room.find(FIND_DROPPED_RESOURCES, {

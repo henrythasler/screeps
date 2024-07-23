@@ -112,7 +112,7 @@ export function createRoomInfoMap(): void {
 }
 
 export function logRoomInfoMap(): void {
-    const reqOwnerStr = Memory.requisitionOwner.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
+    // const reqOwnerStr = Memory.requisitionOwner.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
     const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { return `${sum} [${req.position.roomName}, ${req.requesterId}, ${req.amount}]`}, "");
     const creepReqs: string[] = [];
 
@@ -123,7 +123,7 @@ export function logRoomInfoMap(): void {
         }
     }
 
-    log(`creeps: ${creepReqs.join(", ")}, requisitionOwner: ${reqOwnerStr}, pendingRequisitions: ${pending}`, Loglevel.INFO);
+    log(`creeps: ${creepReqs.join(", ")}, pendingRequisitions: ${pending}`, Loglevel.INFO);
 }
 
 function evaluateExitProperties(exitTo: string, direction: Direction, creep: Creep, visuals: boolean): ExitDetail {

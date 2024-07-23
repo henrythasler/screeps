@@ -152,9 +152,6 @@ export function initializeGlobalObjects(): void {
     if (!Memory.pendingRequisitions) {
         Memory.pendingRequisitions = [];
     }
-    if (!Memory.requisitionOwner) {
-        Memory.requisitionOwner = [];
-    }
 }
 
 export function initializeRoomObjects(room: Room): void {

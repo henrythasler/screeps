@@ -15,17 +15,19 @@ const harvesterConfig: CreepConfig = {
         ["E36S38", 2],
         ["W14N19", 2],  // Newbie Land
         ["W14N18", 2],  // Newbie Land
+        ["W13N19", 2],  // Newbie Land
     ]),
 }
 
 const workerConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 2],
+        ["sim", 3],
         ["E37S37", 4],
         ["E37S38", 6],
         ["E36S38", 6],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 4],  // Newbie Land
+        ["W13N19", 4],  // Newbie Land
     ]),
 }
 
@@ -106,9 +108,10 @@ export class Config {
     static wallTowerRepairThresholdPeace = 0.01;
     static wallTowerRepairThresholdThreat = 0.05;
 
+    static threatLevelMaxValue = 100_000;
     static threatLevelStructureReinforcementThreshold = 50_000;   // triggers reinforcement of structures
     static threatLevelDefenderThreshold = 150_000;   // triggers spawning of defender creeps
-    static additionalDefender = 1;   // add that many defender per threatLevelDefenderThreshold
+    static additionalDefender = 0;   // add that many defender per threatLevelDefenderThreshold
     static safeModeThreshold = 16_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
     static threatLevelCooldown = 4_000;
 

@@ -19,22 +19,18 @@ export function execute(creep: Creep): boolean {
             return false;
         }
 
-        let availableEnergy = creep.store[RESOURCE_ENERGY] - creep.memory.activeRequisitions.reduce( (total, req) => {return total + ((req.resource == RESOURCE_ENERGY) ? req.amount : 0)}, 0);
+        let availableEnergy = creep.store[RESOURCE_ENERGY] - creep.memory.activeRequisitions.reduce((total, req) => { return total + ((req.resource == RESOURCE_ENERGY) ? req.amount : 0) }, 0);
         log(`[${creep.name}] availableEnergy: ${availableEnergy}`, Loglevel.DEBUG);
         for (let i = 0; i < Memory.pendingRequisitions.length; i++) {
             if (availableEnergy <= 0 || Memory.pendingRequisitions.length == 0) {
                 break;
             }
-            const requisition = Memory.pendingRequisitions.shift();
-            if (requisition && requisition.resource == RESOURCE_ENERGY && requisition.position.roomName == creep.memory.homeBase) {
+            const requisition = Memory.pendingRequisitions[i];
+            if (requisition && requisition.resource == RESOURCE_ENERGY && requisition.position.roomName == creep.memory.homeBase && requisition.amount > 0) {
                 const requisitionCopy: Requisition = deepCopy(requisition);
-                const requisitionAmount = requisition.amount;
-                if (availableEnergy < requisitionAmount) {
-                    requisitionCopy.amount = availableEnergy;
-                    requisition.amount -= availableEnergy;
-                    Memory.pendingRequisitions.unshift(requisition);
-                }
-                availableEnergy -= requisitionAmount;
+                requisition.amount = Math.max(requisition.amount - availableEnergy, 0);
+                requisitionCopy.amount = Math.min(availableEnergy, requisitionCopy.amount);
+                availableEnergy -= requisitionCopy.amount;
                 creep.memory.activeRequisitions.push(requisitionCopy);
             }
         }
@@ -63,13 +59,10 @@ export function execute(creep: Creep): boolean {
         if (currentStructure) {
             log(`[${creep.name}] activeRequisitions: ${JSON.stringify(creep.memory.activeRequisitions)}`, Loglevel.DEBUG);
 
-            const energyAmount = creep.store[RESOURCE_ENERGY];
-            const res = creep.transfer(currentStructure, RESOURCE_ENERGY);
+            const energyAmount = creep.memory.activeRequisitions.find((reqs) => reqs.requesterId == currentStructure.id)?.amount;
+            const res = creep.transfer(currentStructure, RESOURCE_ENERGY, energyAmount);
             if (res == OK) {
                 creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
-                if (currentStructure?.store.getFreeCapacity(RESOURCE_ENERGY) - energyAmount <= 0) {
-                    Memory.requisitionOwner = Memory.requisitionOwner.filter((req) => req != currentStructure.id);
-                }
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
             }
             else if (res == ERR_NOT_IN_RANGE) {
@@ -77,7 +70,6 @@ export function execute(creep: Creep): boolean {
             }
             else if (res == ERR_FULL) {
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
-                Memory.requisitionOwner = Memory.requisitionOwner.filter((req) => req != currentStructure.id);
             }
             else {
                 creep.memory.activeRequisitions = creep.memory.activeRequisitions.filter((req) => req.requesterId != currentStructure.id);
@@ -89,41 +81,5 @@ export function execute(creep: Creep): boolean {
             return true;
         }
     }
-
-    /*    
-        const structuresToCharge: AnyStructure[] = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION ||
-                    structure.structureType == STRUCTURE_SPAWN ||
-                    structure.structureType == STRUCTURE_TOWER) &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-            }
-        });
-    
-        if (structuresToCharge.length && creep.memory.occupation.includes(Trait.RECHARGE_STRUCTURE) && creep.store[RESOURCE_ENERGY] > 0 && actionAllowed(creep, creep.room.name)) {
-            creep.memory.task = Task.CHARGE_STRUCTURE;
-            structuresToCharge.sort((a: AnyStructure, b: AnyStructure): number => {
-                if(a.structureType == STRUCTURE_SPAWN && b.structureType != STRUCTURE_SPAWN) return -1;
-                if(a.structureType != STRUCTURE_SPAWN && b.structureType == STRUCTURE_SPAWN) return 1;
-    
-                if(a.structureType == STRUCTURE_EXTENSION && b.structureType != STRUCTURE_EXTENSION) return -1;
-                if(a.structureType != STRUCTURE_EXTENSION && b.structureType == STRUCTURE_EXTENSION) return 1;
-    
-                return (a.pos.getRangeTo(creep.pos) - b.pos.getRangeTo(creep.pos));
-            });
-            
-            const res = creep.transfer(structuresToCharge[0]!, RESOURCE_ENERGY);
-            if(res == OK) {
-                creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
-            }
-            else if (res == ERR_NOT_IN_RANGE) {
-                creep.moveTo(structuresToCharge[0]!, { visualizePathStyle: { stroke: '#00ff00' } });
-            }
-            else {
-                log(`[${creep.room.name}][${creep.name}] build(${structuresToCharge[0]}) failed: ${res}`, Loglevel.ERROR);
-            }
-            return true;
-        }
-    */
     return false;
 }
