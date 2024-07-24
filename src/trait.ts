@@ -38,5 +38,6 @@ export enum Trait {
     GATHER_RESOURCE,
     
     STORE_OTHER,
+    MINE_MINERAL,
     // LOCATE_SOURCE,
 }

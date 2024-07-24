@@ -4,7 +4,7 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
-import { getCreepsByRole, mergeArrays, removeEntries } from "./helper";
+import { getCreepsByRole, isInHomeBase, isOnBorder, mergeArrays, removeEntries } from "./helper";
 import { Config } from "./config";
 import { Role } from "./manager.global";
 
@@ -31,7 +31,7 @@ export function execute(creep: Creep, maxHops: number = 1, squadSize: number = 2
 
         const locations: string[] = [];
         roomInfoMap.forEach((roomInfo, roomName) => {
-            if (roomInfo.hostile && creep.room.name != roomName ) {
+            if (roomInfo.hostile && (creep.room.name != roomName || isOnBorder(creep))) {
                 locations.push(roomName);
             }
         });

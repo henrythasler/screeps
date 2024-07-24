@@ -39,7 +39,7 @@ export function run(creep: Creep) {
     if (idleTasks.includes(creep.memory.task)) {
         creep.memory.idleTicks++;
         if (creep.memory.idleTicks > Config.idleTickThreshold) {
-            // creep.memory.lastChargeSource = EnergyLocation.OTHER;
+            creep.memory.lastChargeSource = EnergyLocation.OTHER;
             creep.memory.lastEnergyDeposit = EnergyLocation.OTHER;
         }
     }

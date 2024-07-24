@@ -179,6 +179,21 @@ const hunter: Map<string, Species> = new Map([
     }],
 ]);
 
+const minerDefaultTraits = [
+    Trait.MINE_MINERAL,
+    Trait.STORE_OTHER,
+    Trait.STORE_STORAGE,
+];
+const miner: Map<string, Species> = new Map([
+    ["MINER_BASIC", {
+        parts: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        traits: new Map([
+            [Location.HOME, minerDefaultTraits]
+        ]),
+        cost: 900,
+    }],
+]);
+
 export const zoo: Map<Role, Map<string, Species>> = new Map([
     [Role.HARVESTER, harvester],
     [Role.WORKER, worker],
@@ -186,4 +201,5 @@ export const zoo: Map<Role, Map<string, Species>> = new Map([
     [Role.COLLECTOR, collector],
     [Role.DEFENDER, defender],
     [Role.HUNTER, hunter],
+    [Role.MINER, miner],
 ]);

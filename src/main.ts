@@ -109,15 +109,16 @@ export const loop = () => {
                 log(`[${room.name}] threatLevel: ${room.memory.threatLevel}`)
             }
             roomManager.cleanUpRequisitions(room);
-            logRoomInfoMap();
+            // logRoomInfoMap();
             roomManager.updateRequisitions(room);
         }
 
-        logRoomInfoMap();
+        // logRoomInfoMap("E37S38");
         roomManager.run(room);  // execute creep action
-        // logRoomInfoMap();
+        // logRoomInfoMap("E37S38");
         spawnManager.run(room); // spawn/heal creeps
     }
+    logRoomInfoMap("E37S37");
 
     saveRoomInfoMap();
 };

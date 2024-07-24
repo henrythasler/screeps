@@ -12,6 +12,7 @@ export enum Role {
     HARVESTER,
     DEFENDER,
     HUNTER,
+    MINER,
 }
 
 export enum EnergyLocation {
@@ -118,18 +119,6 @@ export function managePopulation(required: number, current: number, room: Room, 
     return requested;
 }
 
-export function manageTraitDistribution(creeps: Creep[], zoo: Map<string, Species>, traitDistribution: Map<Trait, number>): void {
-    // const currentDistribution: Map<Trait, number> = new Map();
-    // for (const creep of creeps) {
-    //     // update traits from blueprint
-    //     const species = zoo.get(creep.memory.speciesName);
-    //     creep.memory.traits = species?.traits ?? [];
-
-    //     // assign occupation
-    //     creep.memory.occupation = applyTraitDistribution(creep, creeps.length, currentDistribution, traitDistribution);
-    //     log(`[${creep.name}][${creep.memory.speciesName}] traits: [${creep.memory.traits}], occupation: [${creep.memory.occupation}]`, Loglevel.DEBUG);
-    // }
-}
 
 export function creepMaintenance(): void {
     if ((Game.time % 60) == 0) {

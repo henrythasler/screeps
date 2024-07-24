@@ -111,14 +111,19 @@ export function createRoomInfoMap(): void {
     roomInfoMap = new Map<string, RoomInfo>();
 }
 
-export function logRoomInfoMap(): void {
+export function logRoomInfoMap(roomName?: string): void {
     // const reqOwnerStr = Memory.requisitionOwner.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
-    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { return `${sum} [${req.position.roomName}, ${req.requesterId}, ${req.amount}]`}, "");
+    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { 
+        if(req.position.roomName == roomName) {
+            return `${sum} [${req.position.roomName}, ${req.requesterId}, ${req.amount}]`
+        }
+        return sum;
+    }, "");
     const creepReqs: string[] = [];
 
     for(const creepId in Game.creeps) {
         const creep = Game.creeps[creepId];
-        if(creep && creep.memory.activeRequisitions.length) {
+        if(creep && creep.memory.activeRequisitions.length && creep.room.name == roomName) {
             creepReqs.push(`${creep.name} ${creep.memory.activeRequisitions.reduce((sum: string, req) => {return `${sum} [${req.amount}]`}, "")}`)
         }
     }

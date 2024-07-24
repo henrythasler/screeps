@@ -199,3 +199,38 @@ export function getCreepsByRole(room: Room, role: Role): Creep[] {
         }
     });
 }
+
+export function getCreepsByHome(roomName: string, role?: Role): Creep[] {
+    const creeps: Creep[] = [];
+    for (const name in Game.creeps) {
+        if (Game.creeps[name]!.memory.role == role && Game.creeps[name]!.memory.homeBase == roomName) {
+            creeps.push(Game.creeps[name]!);
+        }
+    }    
+    return creeps;
+}
+
+export function smallestMissingNumber(numbers: number[]): number {
+    // Explicitly type the Set as Set<number>
+    const uniqueNumbers = new Set<number>(numbers);
+
+    // Convert Set back to array and sort
+    const sortedUniqueNumbers = Array.from(uniqueNumbers).sort((a, b) => a - b);
+
+    // Start checking from 1
+    let smallestMissing = 1;
+
+    for (const num of sortedUniqueNumbers) {
+        // If we find a number larger than our current smallest missing,
+        // we've found our answer
+        if (num > smallestMissing) {
+            return smallestMissing;
+        }
+
+        // Otherwise, update our smallest missing to the next number
+        smallestMissing = num + 1;
+    }
+
+    // If we've gone through all numbers, return the next number after the largest
+    return smallestMissing;
+}

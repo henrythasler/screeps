@@ -1,6 +1,6 @@
 import { log, Loglevel } from "./debug";
 import { Config } from "./config";
-import { Role, Species, managePopulation, manageTraitDistribution } from "./manager.global";
+import { Role, Species, managePopulation } from "./manager.global";
 import { Trait } from "./trait";
 import { Location } from "./location";
 import { zoo } from "./zoo";

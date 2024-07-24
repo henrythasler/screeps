@@ -76,6 +76,18 @@ const hunterConfig: CreepConfig = {
     squadSize: 2,
 }
 
+const minerConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["E36S38", 0],
+        ["W14N19", 1],  // Newbie Land
+        ["W14N18", 0],  // Newbie Land
+        ["W13N19", 0],  // Newbie Land
+    ]),
+}
+
 export class Config {
     static userName = "null-ptr";
     // Controller
@@ -99,7 +111,7 @@ export class Config {
     static creepHealThreshold = 1; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
-    static idleTickThreshold = 10;
+    static idleTickThreshold = 16;
     static minStorageEnergy = 10000; // how much energy is at least conserved in local storages before structures will be upgraded or reinforced
 
     static rampartTowerRepairThresholdPeace = 0.1;
@@ -152,5 +164,6 @@ export class Config {
         [Role.COLLECTOR, collectorConfig],
         [Role.DEFENDER, defenderConfig],
         [Role.HUNTER, hunterConfig],
+        [Role.MINER, minerConfig],
     ]);
 }

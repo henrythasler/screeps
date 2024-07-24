@@ -44,7 +44,7 @@ function pickupResource(creep: Creep, items: Resource[]): boolean {
             creep.moveTo(item, { visualizePathStyle: Config.visualizePathStyle.get(Task.GATHER) });
         }
         else if (res == OK) {
-            creep.memory.lastChargeSource = creep.memory.lastChargeSource = EnergyLocation.OTHER;
+            creep.memory.lastChargeSource = EnergyLocation.OTHER;
         }
         else {
             log(`[${creep.room.name}][${creep.name}] pickup(${items[0]}) failed: ${res}`, Loglevel.ERROR);
