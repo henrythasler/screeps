@@ -173,12 +173,24 @@ const hunter: Map<string, Species> = new Map([
     ["HUNTER_ENTRY", {
         parts: [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK],
         traits: new Map([
-            [Location.EVERYWHERE, [Trait.SWITCH_ROOM]],
-            [Location.OCCUPIED, [
-                Trait.ATTACK_HOSTILE,
-            ]]
+            [Location.EVERYWHERE, [Trait.SWITCH_ROOM, Trait.ATTACK_HOSTILE]],
         ]),
         cost: 1200,
+    }],
+]);
+
+const minerDefaultTraits = [
+    Trait.MINE_MINERAL,
+    Trait.STORE_OTHER,
+    Trait.STORE_STORAGE,
+];
+const miner: Map<string, Species> = new Map([
+    ["MINER_BASIC", {
+        parts: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        traits: new Map([
+            [Location.HOME, minerDefaultTraits]
+        ]),
+        cost: 900,
     }],
 ]);
 
@@ -189,4 +201,5 @@ export const zoo: Map<Role, Map<string, Species>> = new Map([
     [Role.COLLECTOR, collector],
     [Role.DEFENDER, defender],
     [Role.HUNTER, hunter],
+    [Role.MINER, miner],
 ]);

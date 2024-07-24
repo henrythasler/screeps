@@ -15,17 +15,19 @@ const harvesterConfig: CreepConfig = {
         ["E36S38", 2],
         ["W14N19", 2],  // Newbie Land
         ["W14N18", 2],  // Newbie Land
+        ["W13N19", 2],  // Newbie Land
     ]),
 }
 
 const workerConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 2],
+        ["sim", 3],
         ["E37S37", 4],
         ["E37S38", 6],
         ["E36S38", 6],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 4],  // Newbie Land
+        ["W13N19", 4],  // Newbie Land
     ]),
 }
 
@@ -66,10 +68,24 @@ const hunterConfig: CreepConfig = {
         ["E37S37", 0],
         ["E37S38", 0],
         ["E36S38", 0],
-        ["W14N19", 0],  // Newbie Land
-        ["W14N18", 4],  // Newbie Land
+        ["W14N19", 2],  // Newbie Land
+        ["W14N18", 2],  // Newbie Land
+        ["W13N19", 0],  // Newbie Land
     ]),
     maxHops: 1,
+    squadSize: 2,
+}
+
+const minerConfig: CreepConfig = {
+    minCount: new Map<string, number>([
+        ["sim", 0],
+        ["E37S37", 0],
+        ["E37S38", 0],
+        ["E36S38", 0],
+        ["W14N19", 1],  // Newbie Land
+        ["W14N18", 0],  // Newbie Land
+        ["W13N19", 0],  // Newbie Land
+    ]),
 }
 
 export class Config {
@@ -95,7 +111,7 @@ export class Config {
     static creepHealThreshold = 1; // ratio of hits/hitsMax that, if falling below the given threshold, triggers creep healing
     static structureTowerRepairThreshold = 0.5; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by towers
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
-    static idleTickThreshold = 10;
+    static idleTickThreshold = 16;
     static minStorageEnergy = 10000; // how much energy is at least conserved in local storages before structures will be upgraded or reinforced
 
     static rampartTowerRepairThresholdPeace = 0.1;
@@ -104,9 +120,10 @@ export class Config {
     static wallTowerRepairThresholdPeace = 0.01;
     static wallTowerRepairThresholdThreat = 0.05;
 
+    static threatLevelMaxValue = 100_000;
     static threatLevelStructureReinforcementThreshold = 50_000;   // triggers reinforcement of structures
     static threatLevelDefenderThreshold = 150_000;   // triggers spawning of defender creeps
-    static additionalDefender = 1;   // add that many defender per threatLevelDefenderThreshold
+    static additionalDefender = 0;   // add that many defender per threatLevelDefenderThreshold
     static safeModeThreshold = 16_000;  // total sum of hitpoints of all hostiles per room to trigger safe-mode
     static threatLevelCooldown = 4_000;
 
@@ -137,7 +154,7 @@ export class Config {
     static harvestSourceRegenerationThreshold = 60;   // ticks to wait for regen
 
     static scoutRoomReconCooldownNeutral = 120;
-    static scoutRoomReconCooldownHostile = 600;
+    static scoutRoomReconCooldownHostile = 300;
     static roomReconVisuals = true;
 
     static creeps: Map<Role, CreepConfig> = new Map<Role, CreepConfig>([
@@ -147,5 +164,6 @@ export class Config {
         [Role.COLLECTOR, collectorConfig],
         [Role.DEFENDER, defenderConfig],
         [Role.HUNTER, hunterConfig],
+        [Role.MINER, minerConfig],
     ]);
 }

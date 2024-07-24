@@ -5,6 +5,7 @@ import { isInHomeBase, mergeArrays, removeEntries } from "./helper";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 import { Config } from "./config";
+import { log } from "./debug";
 
 export function execute(creep: Creep, maxDistance?: number, ignoreLastDeposit: boolean = false): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);

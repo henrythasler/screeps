@@ -1,5 +1,6 @@
 import { Config } from "./config";
 import { Loglevel, log } from "./debug";
+import { getCreepsByHome, smallestMissingNumber } from "./helper";
 import { EnergyLocation, Role, roleToString, Species, findMostExpensiveSpecies } from "./manager.global";
 import { Task } from "./task";
 import { Trait } from "./trait";
@@ -10,6 +11,16 @@ export interface RequiredSpecies {
 }
 
 function generateName(role: Role, room: Room): string {
+    const creeps: Creep[] = getCreepsByHome(room.name);
+    const ids = creeps.map((creep) => {
+        const idStr = creep.name.split("_")[2];
+        return idStr ? parseInt(idStr) : 0;
+    });
+
+    const newId = smallestMissingNumber(ids);
+
+    log(`${roleToString(role)}_${room.name}_${newId}`);
+    // FIXME!
     return `${roleToString(role)}_${room.name}_${Game.time}`;
 }
 
@@ -24,8 +35,8 @@ export function run(room: Room): void {
     availableSpawns.forEach((spawn) => {
         const renew: Creep[] = room.find(FIND_MY_CREEPS, {
             filter: (creep) => {
-                return !creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < Config.creepRenewMax && 
-                creep.memory.task == Task.RENEW;
+                return !creep.spawning && spawn.pos.getRangeTo(creep.pos) <= 1 && creep.ticksToLive! < Config.creepRenewMax &&
+                    creep.memory.task == Task.RENEW;
             }
         });
 
@@ -37,7 +48,7 @@ export function run(room: Room): void {
         }
 
         if (room.memory.buildQueue.length && !spawn.spawning) {
-            log(`[${room.name}][spawn] buildQueue: [${room.memory.buildQueue.reduce( (str, val) => str+=val.species.name + " ", "")}], ticksWithPendingSpawns:${room.memory.ticksWithPendingSpawns}`, Loglevel.INFO);
+            log(`[${room.name}][spawn] buildQueue: [${room.memory.buildQueue.reduce((str, val) => str += val.species.name + " ", "")}], ticksWithPendingSpawns:${room.memory.ticksWithPendingSpawns}`, Loglevel.INFO);
             const requiredCreep = room.memory.buildQueue[0]!;
 
             const res = spawn.spawnCreep(requiredCreep.species.parts, generateName(requiredCreep.role, room),
@@ -67,9 +78,10 @@ export function run(room: Room): void {
             }
             else {
                 room.memory.ticksWithPendingSpawns += Config.spawnManagerInterval;
+                log(`[${room.name}][spawn] spawning error ${res}`);
 
                 // remove item prom the queue after a while
-                if(room.memory.ticksWithPendingSpawns > Config.resetBuildQueueTimeout) {
+                if (room.memory.ticksWithPendingSpawns > Config.resetBuildQueueTimeout) {
                     room.memory.buildQueue.shift();
                 }
             }

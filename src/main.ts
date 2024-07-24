@@ -35,7 +35,7 @@ declare global {
         // knownSpawns: Array<Id<StructureSpawn>>,  // stores the ID of all known sources
         roomInfoMap: { [roomName: string]: SerializableRoomInfo }, //Map<string, RoomInfo>,
         pendingRequisitions: Requisition[];
-        requisitionOwner: Id<RequesterIdTypes>[],
+        // requisitionOwner: Id<RequesterIdTypes>[],
     }
 
     interface CreepMemory {
@@ -109,14 +109,16 @@ export const loop = () => {
                 log(`[${room.name}] threatLevel: ${room.memory.threatLevel}`)
             }
             roomManager.cleanUpRequisitions(room);
+            // logRoomInfoMap();
+            roomManager.updateRequisitions(room);
         }
 
-        roomManager.updateRequisitions(room);
-        // logRoomInfoMap();
+        // logRoomInfoMap("E37S38");
         roomManager.run(room);  // execute creep action
-        // logRoomInfoMap();
+        // logRoomInfoMap("E37S38");
         spawnManager.run(room); // spawn/heal creeps
     }
+    logRoomInfoMap("E37S37");
 
     saveRoomInfoMap();
 };

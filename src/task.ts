@@ -17,6 +17,7 @@ export enum Task {
     ATTACK_HOSTILE, // attack hostile creep
     GATHER,
     STORE_OTHER,
+    MINE,
     // LOCATE_SOURCE,  // move to a knownSource in another room for charging/harvesting
 }
 
@@ -45,6 +46,7 @@ export function sayTask(creep: Creep): void {
         case Task.HARVEST: creep.say('🚜'); break;
         case Task.ATTACK_HOSTILE: creep.say('⚔️'); break;
         case Task.GATHER: creep.say('🧺'); break;
+        case Task.MINE: creep.say('⛏️'); break;
         default: creep.say('💤');
     }
 }

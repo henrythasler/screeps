@@ -33,7 +33,6 @@ export function execute(creep: Creep, maxHops: number = 1): boolean {
             return route.length <= maxHops;
         });
 
-
         if (filteredLocations.length) {
             const pos = new RoomPosition(25, 25, filteredLocations[creep.memory.percentile % filteredLocations.length]!);
             const res = creep.moveTo(pos, { visualizePathStyle: Config.visualizePathStyle.get(Task.SWITCH_ROOM) });

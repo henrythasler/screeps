@@ -28,7 +28,7 @@ export function execute(creep: Creep, ignoreCapacity: boolean = false): boolean 
         const res = creep.moveTo(pos, { visualizePathStyle: Config.visualizePathStyle.get(Task.SWITCH_ROOM) });
 
         if (res == OK || res == ERR_TIRED) {
-            creep.memory.task = Task.SWITCH_ROOM;
+            creep.memory.task = Task.RETURN;
             return true;
         }
     }

@@ -1,7 +1,8 @@
 import { Trait } from "./trait";
 import { Config } from "./config";
-import { Direction } from "./room.info";
+import { Direction, roomInfoMap, serializeRoomInfo } from "./room.info";
 import { log } from "./debug";
+import { Role } from "./manager.global";
 
 export function isNearHostile(entity: ConstructionSite | AnyStructure | Creep | Source | Ruin | Resource | Tombstone, hostiles: Creep[]): boolean {
     return hostiles.some((hostile) => { return entity.pos.getRangeTo(hostile.pos) < Config.minHostileDistance });
@@ -166,4 +167,70 @@ export function getTotalStorageVolume(room: Room, resource: ResourceConstant): [
             return sum + value.store[resource]
         }, 0)
     ];
+}
+
+export function getAdjacentRooms(room: Room,): string[] {
+    const adjacentRooms: string[] = [];
+    const currentRoomInfo = roomInfoMap.get(room.name);
+    if (currentRoomInfo) {
+        currentRoomInfo.exits.forEach((detail, direction) => {
+            if (!detail.blocked) {
+                const newName = getRoomNameByDirection(room.name, direction);
+                if (newName) {
+                    adjacentRooms.push(newName);
+                }
+            }
+        });
+    }
+    return adjacentRooms;
+}
+
+export function getAdjacentHostileRooms(room: Room,): string[] {
+    const adjacentRooms: string[] = getAdjacentRooms(room);
+    return adjacentRooms.filter((roomName) => {
+        return roomInfoMap.get(roomName)?.hostile;
+    });
+}
+
+export function getCreepsByRole(room: Room, role: Role): Creep[] {
+    return room.find(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return creep.memory.role == role;
+        }
+    });
+}
+
+export function getCreepsByHome(roomName: string, role?: Role): Creep[] {
+    const creeps: Creep[] = [];
+    for (const name in Game.creeps) {
+        if (Game.creeps[name]!.memory.role == role && Game.creeps[name]!.memory.homeBase == roomName) {
+            creeps.push(Game.creeps[name]!);
+        }
+    }    
+    return creeps;
+}
+
+export function smallestMissingNumber(numbers: number[]): number {
+    // Explicitly type the Set as Set<number>
+    const uniqueNumbers = new Set<number>(numbers);
+
+    // Convert Set back to array and sort
+    const sortedUniqueNumbers = Array.from(uniqueNumbers).sort((a, b) => a - b);
+
+    // Start checking from 1
+    let smallestMissing = 1;
+
+    for (const num of sortedUniqueNumbers) {
+        // If we find a number larger than our current smallest missing,
+        // we've found our answer
+        if (num > smallestMissing) {
+            return smallestMissing;
+        }
+
+        // Otherwise, update our smallest missing to the next number
+        smallestMissing = num + 1;
+    }
+
+    // If we've gone through all numbers, return the next number after the largest
+    return smallestMissing;
 }

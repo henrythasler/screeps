@@ -32,7 +32,7 @@ export function execute(creep: Creep): boolean {
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
 
-        if (!traits.includes(Trait.ATTACK_HOSTILE)) {
+        if (!traits.includes(Trait.ATTACK_HOSTILE) || isOnBorder(creep)) {
             return false;
         }
 

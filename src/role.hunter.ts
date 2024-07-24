@@ -14,7 +14,7 @@ export function run(creep: Creep) {
     updateRoom.execute(creep);
 
     let match = attack.execute(creep);
-    if (!match) match = hunt.execute(creep, Config.creeps.get(Role.HUNTER)?.maxHops);
+    if (!match) match = hunt.execute(creep, Config.creeps.get(Role.HUNTER)?.maxHops, Config.creeps.get(Role.HUNTER)?.squadSize);
     if (!match) match = returnHome.execute(creep, true);
     if(!match) creep.memory.task = Task.IDLE;
 
