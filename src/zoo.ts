@@ -186,11 +186,11 @@ const minerDefaultTraits = [
 ];
 const miner: Map<string, Species> = new Map([
     ["MINER_BASIC", {
-        parts: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
+        parts: [MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY],
         traits: new Map([
             [Location.HOME, minerDefaultTraits]
         ]),
-        cost: 900,
+        cost: 1050,
     }],
 ]);
 

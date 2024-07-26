@@ -1,5 +1,5 @@
 import { Task } from "./task";
-import { EnergyLocation, Requisition } from "./manager.global";
+import { EnergyLocation, logRequisitions, Requisition } from "./manager.global";
 import { Trait } from "./trait";
 import { deepCopy, isInHomeBase, mergeArrays, removeEntries } from "./helper";
 import { categorizeCreepLocation, Location } from "./location";
@@ -20,18 +20,30 @@ export function execute(creep: Creep): boolean {
         }
 
         let availableEnergy = creep.store[RESOURCE_ENERGY] - creep.memory.activeRequisitions.reduce((total, req) => { return total + ((req.resource == RESOURCE_ENERGY) ? req.amount : 0) }, 0);
-        log(`[${creep.name}] availableEnergy: ${availableEnergy}`, Loglevel.DEBUG);
-        for (let i = 0; i < Memory.pendingRequisitions.length; i++) {
-            if (availableEnergy <= 0 || Memory.pendingRequisitions.length == 0) {
-                break;
-            }
-            const requisition = Memory.pendingRequisitions[i];
-            if (requisition && requisition.resource == RESOURCE_ENERGY && requisition.position.roomName == creep.memory.homeBase && requisition.amount > 0) {
-                const requisitionCopy: Requisition = deepCopy(requisition);
-                requisition.amount = Math.max(requisition.amount - availableEnergy, 0);
-                requisitionCopy.amount = Math.min(availableEnergy, requisitionCopy.amount);
-                availableEnergy -= requisitionCopy.amount;
-                creep.memory.activeRequisitions.push(requisitionCopy);
+
+        // can we asiign more requisitions
+        if (availableEnergy) {
+            // log(`[${creep.name}] availableEnergy: ${availableEnergy}`, Loglevel.INFO);
+
+            // logRequisitions("sim");
+            const reqList = Memory.pendingRequisitions.sort((a: Requisition, b: Requisition): number => {
+                return (creep.pos.getRangeTo(new RoomPosition(a.position.x, a.position.y, a.position.roomName)) - creep.pos.getRangeTo(new RoomPosition(b.position.x, b.position.y, b.position.roomName)));
+            });
+            // logRequisitions("sim");
+
+            // log(`${JSON.stringify(reqList[0]?.position)}`);
+            for (let i = 0; i < reqList.length; i++) {
+                if (availableEnergy <= 0 || reqList.length == 0) {
+                    break;
+                }
+                const requisition = reqList[i];
+                if (requisition && requisition.resource == RESOURCE_ENERGY && requisition.position.roomName == creep.memory.homeBase && requisition.amount > 0) {
+                    const requisitionCopy: Requisition = deepCopy(requisition);
+                    requisition.amount = Math.max(requisition.amount - availableEnergy, 0);
+                    requisitionCopy.amount = Math.min(availableEnergy, requisitionCopy.amount);
+                    availableEnergy -= requisitionCopy.amount;
+                    creep.memory.activeRequisitions.push(requisitionCopy);
+                }
             }
         }
 

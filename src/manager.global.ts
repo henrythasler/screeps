@@ -28,13 +28,18 @@ export enum Alert {
 }
 
 export type RequesterIdTypes = StructureExtension | StructureSpawn | StructureTower;
+export interface PlainPosition {
+    roomName: string;
+    x: number;
+    y: number;    
+}
 
 export interface Requisition {
     requesterId: Id<RequesterIdTypes>,
     resource: ResourceConstant,
     amount: number,
     priority: number,   // higher is more important
-    position: RoomPosition,
+    position: PlainPosition,
 }
 
 export function roleToString(role: Role): string {
@@ -76,7 +81,7 @@ export interface Species {
 
 export function findMostExpensiveSpecies(capacity: number, available: number, ticksWithPendingSpawns: number, zoo: Map<string, Species>): Species | undefined {
     let speciesName: string = "null";
-    const actualBudget = Math.max(300, capacity - ticksWithPendingSpawns);
+    const actualBudget = Math.max(300, capacity - ticksWithPendingSpawns * 4);
     zoo.forEach((value, key) => {
         if ((value.cost <= actualBudget || value.cost <= available) && ((speciesName != "null") ? value.cost >= zoo.get(speciesName)!.cost : true)) {
             speciesName = key;
@@ -157,4 +162,24 @@ export function initializeCreepObjects(creep: Creep): void {
     if (!creep.memory.activeRequisitions) {
         creep.memory.activeRequisitions = [];
     }
+}
+
+export function logRequisitions(roomName?: string): void {
+    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { 
+        if(req.position.roomName == roomName) {
+            
+            return `${sum} [${req.amount}, ${req.position.x}/${req.position.y}, ${Game.getObjectById(req.requesterId)?.structureType}]`
+        }
+        return sum;
+    }, "");
+    const creepReqs: string[] = [];
+
+    for(const creepId in Game.creeps) {
+        const creep = Game.creeps[creepId];
+        if(creep && creep.memory.activeRequisitions.length && creep.room.name == roomName) {
+            creepReqs.push(`${creep.name} ${creep.memory.activeRequisitions.reduce((sum: string, req) => {return `${sum} [${req.amount}, ${req.position.x}/${req.position.y}]`}, "")}`)
+        }
+    }
+
+    log(`creeps: ${creepReqs.join(", ")}, pendingRequisitions: ${pending}`, Loglevel.INFO);
 }

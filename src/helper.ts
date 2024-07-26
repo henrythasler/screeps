@@ -203,10 +203,11 @@ export function getCreepsByRole(room: Room, role: Role): Creep[] {
 export function getCreepsByHome(roomName: string, role?: Role): Creep[] {
     const creeps: Creep[] = [];
     for (const name in Game.creeps) {
-        if (Game.creeps[name]!.memory.role == role && Game.creeps[name]!.memory.homeBase == roomName) {
-            creeps.push(Game.creeps[name]!);
+        const creep = Game.creeps[name]!;
+        if ((role == undefined || creep.memory.role == role) && creep.memory.homeBase == roomName) {
+            creeps.push(creep);
         }
-    }    
+    }
     return creeps;
 }
 

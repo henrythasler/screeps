@@ -13,7 +13,7 @@ import { log } from "./debug";
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
 
-    log(`[${creep.room.name}] ${locationToString(categorizeCreepLocation(creep.room, creep.memory.homeBase))}`);
+    // log(`[${creep.room.name}] ${locationToString(categorizeCreepLocation(creep.room, creep.memory.homeBase))}`);
 
     // updateRoom.execute(creep);  // always update roomInfo
     recon.execute(creep);   // uses no action

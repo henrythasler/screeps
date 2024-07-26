@@ -111,26 +111,6 @@ export function createRoomInfoMap(): void {
     roomInfoMap = new Map<string, RoomInfo>();
 }
 
-export function logRoomInfoMap(roomName?: string): void {
-    // const reqOwnerStr = Memory.requisitionOwner.reduce( (sum:string, item) => {return `${sum} ${Game.getObjectById(item)?.structureType}`}, "");
-    const pending = Memory.pendingRequisitions.reduce((sum: string, req) => { 
-        if(req.position.roomName == roomName) {
-            return `${sum} [${req.position.roomName}, ${req.requesterId}, ${req.amount}]`
-        }
-        return sum;
-    }, "");
-    const creepReqs: string[] = [];
-
-    for(const creepId in Game.creeps) {
-        const creep = Game.creeps[creepId];
-        if(creep && creep.memory.activeRequisitions.length && creep.room.name == roomName) {
-            creepReqs.push(`${creep.name} ${creep.memory.activeRequisitions.reduce((sum: string, req) => {return `${sum} [${req.amount}]`}, "")}`)
-        }
-    }
-
-    log(`creeps: ${creepReqs.join(", ")}, pendingRequisitions: ${pending}`, Loglevel.INFO);
-}
-
 function evaluateExitProperties(exitTo: string, direction: Direction, creep: Creep, visuals: boolean): ExitDetail {
     let blocked = true;
 
@@ -164,10 +144,10 @@ export function evaluateRoomInfo(creep: Creep, evalExits: boolean): RoomInfo {
 
     if (evalExits) {
         const exitsTemp = Game.map.describeExits(creep.room.name);
-        if (exitsTemp[1]) exits.set(Direction.TOP, evaluateExitProperties(exitsTemp[1], Direction.TOP, creep, Config.roomReconVisuals));
-        if (exitsTemp[3]) exits.set(Direction.RIGHT, evaluateExitProperties(exitsTemp[3], Direction.RIGHT, creep, Config.roomReconVisuals));
-        if (exitsTemp[5]) exits.set(Direction.BOTTOM, evaluateExitProperties(exitsTemp[5], Direction.BOTTOM, creep, Config.roomReconVisuals));
-        if (exitsTemp[7]) exits.set(Direction.LEFT, evaluateExitProperties(exitsTemp[7], Direction.LEFT, creep, Config.roomReconVisuals));
+        if (exitsTemp && exitsTemp[1]) exits.set(Direction.TOP, evaluateExitProperties(exitsTemp[1], Direction.TOP, creep, Config.roomReconVisuals));
+        if (exitsTemp && exitsTemp[3]) exits.set(Direction.RIGHT, evaluateExitProperties(exitsTemp[3], Direction.RIGHT, creep, Config.roomReconVisuals));
+        if (exitsTemp && exitsTemp[5]) exits.set(Direction.BOTTOM, evaluateExitProperties(exitsTemp[5], Direction.BOTTOM, creep, Config.roomReconVisuals));
+        if (exitsTemp && exitsTemp[7]) exits.set(Direction.LEFT, evaluateExitProperties(exitsTemp[7], Direction.LEFT, creep, Config.roomReconVisuals));
     }
 
     const hostileCreeps = creep.room.find(FIND_HOSTILE_CREEPS).length;
