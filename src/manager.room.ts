@@ -1,25 +1,59 @@
 import { Config } from "./config";
-import { EnergyLocation, RequesterIdTypes, Role, Species, findMostExpensiveSpecies, initializeCreepObjects } from "./manager.global";
-import { Task } from "./task";
-import { Trait } from "./trait";
+import { RequesterIdTypes, Role, initializeCreepObjects, managePopulation } from "./manager.global";
 import * as worker from "./role.worker";
 import * as scout from "./role.scout";
 import * as collector from "./role.collector";
 import * as harvester from "./role.harvester";
 import * as defender from "./role.defender";
 import * as hunter from "./role.hunter";
+import * as miner from "./role.miner";
 import { log, Loglevel } from "./debug";
-import { priorityQueue } from "./priorityqueue";
-import { logRoomInfoMap } from "./room.info";
+import { zoo } from "./zoo";
+import { getAdjacentHostileRooms } from "./helper";
 
+// order defines priority
 const runnables: Map<Role, Function> = new Map([
+    [Role.DEFENDER, defender.run],
+    [Role.HARVESTER, harvester.run],
     [Role.WORKER, worker.run],
     [Role.SCOUT, scout.run],
     [Role.COLLECTOR, collector.run],
-    [Role.HARVESTER, harvester.run],
-    [Role.DEFENDER, defender.run],
     [Role.HUNTER, hunter.run],
+    [Role.MINER, miner.run],
 ]);
+
+export function manageCreeps(room: Room): void {
+    runnables.forEach((_, role) => {
+
+        const creeps: Creep[] = [];
+        for (const name in Game.creeps) {
+            if (Game.creeps[name]!.memory.role == role && Game.creeps[name]!.memory.homeBase == room.name) {
+                creeps.push(Game.creeps[name]!);
+            }
+        }
+
+        let minCount = Config.creeps.get(role)?.minCount.get(room.name) ?? 0;
+
+        if (role == Role.DEFENDER) {
+            // add more defender the higher the threat-level is
+            minCount += Math.floor(room.memory.threatLevel / Config.threatLevelDefenderThreshold) * Config.additionalDefender;
+        }
+
+        // only spawn if there is a threat nearby
+        if (role == Role.HUNTER) {
+            // log(`[${room.name}] ${getAdjacentHostileRooms(room).join(", ")}`);
+            minCount = getAdjacentHostileRooms(room).length ? (Config.creeps.get(role)?.minCount.get(room.name) ?? 0) : 0;
+        }
+
+        room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
+
+        const speciesZoo = zoo.get(role);
+        if (speciesZoo) {
+            managePopulation(minCount, creeps.length, room, speciesZoo, role);
+        }
+
+    });
+}
 
 export function run(room: Room): void {
     const creeps: Creep[] = room.find(FIND_MY_CREEPS, {

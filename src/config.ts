@@ -9,7 +9,7 @@ interface CreepConfig {
 
 const harvesterConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 0],
+        ["sim", 2],
         ["E37S37", 2],
         ["E37S38", 2],
         ["E36S38", 2],
@@ -21,7 +21,7 @@ const harvesterConfig: CreepConfig = {
 
 const workerConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 3],
+        ["sim", 2],
         ["E37S37", 4],
         ["E37S38", 6],
         ["E36S38", 6],
@@ -33,7 +33,7 @@ const workerConfig: CreepConfig = {
 
 const scoutConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 0],
+        ["sim", 1],
         ["E37S37", 0],
         ["E37S38", 1],
         ["W14N19", 1],  // Newbie Land
@@ -42,11 +42,11 @@ const scoutConfig: CreepConfig = {
 
 const collectorConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 0],
+        ["sim", 2],
         ["E37S37", 0],
         ["E37S38", 2],
         ["E36S38", 2],
-        ["W14N19", 8],  // Newbie Land
+        ["W14N19", 6],  // Newbie Land
         ["W14N18", 6],  // Newbie Land
     ]),
     maxHops: 1,
@@ -64,7 +64,7 @@ const defenderConfig: CreepConfig = {
 
 const hunterConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 0],
+        ["sim", 2],
         ["E37S37", 0],
         ["E37S38", 0],
         ["E36S38", 0],
@@ -78,7 +78,7 @@ const hunterConfig: CreepConfig = {
 
 const minerConfig: CreepConfig = {
     minCount: new Map<string, number>([
-        ["sim", 0],
+        ["sim", 2],
         ["E37S37", 0],
         ["E37S38", 0],
         ["E36S38", 0],
@@ -98,7 +98,7 @@ export class Config {
         ["E36S38", 5],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 6],  // Newbie Land
-        ["W13N19", 4],  // Newbie Land
+        ["W13N19", 5],  // Newbie Land
     ]);
     static minControllerRefreshTicksRatio = 0.5; // ratio based on downgradeTicksPerLevel that triggers a controller refresh action
 
@@ -138,6 +138,7 @@ export class Config {
     static visualizePathStrokeWidth = 0.05;
     static visualizePathStyle = new Map<Task, PolyStyle>([
         [Task.HARVEST, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.MINE, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.STORE_ENERGY, { stroke: '#808080', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.STORE_OTHER, { stroke: '#0000ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.CHARGE, { stroke: '#808000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],

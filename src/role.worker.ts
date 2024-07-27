@@ -13,7 +13,6 @@ import * as structureRepair from "./task.structure.repair";
 import * as renew from "./task.creep.renew";
 import * as harvest from "./task.creep.harvest";
 import { Config } from "./config";
-import { logRoomInfoMap } from "./room.info";
 
 export function run(creep: Creep) {
     const previousTask = creep.memory.task;
