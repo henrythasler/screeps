@@ -138,6 +138,7 @@ export class Config {
     static visualizePathStrokeWidth = 0.05;
     static visualizePathStyle = new Map<Task, PolyStyle>([
         [Task.HARVEST, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
+        [Task.MINE, { stroke: '#ffff00', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.STORE_ENERGY, { stroke: '#808080', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.STORE_OTHER, { stroke: '#0000ff', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],
         [Task.CHARGE, { stroke: '#808000', opacity: Config.visualizePathOpacity, strokeWidth: Config.visualizePathStrokeWidth }],

@@ -49,6 +49,7 @@ export function roleToString(role: Role): string {
     if (role == Role.HARVESTER) return "Harvester";
     if (role == Role.DEFENDER) return "Defender";
     if (role == Role.HUNTER) return "Hunter";
+    if (role == Role.MINER) return "Miner";
     return "unknown";
 }
 

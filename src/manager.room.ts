@@ -1,15 +1,13 @@
 import { Config } from "./config";
-import { EnergyLocation, RequesterIdTypes, Role, Species, findMostExpensiveSpecies, initializeCreepObjects, managePopulation } from "./manager.global";
-import { Task } from "./task";
-import { Trait } from "./trait";
+import { RequesterIdTypes, Role, initializeCreepObjects, managePopulation } from "./manager.global";
 import * as worker from "./role.worker";
 import * as scout from "./role.scout";
 import * as collector from "./role.collector";
 import * as harvester from "./role.harvester";
 import * as defender from "./role.defender";
 import * as hunter from "./role.hunter";
+import * as miner from "./role.miner";
 import { log, Loglevel } from "./debug";
-import { priorityQueue } from "./priorityqueue";
 import { zoo } from "./zoo";
 import { getAdjacentHostileRooms } from "./helper";
 
@@ -21,6 +19,7 @@ const runnables: Map<Role, Function> = new Map([
     [Role.SCOUT, scout.run],
     [Role.COLLECTOR, collector.run],
     [Role.HUNTER, hunter.run],
+    [Role.MINER, miner.run],
 ]);
 
 export function manageCreeps(room: Room): void {
