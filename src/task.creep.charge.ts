@@ -3,7 +3,7 @@ import { EnergyLocation, Role } from "./manager.global";
 import { Trait } from "./trait";
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
-import { isNearHostile, mergeArrays, removeEntries } from "./helper";
+import { getTotalStorageVolume, isNearHostile, mergeArrays, removeEntries } from "./helper";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 
@@ -126,7 +126,7 @@ export function execute(creep: Creep): boolean {
         // container
         if (creep.memory.lastEnergyDeposit != EnergyLocation.CONTAINER && 
             creep.memory.lastEnergyDeposit != EnergyLocation.LINK && 
-            traits.includes(Trait.CHARGE_CONTAINER)) {
+            traits.includes(Trait.CHARGE_CONTAINER) && getTotalStorageVolume(creep.room, RESOURCE_ENERGY)[1] < Config.storageReservation) {
             const container = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return !isNearHostile(structure, hostiles) &&

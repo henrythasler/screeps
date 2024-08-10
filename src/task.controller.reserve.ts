@@ -1,12 +1,12 @@
 import { Task } from "./task";
 import { Trait } from "./trait";
-import { mergeArrays, removeEntries } from "./helper";
+import { getCreepsByRole, mergeArrays, removeEntries } from "./helper";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 import { Config } from "./config";
 import { log, Loglevel } from "./debug";
 
-export function execute(creep: Creep): boolean {
+export function execute(creep: Creep, maxHops: number = 1): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
     if (species) {
         const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
@@ -18,9 +18,21 @@ export function execute(creep: Creep): boolean {
             return false;
         }
 
+        // reserve adjacent rooms for collecting resources
+        const route = Game.map.findRoute(creep.memory.homeBase, creep.room);
+        if (route == ERR_NO_PATH || route.length > maxHops) return false;
+
         const controller = creep.room.controller;
-        // only reserve if at least one other creep (besides the scout) is in the room
-        if (controller && !controller.my && creep.room.find(FIND_MY_CREEPS).length >= 2) {
+        if (controller && !controller.my) {
+            const ownRange = creep.pos.getRangeTo(controller.pos);
+            const similarCreeps = getCreepsByRole(creep.room, creep.memory.role);
+
+            if (similarCreeps.some((otherCreep: Creep) => {
+                return otherCreep.pos.getRangeTo(controller.pos) < ownRange;
+            })) {
+                return false;
+            }
+
             const res = creep.reserveController(controller);
             if (res == ERR_NOT_IN_RANGE) {
                 creep.moveTo(controller, { visualizePathStyle: Config.visualizePathStyle.get(Task.RESERVE_CONTROLLER) });

@@ -6,7 +6,7 @@ import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
 import { getCreepsByRole, isInHomeBase, isOnBorder, mergeArrays, removeEntries } from "./helper";
 import { Config } from "./config";
-import { Role } from "./manager.global";
+import { Role, roleToString } from "./manager.global";
 
 /**
  * 
@@ -23,7 +23,7 @@ export function execute(creep: Creep, maxHops: number = 1, squadSize: number = 2
         // derive available traits for the current room and general traits
         const traits = removeEntries(mergeArrays(species.traits.get(location), species.traits.get(Location.EVERYWHERE)), species.traits.get(Location.NOWHERE));
 
-        const availableHunters = getCreepsByRole(creep.room, creep.memory.role).length;
+        const availableHunters = Game.rooms[creep.memory.homeBase]?.memory.creepCensus[roleToString(creep.memory.role)]?.current ?? 0;
 
         if (!traits.includes(Trait.SWITCH_ROOM) || availableHunters < squadSize) {
             return false;

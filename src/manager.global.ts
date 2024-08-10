@@ -137,9 +137,12 @@ export function creepMaintenance(): void {
     }
 }
 
-export function showCreepCensus(room: Room, census: Map<Role, { current: number, required: number }>): void {
+export function showCreepCensus(room: Room, census: { [role: string]: { current: number, required: number }}): void {
     let text = `[${room.name}][${room.energyAvailable}/${room.energyCapacityAvailable}] `;
-    census.forEach((details, role) => text += `${roleToString(role)}: ${details.current}/${details.required}, `);
+    for( const role in census) {
+        const details = census[role]!;
+        text += `${role}: ${details.current}/${details.required}, `;
+    }
     log(text);
 }
 

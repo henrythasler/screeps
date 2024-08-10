@@ -60,7 +60,7 @@ declare global {
         ticksWithPendingSpawns: number;
         harvesterPerSource: Map<Id<Source>, number>;
         threatLevel: number;
-        creepCensus: Map<Role, { current: number, required: number }>;
+        creepCensus: { [role: string]: { current: number, required: number }};
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -90,7 +90,7 @@ export const loop = () => {
 
         if ((Game.time % Config.spawnManagerInterval) == 0) {
             if (room.find(FIND_MY_SPAWNS).length) {
-                room.memory.creepCensus = new Map<Role, { current: number, required: number }>();
+                room.memory.creepCensus = {};
                 manageCreeps(room);
                 showCreepCensus(room, room.memory.creepCensus);
             }

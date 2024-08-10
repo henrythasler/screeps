@@ -23,11 +23,11 @@ const workerConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 2],
         ["E37S37", 4],
-        ["E37S38", 6],
-        ["E36S38", 6],
-        ["W14N19", 8],  // Newbie Land
+        ["E37S38", 4],
+        ["E36S38", 4],
+        ["W14N19", 6],  // Newbie Land
         ["W14N18", 4],  // Newbie Land
-        ["W13N19", 4],  // Newbie Land
+        ["W13N19", 6],  // Newbie Land
     ]),
 }
 
@@ -35,8 +35,11 @@ const scoutConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 1],
         ["E37S37", 0],
-        ["E37S38", 1],
-        ["W14N19", 1],  // Newbie Land
+        ["E37S38", 0],
+        ["E36S38", 0],
+        ["W14N19", 2],  // Newbie Land
+        ["W14N18", 2],  // Newbie Land
+        ["W13N19", 1],  // Newbie Land
     ]),
 }
 
@@ -46,8 +49,9 @@ const collectorConfig: CreepConfig = {
         ["E37S37", 0],
         ["E37S38", 2],
         ["E36S38", 2],
-        ["W14N19", 6],  // Newbie Land
-        ["W14N18", 6],  // Newbie Land
+        ["W14N19", 3],  // Newbie Land
+        ["W14N18", 3],  // Newbie Land
+        ["W13N19", 3],  // Newbie Land
     ]),
     maxHops: 1,
 }
@@ -66,8 +70,8 @@ const hunterConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 2],
         ["E37S37", 0],
-        ["E37S38", 0],
-        ["E36S38", 0],
+        ["E37S38", 2],
+        ["E36S38", 2],
         ["W14N19", 2],  // Newbie Land
         ["W14N18", 2],  // Newbie Land
         ["W13N19", 0],  // Newbie Land
@@ -79,7 +83,7 @@ const hunterConfig: CreepConfig = {
 const minerConfig: CreepConfig = {
     minCount: new Map<string, number>([
         ["sim", 2],
-        ["E37S37", 0],
+        ["E37S37", 1],
         ["E37S38", 0],
         ["E36S38", 0],
         ["W14N19", 1],  // Newbie Land
@@ -94,8 +98,8 @@ export class Config {
     static minControllerLevel = new Map<string, number>([
         ["sim", 4],
         ["E37S37", 8],
-        ["E37S38", 7],
-        ["E36S38", 5],
+        ["E37S38", 8],
+        ["E36S38", 8],
         ["W14N19", 8],  // Newbie Land
         ["W14N18", 6],  // Newbie Land
         ["W13N19", 5],  // Newbie Land
@@ -113,6 +117,7 @@ export class Config {
     static structureWorkerRepairThreshold = 0.4; // ratio of hits/hitsMax that, if falling below the given threshold, triggers repair by workers
     static idleTickThreshold = 16;
     static minStorageEnergy = 10000; // how much energy is at least conserved in local storages before structures will be upgraded or reinforced
+    static storageReservation = 500_000;    // 
 
     static rampartTowerRepairThresholdPeace = 0.1;
     static rampartTowerRepairThresholdThreat = 0.5;

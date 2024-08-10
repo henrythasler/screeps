@@ -4,10 +4,10 @@ import { Task } from "./task";
 import { Trait } from "./trait";
 import { categorizeCreepLocation, Location } from "./location";
 import { zoo } from "./zoo";
-import { mergeArrays, removeEntries } from "./helper";
+import { getCreepsByRole, mergeArrays, removeEntries } from "./helper";
 import { Config } from "./config";
 
-export function execute(creep: Creep, maxHops: number = 1): boolean {
+export function execute(creep: Creep, maxHops: number = 1, creepLimit: number = 99): boolean {
     const species = zoo.get(creep.memory.role)?.get(creep.memory.speciesName);
     if (species) {
         const location = categorizeCreepLocation(creep.room, creep.memory.homeBase);
@@ -19,10 +19,14 @@ export function execute(creep: Creep, maxHops: number = 1): boolean {
             return false;
         }
 
+
         const locations: string[] = [];
         roomInfoMap.forEach((roomInfo, roomName) => {
+            const room = Game.rooms[roomName];
+            const similarCreeps = room ? getCreepsByRole(room, creep.memory.role).length : 0;
+
             if (roomInfo.availableSources && !roomInfo.hostile && !roomInfo.occupied && !roomInfo.base && 
-                roomName != creep.memory.homeBase && creep.room.name != roomName ) {
+                roomName != creep.memory.homeBase && creep.room.name != roomName && similarCreeps < creepLimit) {
                 locations.push(roomName);
             }
         });

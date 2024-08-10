@@ -1,5 +1,5 @@
 import { Config } from "./config";
-import { RequesterIdTypes, Role, initializeCreepObjects, managePopulation } from "./manager.global";
+import { RequesterIdTypes, Role, initializeCreepObjects, managePopulation, roleToString } from "./manager.global";
 import * as worker from "./role.worker";
 import * as scout from "./role.scout";
 import * as collector from "./role.collector";
@@ -45,7 +45,7 @@ export function manageCreeps(room: Room): void {
             minCount = getAdjacentHostileRooms(room).length ? (Config.creeps.get(role)?.minCount.get(room.name) ?? 0) : 0;
         }
 
-        room.memory.creepCensus.set(role, { current: creeps.length, required: minCount });
+        room.memory.creepCensus[roleToString(role)] = { current: creeps.length, required: minCount };
 
         const speciesZoo = zoo.get(role);
         if (speciesZoo) {
